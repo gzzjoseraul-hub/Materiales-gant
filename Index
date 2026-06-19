@@ -1,0 +1,369 @@
+import React, { useMemo, useState } from "react";
+import { motion } from "framer-motion";
+import { Plus, Trash2, Package, Truck, CalendarDays, AlertTriangle, CheckCircle2, Upload, Download, Search } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+
+const fmt = new Intl.DateTimeFormat("es-MX", { day: "2-digit", month: "short" });
+const todayISO = new Date().toISOString().slice(0, 10);
+
+const initialMaterials = [
+  {
+    id: "MAT-1001",
+    material: "Resina ABS Negra",
+    inventario: 1250,
+    demandaDiaria: 180,
+    unidad: "kg",
+    llegadas: [
+      { id: crypto.randomUUID(), fecha: addDaysISO(todayISO, 5), cantidad: 900 },
+      { id: crypto.randomUUID(), fecha: addDaysISO(todayISO, 13), cantidad: 1200 },
+    ],
+  },
+  {
+    id: "MAT-2044",
+    material: "Empaque Corrugado A",
+    inventario: 4200,
+    demandaDiaria: 650,
+    unidad: "pzas",
+    llegadas: [{ id: crypto.randomUUID(), fecha: addDaysISO(todayISO, 8), cantidad: 5000 }],
+  },
+  {
+    id: "MAT-3309",
+    material: "Tornillo M4 x 12",
+    inventario: 8500,
+    demandaDiaria: 1600,
+    unidad: "pzas",
+    llegadas: [
+      { id: crypto.randomUUID(), fecha: addDaysISO(todayISO, 3), cantidad: 3000 },
+      { id: crypto.randomUUID(), fecha: addDaysISO(todayISO, 10), cantidad: 9000 },
+    ],
+  },
+  {
+    id: "MAT-7781",
+    material: "Etiqueta Frontal MX",
+    inventario: 950,
+    demandaDiaria: 240,
+    unidad: "pzas",
+    llegadas: [],
+  },
+];
+
+function addDaysISO(iso, days) {
+  const d = new Date(iso + "T00:00:00");
+  d.setDate(d.getDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+
+function daysBetween(startISO, endISO) {
+  return Math.round((new Date(endISO + "T00:00:00") - new Date(startISO + "T00:00:00")) / 86400000);
+}
+
+function cls(...x) {
+  return x.filter(Boolean).join(" ");
+}
+
+function calculateCoverage(material, startISO, horizonDays) {
+  const arrivalsByDay = new Map();
+  material.llegadas.forEach((a) => {
+    const idx = daysBetween(startISO, a.fecha);
+    if (idx >= 0 && idx <= horizonDays) arrivalsByDay.set(idx, (arrivalsByDay.get(idx) || 0) + Number(a.cantidad || 0));
+  });
+
+  let stock = Number(material.inventario || 0);
+  const demand = Number(material.demandaDiaria || 0);
+  const timeline = [];
+  let stockoutDay = null;
+
+  for (let day = 0; day < horizonDays; day++) {
+    const arrival = arrivalsByDay.get(day) || 0;
+    stock += arrival;
+    const startStock = stock;
+
+    let coveredRatio = demand > 0 ? Math.min(1, Math.max(0, stock / demand)) : 1;
+    const fullyCovered = demand === 0 || stock >= demand;
+    stock = Math.max(0, stock - demand);
+
+    if (!fullyCovered && stockoutDay === null) stockoutDay = day;
+
+    timeline.push({
+      day,
+      fecha: addDaysISO(startISO, day),
+      arrival,
+      startStock,
+      endStock: stock,
+      coveredRatio,
+      fullyCovered,
+    });
+  }
+
+  const totalDemandHorizon = demand * horizonDays;
+  const totalArrivals = material.llegadas.reduce((s, a) => s + Number(a.cantidad || 0), 0);
+  const available = Number(material.inventario || 0) + totalArrivals;
+  const coverageDaysDecimal = demand > 0 ? available / demand : horizonDays;
+
+  return { timeline, stockoutDay, coverageDaysDecimal, totalArrivals };
+}
+
+function statusFor(stockoutDay, coverageDays) {
+  if (coverageDays >= 21 && stockoutDay === null) return { label: "Sano", color: "bg-emerald-500", text: "text-emerald-700", icon: CheckCircle2 };
+  if (coverageDays >= 7) return { label: "Cuidado", color: "bg-amber-500", text: "text-amber-700", icon: AlertTriangle };
+  return { label: "Crítico", color: "bg-red-500", text: "text-red-700", icon: AlertTriangle };
+}
+
+export default function App() {
+  const [materials, setMaterials] = useState(initialMaterials);
+  const [selectedId, setSelectedId] = useState(initialMaterials[0].id);
+  const [horizonDays, setHorizonDays] = useState(30);
+  const [startDate, setStartDate] = useState(todayISO);
+  const [search, setSearch] = useState("");
+  const [sortBy, setSortBy] = useState("critical");
+  const [newArrival, setNewArrival] = useState({ fecha: addDaysISO(todayISO, 2), cantidad: 0 });
+
+  const enriched = useMemo(() => {
+    const rows = materials.map((m) => ({ ...m, calc: calculateCoverage(m, startDate, horizonDays) }));
+    rows.sort((a, b) => {
+      if (sortBy === "critical") return a.calc.coverageDaysDecimal - b.calc.coverageDaysDecimal;
+      if (sortBy === "coverageDesc") return b.calc.coverageDaysDecimal - a.calc.coverageDaysDecimal;
+      return a.material.localeCompare(b.material);
+    });
+    return rows.filter((m) => `${m.id} ${m.material}`.toLowerCase().includes(search.toLowerCase()));
+  }, [materials, horizonDays, startDate, search, sortBy]);
+
+  const selected = materials.find((m) => m.id === selectedId) || materials[0];
+  const selectedCalc = selected ? calculateCoverage(selected, startDate, horizonDays) : null;
+
+  function updateMaterial(id, patch) {
+    setMaterials((prev) => prev.map((m) => (m.id === id ? { ...m, ...patch } : m)));
+  }
+
+  function addArrival() {
+    if (!selected || !newArrival.fecha || Number(newArrival.cantidad) <= 0) return;
+    const llegada = { id: crypto.randomUUID(), fecha: newArrival.fecha, cantidad: Number(newArrival.cantidad) };
+    updateMaterial(selected.id, { llegadas: [...selected.llegadas, llegada].sort((a, b) => a.fecha.localeCompare(b.fecha)) });
+    setNewArrival({ fecha: addDaysISO(newArrival.fecha, 1), cantidad: 0 });
+  }
+
+  function deleteArrival(arrivalId) {
+    if (!selected) return;
+    updateMaterial(selected.id, { llegadas: selected.llegadas.filter((a) => a.id !== arrivalId) });
+  }
+
+  function addMaterial() {
+    const id = `MAT-${Math.floor(1000 + Math.random() * 9000)}`;
+    const mat = { id, material: "Nuevo material", inventario: 0, demandaDiaria: 1, unidad: "pzas", llegadas: [] };
+    setMaterials((prev) => [mat, ...prev]);
+    setSelectedId(id);
+  }
+
+  function exportJSON() {
+    const blob = new Blob([JSON.stringify(materials, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "cobertura_materiales.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function importJSON(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const data = JSON.parse(String(reader.result));
+        if (Array.isArray(data)) {
+          setMaterials(data.map((m) => ({ ...m, llegadas: m.llegadas || [] })));
+          setSelectedId(data[0]?.id || "");
+        }
+      } catch (err) {
+        alert("No se pudo leer el archivo JSON. Revisa el formato.");
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-900 p-4 md:p-6">
+      <div className="mx-auto max-w-7xl space-y-5">
+        <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700 ring-1 ring-blue-100">
+              <CalendarDays className="h-4 w-4" /> Planeación visual de cobertura
+            </div>
+            <h1 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight">Cobertura de materiales tipo Gantt</h1>
+            <p className="mt-2 max-w-3xl text-slate-600">Visualiza cuánto inventario tienes, hasta qué día alcanza la demanda y cómo cambian las coberturas al agregar llegadas.</p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Button onClick={addMaterial} className="rounded-2xl shadow-sm"><Plus className="h-4 w-4 mr-2" /> Material</Button>
+            <Button variant="outline" onClick={exportJSON} className="rounded-2xl"><Download className="h-4 w-4 mr-2" /> Exportar</Button>
+            <label className="inline-flex cursor-pointer items-center rounded-2xl border bg-white px-4 py-2 text-sm font-medium shadow-sm hover:bg-slate-50">
+              <Upload className="h-4 w-4 mr-2" /> Importar JSON
+              <input type="file" accept="application/json" className="hidden" onChange={importJSON} />
+            </label>
+          </div>
+        </motion.div>
+
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
+          <Card className="rounded-2xl shadow-sm lg:col-span-1">
+            <CardContent className="p-4 space-y-4">
+              <h2 className="font-semibold text-lg">Parámetros</h2>
+              <div className="grid grid-cols-2 gap-3">
+                <label className="text-sm">
+                  <span className="text-slate-600">Fecha inicio</span>
+                  <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="mt-1 w-full rounded-xl border px-3 py-2" />
+                </label>
+                <label className="text-sm">
+                  <span className="text-slate-600">Horizonte</span>
+                  <select value={horizonDays} onChange={(e) => setHorizonDays(Number(e.target.value))} className="mt-1 w-full rounded-xl border px-3 py-2">
+                    <option value={14}>14 días</option>
+                    <option value={30}>30 días</option>
+                    <option value={45}>45 días</option>
+                    <option value={60}>60 días</option>
+                  </select>
+                </label>
+              </div>
+              <div className="relative">
+                <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+                <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Buscar material..." className="w-full rounded-xl border py-2 pl-9 pr-3" />
+              </div>
+              <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="w-full rounded-xl border px-3 py-2 text-sm">
+                <option value="critical">Ordenar: críticos primero</option>
+                <option value="coverageDesc">Ordenar: mayor cobertura</option>
+                <option value="name">Ordenar: nombre</option>
+              </select>
+
+              {selected && <div className="rounded-2xl bg-slate-100 p-3 space-y-3">
+                <h3 className="font-semibold">Editar material seleccionado</h3>
+                <input value={selected.material} onChange={(e) => updateMaterial(selected.id, { material: e.target.value })} className="w-full rounded-xl border px-3 py-2 text-sm" />
+                <div className="grid grid-cols-2 gap-2">
+                  <label className="text-xs text-slate-600">Inventario
+                    <input type="number" value={selected.inventario} onChange={(e) => updateMaterial(selected.id, { inventario: Number(e.target.value) })} className="mt-1 w-full rounded-xl border px-3 py-2 text-sm text-slate-900" />
+                  </label>
+                  <label className="text-xs text-slate-600">Demanda/día
+                    <input type="number" value={selected.demandaDiaria} onChange={(e) => updateMaterial(selected.id, { demandaDiaria: Number(e.target.value) })} className="mt-1 w-full rounded-xl border px-3 py-2 text-sm text-slate-900" />
+                  </label>
+                </div>
+                <label className="text-xs text-slate-600">Unidad
+                  <input value={selected.unidad} onChange={(e) => updateMaterial(selected.id, { unidad: e.target.value })} className="mt-1 w-full rounded-xl border px-3 py-2 text-sm text-slate-900" />
+                </label>
+              </div>}
+            </CardContent>
+          </Card>
+
+          <Card className="rounded-2xl shadow-sm lg:col-span-3 overflow-hidden">
+            <CardContent className="p-0">
+              <div className="overflow-x-auto">
+                <div className="min-w-[980px]">
+                  <div className="grid grid-cols-[260px_1fr_115px] border-b bg-white sticky top-0 z-10">
+                    <div className="p-3 font-semibold">Material</div>
+                    <div className="grid" style={{ gridTemplateColumns: `repeat(${horizonDays}, minmax(22px, 1fr))` }}>
+                      {Array.from({ length: horizonDays }).map((_, i) => {
+                        const date = addDaysISO(startDate, i);
+                        return <div key={i} className="border-l p-1 text-center text-[10px] text-slate-500">{fmt.format(new Date(date + "T00:00:00"))}</div>;
+                      })}
+                    </div>
+                    <div className="p-3 text-right font-semibold">Cobertura</div>
+                  </div>
+
+                  <div className="divide-y">
+                    {enriched.map((m) => {
+                      const st = statusFor(m.calc.stockoutDay, m.calc.coverageDaysDecimal);
+                      const Icon = st.icon;
+                      return (
+                        <button key={m.id} onClick={() => setSelectedId(m.id)} className={cls("grid w-full grid-cols-[260px_1fr_115px] text-left transition hover:bg-blue-50/40", selectedId === m.id && "bg-blue-50") }>
+                          <div className="p-3">
+                            <div className="flex items-start gap-2">
+                              <Package className="mt-1 h-4 w-4 text-slate-400" />
+                              <div>
+                                <div className="font-semibold leading-tight">{m.material}</div>
+                                <div className="text-xs text-slate-500">{m.id} · Inv: {Number(m.inventario).toLocaleString("es-MX")} {m.unidad} · Dem/día: {Number(m.demandaDiaria).toLocaleString("es-MX")}</div>
+                                <div className={cls("mt-1 inline-flex items-center gap-1 text-xs font-medium", st.text)}><Icon className="h-3.5 w-3.5" /> {st.label}</div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="grid items-center py-3" style={{ gridTemplateColumns: `repeat(${horizonDays}, minmax(22px, 1fr))` }}>
+                            {m.calc.timeline.map((d) => {
+                              const color = d.fullyCovered ? "bg-emerald-500" : d.coveredRatio > 0 ? "bg-amber-400" : "bg-red-500";
+                              return <div key={d.day} title={`${d.fecha}\nStock inicio: ${Math.round(d.startStock).toLocaleString("es-MX")}\nLlegada: ${d.arrival.toLocaleString("es-MX")}\nCobertura del día: ${Math.round(d.coveredRatio * 100)}%`} className="relative h-8 border-l bg-slate-100">
+                                <div className={cls("absolute left-0 top-0 h-full", color)} style={{ width: `${d.coveredRatio * 100}%` }} />
+                                {d.arrival > 0 && <div className="absolute right-0 top-0 h-full w-1.5 bg-blue-600" />}
+                              </div>;
+                            })}
+                          </div>
+
+                          <div className="p-3 text-right">
+                            <div className="font-bold">{m.calc.coverageDaysDecimal.toFixed(1)} días</div>
+                            <div className="text-xs text-slate-500">Llegadas: {m.calc.totalArrivals.toLocaleString("es-MX")}</div>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              <div className="border-t bg-white p-3 flex flex-wrap gap-3 text-xs text-slate-600">
+                <span className="inline-flex items-center gap-1"><span className="h-3 w-5 rounded bg-emerald-500" /> Día cubierto</span>
+                <span className="inline-flex items-center gap-1"><span className="h-3 w-5 rounded bg-amber-400" /> Cobertura parcial</span>
+                <span className="inline-flex items-center gap-1"><span className="h-3 w-5 rounded bg-red-500" /> Sin cobertura</span>
+                <span className="inline-flex items-center gap-1"><span className="h-3 w-1.5 rounded bg-blue-600" /> Llegada</span>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {selected && selectedCalc && (
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+            <Card className="rounded-2xl shadow-sm lg:col-span-1">
+              <CardContent className="p-4 space-y-3">
+                <h2 className="flex items-center gap-2 text-lg font-semibold"><Truck className="h-5 w-5 text-blue-600" /> Agregar llegada</h2>
+                <div className="grid grid-cols-2 gap-2">
+                  <label className="text-sm text-slate-600">Fecha
+                    <input type="date" value={newArrival.fecha} onChange={(e) => setNewArrival({ ...newArrival, fecha: e.target.value })} className="mt-1 w-full rounded-xl border px-3 py-2 text-slate-900" />
+                  </label>
+                  <label className="text-sm text-slate-600">Cantidad
+                    <input type="number" value={newArrival.cantidad} onChange={(e) => setNewArrival({ ...newArrival, cantidad: e.target.value })} className="mt-1 w-full rounded-xl border px-3 py-2 text-slate-900" />
+                  </label>
+                </div>
+                <Button onClick={addArrival} className="w-full rounded-2xl"><Plus className="h-4 w-4 mr-2" /> Agregar y recalcular</Button>
+                <p className="text-xs text-slate-500">La cobertura se actualiza automáticamente en el diagrama al agregar o borrar llegadas.</p>
+              </CardContent>
+            </Card>
+
+            <Card className="rounded-2xl shadow-sm lg:col-span-2">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <h2 className="text-lg font-semibold">Llegadas programadas: {selected.material}</h2>
+                    <p className="text-sm text-slate-500">Inventario actual + llegadas vs demanda diaria.</p>
+                  </div>
+                  <div className="rounded-2xl bg-slate-100 px-4 py-2 text-right">
+                    <div className="text-xs text-slate-500">Cobertura total</div>
+                    <div className="text-xl font-bold">{selectedCalc.coverageDaysDecimal.toFixed(1)} días</div>
+                  </div>
+                </div>
+                <div className="mt-4 overflow-hidden rounded-2xl border">
+                  <table className="w-full text-sm">
+                    <thead className="bg-slate-100 text-slate-600">
+                      <tr><th className="p-3 text-left">Fecha</th><th className="p-3 text-right">Cantidad</th><th className="p-3 text-right">Acción</th></tr>
+                    </thead>
+                    <tbody className="divide-y bg-white">
+                      {selected.llegadas.length === 0 && <tr><td colSpan={3} className="p-5 text-center text-slate-500">Sin llegadas programadas</td></tr>}
+                      {selected.llegadas.map((a) => <tr key={a.id}>
+                        <td className="p-3">{a.fecha}</td>
+                        <td className="p-3 text-right font-semibold">{Number(a.cantidad).toLocaleString("es-MX")} {selected.unidad}</td>
+                        <td className="p-3 text-right"><Button variant="ghost" size="sm" onClick={() => deleteArrival(a.id)} className="rounded-xl text-red-600 hover:text-red-700"><Trash2 className="h-4 w-4" /></Button></td>
+                      </tr>)}
+                    </tbody>
+                  </table>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
