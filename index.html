@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Validador Plan vs Inventario FLOR/STCK</title>
+  <title>Action Board Plan vs FLOR/STCK</title>
 
   <style>
     :root {
@@ -13,13 +13,17 @@
       --text: #0f172a;
       --muted: #64748b;
       --border: #dbe3ef;
-      --blue: #2563eb;
+
       --stck: #2563eb;
       --flor: #f97316;
-      --green: #22c55e;
-      --yellow: #facc15;
-      --red: #ef4444;
+      --ok: #16a34a;
+      --warn: #facc15;
+      --orange: #ea580c;
+      --red: #dc2626;
+      --darkred: #7f1d1d;
       --purple: #7c3aed;
+      --gray: #e2e8f0;
+
       --shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
     }
 
@@ -57,43 +61,44 @@
       padding: 14px;
     }
 
-    .summary {
+    .kpi-grid {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
       gap: 10px;
       margin-bottom: 14px;
     }
 
-    .summary-card {
+    .kpi-card {
       background: white;
       border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 11px;
+      padding: 12px;
       box-shadow: var(--shadow);
     }
 
-    .summary-card span {
+    .kpi-card span {
       display: block;
-      color: var(--muted);
       font-size: 11px;
-      font-weight: 700;
+      color: var(--muted);
+      font-weight: bold;
+      text-transform: uppercase;
     }
 
-    .summary-card strong {
+    .kpi-card strong {
       display: block;
-      margin-top: 4px;
-      font-size: 20px;
+      margin-top: 5px;
+      font-size: 22px;
     }
 
     .layout {
       display: grid;
-      grid-template-columns: 335px 1fr;
+      grid-template-columns: 340px 1fr;
       gap: 14px;
       align-items: start;
     }
 
     .card {
-      background: var(--card);
+      background: white;
       border: 1px solid var(--border);
       border-radius: 14px;
       box-shadow: var(--shadow);
@@ -104,7 +109,7 @@
       padding: 10px 13px;
       border-bottom: 1px solid var(--border);
       background: #f8fafc;
-      font-weight: 700;
+      font-weight: bold;
       font-size: 14px;
     }
 
@@ -116,14 +121,14 @@
       display: block;
       font-size: 11px;
       color: var(--muted);
+      font-weight: bold;
       margin-bottom: 4px;
-      font-weight: 700;
     }
 
     input,
     select {
       width: 100%;
-      padding: 7px 9px;
+      padding: 8px 9px;
       border-radius: 9px;
       border: 1px solid var(--border);
       outline: none;
@@ -134,22 +139,21 @@
 
     input:focus,
     select:focus {
-      border-color: var(--blue);
+      border-color: #2563eb;
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
     }
 
     button {
       border: 0;
       border-radius: 9px;
-      padding: 7px 10px;
-      font-weight: 700;
-      cursor: pointer;
+      padding: 8px 10px;
       font-size: 12px;
-      transition: 0.15s;
+      font-weight: bold;
+      cursor: pointer;
     }
 
     .btn-primary {
-      background: var(--blue);
+      background: #2563eb;
       color: white;
     }
 
@@ -160,19 +164,14 @@
 
     .btn-danger {
       background: #fee2e2;
-      color: #b91c1c;
-    }
-
-    .btn-full {
-      width: 100%;
-      margin-top: 4px;
+      color: #991b1b;
     }
 
     .actions {
       display: flex;
-      gap: 6px;
       flex-wrap: wrap;
-      margin-bottom: 8px;
+      gap: 6px;
+      margin-bottom: 10px;
     }
 
     .form-row {
@@ -186,27 +185,27 @@
       margin-bottom: 9px;
     }
 
-    .small-separator {
-      border: 0;
-      border-top: 1px solid var(--border);
-      margin: 12px 0;
+    .hidden-file {
+      display: none;
     }
 
     .note {
-      color: var(--muted);
       font-size: 11px;
-      line-height: 1.35;
+      color: var(--muted);
+      line-height: 1.4;
     }
 
-    .hidden-file {
-      display: none;
+    .separator {
+      border: 0;
+      border-top: 1px solid var(--border);
+      margin: 12px 0;
     }
 
     .tabs {
       display: flex;
       gap: 6px;
       flex-wrap: wrap;
-      margin: 0 0 10px;
+      margin-bottom: 10px;
     }
 
     .tab {
@@ -219,53 +218,47 @@
       color: white;
     }
 
-    .main-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 14px;
-    }
-
     .table-wrap {
       overflow: auto;
       max-height: 72vh;
     }
 
-    .materials-table {
-      min-width: 1240px;
+    table {
       width: 100%;
       border-collapse: collapse;
       font-size: 11px;
     }
 
-    .materials-table th {
+    th {
       position: sticky;
       top: 0;
-      z-index: 3;
+      z-index: 5;
       background: #f8fafc;
       color: var(--muted);
-      text-transform: uppercase;
       font-size: 10px;
-      border-bottom: 1px solid var(--border);
-      padding: 7px;
+      text-transform: uppercase;
       text-align: left;
+      padding: 7px;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
     }
 
-    .materials-table td {
+    td {
+      padding: 6px 7px;
       border-bottom: 1px solid #edf2f7;
-      padding: 5px 7px;
       vertical-align: middle;
     }
 
-    .materials-table tr {
-      cursor: pointer;
+    tr {
       background: white;
+      cursor: pointer;
     }
 
-    .materials-table tr:hover {
+    tr:hover {
       background: #eff6ff;
     }
 
-    .materials-table tr.selected {
+    tr.selected {
       background: #dbeafe;
     }
 
@@ -275,8 +268,8 @@
     }
 
     .material-name {
-      font-weight: 700;
-      max-width: 190px;
+      font-weight: bold;
+      max-width: 210px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -290,19 +283,19 @@
 
     .badge {
       display: inline-block;
-      padding: 2px 6px;
+      padding: 3px 7px;
       border-radius: 999px;
       font-size: 9px;
       font-weight: 800;
       white-space: nowrap;
     }
 
-    .b-green {
+    .b-ok {
       background: #dcfce7;
       color: #166534;
     }
 
-    .b-yellow {
+    .b-warn {
       background: #fef9c3;
       color: #854d0e;
     }
@@ -329,16 +322,41 @@
 
     .b-gray {
       background: #f1f5f9;
-      color: #64748b;
+      color: #475569;
     }
 
-    .bar {
-      height: 12px;
+    .action-cell {
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .action-red {
+      color: #991b1b;
+    }
+
+    .action-orange {
+      color: #9a3412;
+    }
+
+    .action-yellow {
+      color: #854d0e;
+    }
+
+    .action-purple {
+      color: #5b21b6;
+    }
+
+    .action-green {
+      color: #166534;
+    }
+
+    .coverage-bar {
+      height: 14px;
+      min-width: 210px;
       background: #e5e7eb;
       border-radius: 999px;
       overflow: hidden;
       display: flex;
-      min-width: 190px;
       border: 1px solid #cbd5e1;
     }
 
@@ -350,22 +368,56 @@
       background: var(--flor);
     }
 
-    .seg-miss {
+    .seg-short {
       background: var(--red);
     }
 
     .bar-label {
-      font-size: 10px;
-      color: var(--muted);
       margin-top: 2px;
+      color: var(--muted);
+      font-size: 10px;
       white-space: nowrap;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .mini {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 9px;
+    }
+
+    .mini span {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .mini strong {
+      display: block;
+      margin-top: 3px;
+      font-size: 17px;
     }
 
     .legend {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
-      padding: 9px 12px;
+      padding: 10px 12px;
       background: #f8fafc;
       border-top: 1px solid var(--border);
       color: var(--muted);
@@ -384,220 +436,19 @@
       border-radius: 3px;
     }
 
-    .gantt-wrap {
-      overflow: auto;
-      max-height: 72vh;
-    }
-
-    .gantt {
-      min-width: 1300px;
-    }
-
-    .gantt-head,
-    .gantt-row {
-      display: grid;
-      grid-template-columns: 320px 90px 1fr 120px;
-    }
-
-    .gantt-head {
-      position: sticky;
-      top: 0;
-      z-index: 4;
-      background: #f8fafc;
-      border-bottom: 1px solid var(--border);
-      font-size: 10px;
-      font-weight: 800;
-      color: var(--muted);
-    }
-
-    .gantt-head > div {
-      padding: 5px 7px;
-    }
-
-    .days {
-      display: grid;
-      border-left: 1px solid var(--border);
-    }
-
-    .dayh {
-      font-size: 8px;
-      text-align: center;
-      padding: 5px 1px;
-      border-left: 1px solid var(--border);
-      white-space: nowrap;
-      overflow: hidden;
-    }
-
-    .gantt-row {
-      min-height: 19px;
-      border-bottom: 1px solid #edf2f7;
-      background: white;
-      cursor: pointer;
-    }
-
-    .gantt-row:hover {
-      background: #eff6ff;
-    }
-
-    .gantt-row.selected {
-      background: #dbeafe;
-    }
-
-    .gmat {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      padding: 2px 6px;
-      min-width: 0;
-    }
-
-    .gtitle {
-      font-weight: 700;
-      font-size: 10px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 150px;
-    }
-
-    .gsub {
-      font-size: 9px;
-      color: var(--muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .overcell {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 9px;
-      font-weight: 800;
-      border-left: 1px solid var(--border);
-    }
-
-    .timeline {
-      display: grid;
-      align-items: center;
-      padding: 4px 0;
-    }
-
-    .daycell {
-      height: 9px;
-      background: #f1f5f9;
-      border-left: 1px solid #e2e8f0;
-      position: relative;
-    }
-
-    .daybar {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-    }
-
-    .arrmark {
-      position: absolute;
-      right: 0;
-      top: 0;
-      height: 100%;
-      width: 3px;
-      background: #111827;
-    }
-
-    .demmark {
-      position: absolute;
-      left: 0;
-      top: -3px;
-      height: 2px;
-      width: 100%;
-      background: var(--purple);
-    }
-
-    .finalstock {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding: 2px 6px;
-      font-size: 10px;
-      font-weight: 800;
-    }
-
-    .detail-grid {
-      display: grid;
-      grid-template-columns: 330px 1fr;
-      gap: 14px;
-      margin-top: 14px;
-    }
-
-    .mini-kpis {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-    }
-
-    .mini {
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 9px;
-    }
-
-    .mini span {
-      font-size: 10px;
-      color: var(--muted);
-      font-weight: 700;
-    }
-
-    .mini strong {
-      display: block;
-      font-size: 17px;
-      margin-top: 3px;
-    }
-
-    .detail-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 11px;
-    }
-
-    .detail-table th {
-      background: #f8fafc;
-      color: var(--muted);
-      font-size: 10px;
-      text-transform: uppercase;
-      padding: 7px;
-      border-bottom: 1px solid var(--border);
-      text-align: left;
-    }
-
-    .detail-table td {
-      padding: 7px;
-      border-bottom: 1px solid #edf2f7;
-    }
-
-    .right {
-      text-align: right;
-    }
-
-    .muted {
-      color: var(--muted);
-    }
-
     @media (max-width: 1100px) {
       .layout,
       .detail-grid {
         grid-template-columns: 1fr;
       }
 
-      .summary {
+      .kpi-grid {
         grid-template-columns: repeat(2, 1fr);
       }
     }
 
     @media (max-width: 600px) {
-      .summary {
+      .kpi-grid {
         grid-template-columns: 1fr;
       }
 
@@ -614,40 +465,40 @@
 
 <body>
   <header>
-    <h1>Validador de Plan vs Inventario FLOR/STCK</h1>
-    <p>Detecta faltantes, dependencia de FLOR, riesgo por FLOR &gt; 40% y órdenes afectadas antes de cargar la línea.</p>
+    <h1>Action Board Plan vs FLOR/STCK</h1>
+    <p>Valida si el plan se puede correr, si depende de FLOR y qué órdenes requieren acción antes de cargar línea.</p>
   </header>
 
   <div class="container">
-    <div class="summary">
-      <div class="summary-card">
-        <span>Materiales plan</span>
-        <strong id="kpiMaterials">0</strong>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <span>Plan OK</span>
+        <strong id="kpiPlanOk">0%</strong>
       </div>
 
-      <div class="summary-card">
-        <span>Faltantes reales</span>
-        <strong id="kpiShort">0</strong>
+      <div class="kpi-card">
+        <span>Acción requerida</span>
+        <strong id="kpiAction">0</strong>
       </div>
 
-      <div class="summary-card">
-        <span>Dependen FLOR</span>
-        <strong id="kpiFlorDep">0</strong>
+      <div class="kpi-card">
+        <span>No cargar</span>
+        <strong id="kpiNoLoad">0</strong>
       </div>
 
-      <div class="summary-card">
-        <span>FLOR &gt;= 40%</span>
+      <div class="kpi-card">
+        <span>Validar FLOR</span>
+        <strong id="kpiValidateFlor">0</strong>
+      </div>
+
+      <div class="kpi-card">
+        <span>FLOR &gt;= límite</span>
         <strong id="kpiFlorHigh">0</strong>
       </div>
 
-      <div class="summary-card">
+      <div class="kpi-card">
         <span>Órdenes en riesgo</span>
         <strong id="kpiOrdersRisk">0</strong>
-      </div>
-
-      <div class="summary-card">
-        <span>Overdue</span>
-        <strong id="kpiOverdue">0</strong>
       </div>
     </div>
 
@@ -658,46 +509,55 @@
         <div class="card-body">
           <div class="form-row">
             <div>
-              <label>Fecha corte / hoy</label>
+              <label>Fecha corte</label>
               <input type="date" id="startDate">
             </div>
 
             <div>
               <label>Horizonte plan</label>
               <select id="horizonDays">
-                <option value="3">3 días</option>
-                <option value="7" selected>7 días</option>
+                <option value="1">Hoy</option>
+                <option value="3" selected>3 días</option>
+                <option value="5">5 días</option>
+                <option value="7">7 días</option>
                 <option value="14">14 días</option>
-                <option value="30">30 días</option>
-                <option value="60">60 días</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div>
+              <label>Límite % FLOR</label>
+              <input type="number" id="florLimit" value="40">
+            </div>
+
+            <div>
+              <label>Ordenar</label>
+              <select id="sortBy">
+                <option value="priority">Prioridad acción</option>
+                <option value="shortDesc">Mayor faltante</option>
+                <option value="florPctDesc">Mayor % FLOR</option>
+                <option value="ordersDesc">Más órdenes riesgo</option>
+                <option value="name">Material</option>
               </select>
             </div>
           </div>
 
           <div class="form-group">
             <label>Buscar material / orden / SKU</label>
-            <input id="searchInput" placeholder="Ej. MAT-1001, WO-123, SKU...">
+            <input id="searchInput" placeholder="Ej. MAT-1001, WO-123, SKU-A...">
           </div>
 
           <div class="form-group">
             <label>Filtro rápido</label>
             <select id="quickFilter">
               <option value="all">Todos</option>
-              <option value="short">Solo faltantes reales</option>
-              <option value="florDep">Dependen de FLOR</option>
-              <option value="florHigh">FLOR >= 40%</option>
+              <option value="noLoad">No cargar / Escalar</option>
+              <option value="waitArrival">Esperar llegada</option>
+              <option value="validateFlor">Validar FLOR</option>
+              <option value="florHigh">FLOR alto</option>
+              <option value="ok">OK para correr</option>
               <option value="overdue">Con overdue</option>
-              <option value="today">Con demanda hoy</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Ordenar</label>
-            <select id="sortBy">
-              <option value="priority">Prioridad de riesgo</option>
-              <option value="shortDesc">Mayor faltante</option>
-              <option value="florPctDesc">Mayor % FLOR</option>
-              <option value="name">Nombre material</option>
             </select>
           </div>
 
@@ -707,68 +567,66 @@
             <input class="hidden-file" type="file" id="fileInput" accept="application/json" onchange="importJSON(event)">
           </div>
 
-          <hr class="small-separator">
+          <hr class="separator">
 
           <div id="selectedEditor"></div>
 
           <p class="note">
-            <b>Regla clave:</b> si STCK no cubre el plan, el material depende de FLOR.
-            Si FLOR representa 40% o más del inventario total, se marca como riesgo alto.
+            <b>Regla:</b> si STCK no cubre la necesidad del plan, el material depende de FLOR.
+            Si además FLOR representa más del límite definido, se dispara acción urgente.
           </p>
         </div>
       </aside>
 
-      <main class="main-grid">
-        <section class="card">
-          <div class="card-header">Vista principal</div>
+      <main class="card">
+        <div class="card-header">Tablero de acción</div>
 
-          <div class="card-body">
-            <div class="tabs">
-              <button id="tabSummary" class="tab active" onclick="setView('summary')">Semáforo</button>
-              <button id="tabGantt" class="tab" onclick="setView('gantt')">Gantt diario</button>
-            </div>
-
-            <div id="mainView"></div>
+        <div class="card-body">
+          <div class="tabs">
+            <button id="tabMaterials" class="tab active" onclick="setView('materials')">Materiales de acción</button>
+            <button id="tabOrders" class="tab" onclick="setView('orders')">Órdenes afectadas</button>
           </div>
 
-          <div class="legend">
-            <div class="legend-item">
-              <span class="legend-color" style="background:var(--stck)"></span>
-              STCK usado
-            </div>
+          <div id="mainView"></div>
+        </div>
 
-            <div class="legend-item">
-              <span class="legend-color" style="background:var(--flor)"></span>
-              FLOR usado
-            </div>
-
-            <div class="legend-item">
-              <span class="legend-color" style="background:var(--red)"></span>
-              Faltante
-            </div>
-
-            <div class="legend-item">
-              <span class="legend-color" style="background:var(--purple)"></span>
-              Día con demanda
-            </div>
-
-            <div class="legend-item">
-              <span class="legend-color" style="background:#111827;width:5px"></span>
-              Llegada
-            </div>
+        <div class="legend">
+          <div class="legend-item">
+            <span class="legend-color" style="background:var(--stck)"></span>
+            STCK cubre
           </div>
-        </section>
+
+          <div class="legend-item">
+            <span class="legend-color" style="background:var(--flor)"></span>
+            FLOR requerido
+          </div>
+
+          <div class="legend-item">
+            <span class="legend-color" style="background:var(--red)"></span>
+            Faltante
+          </div>
+
+          <div class="legend-item">
+            <span class="badge b-red-strong">NO CARGAR</span>
+            Faltante real
+          </div>
+
+          <div class="legend-item">
+            <span class="badge b-orange">VALIDAR</span>
+            Riesgo FLOR alto
+          </div>
+        </div>
       </main>
     </div>
 
     <div class="detail-grid">
       <section class="card">
-        <div class="card-header">Agregar llegada a STCK</div>
-        <div class="card-body" id="arrivalForm"></div>
+        <div class="card-header">Agregar llegada</div>
+        <div class="card-body" id="arrivalPanel"></div>
       </section>
 
       <section class="card">
-        <div class="card-header">Detalle del material seleccionado</div>
+        <div class="card-header">Detalle seleccionado</div>
         <div class="card-body" id="detailPanel"></div>
       </section>
     </div>
@@ -777,8 +635,8 @@
   <script>
     const todayISO = new Date().toISOString().slice(0, 10);
 
-    let currentView = "summary";
-    let selectedId = null;
+    let currentView = "materials";
+    let selectedMaterialId = null;
 
     let materials = [
       {
@@ -792,31 +650,31 @@
             orden: "WO-10001",
             fechaNecesidad: addDaysISO(todayISO, -1),
             sku: "SKU-A",
-            cantidad: 250,
             linea: "L1",
-            cliente: "Cliente A"
+            cliente: "Cliente A",
+            cantidad: 250
           },
           {
             orden: "WO-10008",
             fechaNecesidad: addDaysISO(todayISO, 0),
             sku: "SKU-B",
-            cantidad: 300,
             linea: "L1",
-            cliente: "Cliente B"
+            cliente: "Cliente B",
+            cantidad: 300
           },
           {
             orden: "WO-10015",
             fechaNecesidad: addDaysISO(todayISO, 2),
             sku: "SKU-C",
-            cantidad: 650,
             linea: "L2",
-            cliente: "Cliente C"
+            cliente: "Cliente C",
+            cantidad: 650
           }
         ],
         llegadas: [
           {
             po: "PO-50001",
-            fecha: addDaysISO(todayISO, 3),
+            fecha: addDaysISO(todayISO, 2),
             cantidad: 600
           }
         ]
@@ -832,17 +690,17 @@
             orden: "WO-20011",
             fechaNecesidad: addDaysISO(todayISO, 1),
             sku: "SKU-D",
-            cantidad: 3500,
             linea: "L3",
-            cliente: "Cliente B"
+            cliente: "Cliente B",
+            cantidad: 3500
           },
           {
             orden: "WO-20018",
-            fechaNecesidad: addDaysISO(todayISO, 3),
+            fechaNecesidad: addDaysISO(todayISO, 2),
             sku: "SKU-E",
-            cantidad: 2500,
             linea: "L3",
-            cliente: "Cliente A"
+            cliente: "Cliente A",
+            cantidad: 2500
           }
         ],
         llegadas: []
@@ -858,17 +716,43 @@
             orden: "WO-30010",
             fechaNecesidad: addDaysISO(todayISO, -3),
             sku: "SKU-F",
-            cantidad: 900,
             linea: "L2",
-            cliente: "Cliente D"
+            cliente: "Cliente D",
+            cantidad: 900
           },
           {
             orden: "WO-30012",
             fechaNecesidad: addDaysISO(todayISO, 2),
             sku: "SKU-G",
-            cantidad: 700,
             linea: "L2",
-            cliente: "Cliente D"
+            cliente: "Cliente D",
+            cantidad: 700
+          }
+        ],
+        llegadas: []
+      },
+      {
+        id: "MAT-3309",
+        material: "Tornillo M4 x 12",
+        unidad: "pzas",
+        inventarioSTCK: 8500,
+        inventarioFLOR: 300,
+        demandas: [
+          {
+            orden: "WO-40001",
+            fechaNecesidad: addDaysISO(todayISO, 1),
+            sku: "SKU-H",
+            linea: "L4",
+            cliente: "Cliente A",
+            cantidad: 2500
+          },
+          {
+            orden: "WO-40002",
+            fechaNecesidad: addDaysISO(todayISO, 2),
+            sku: "SKU-I",
+            linea: "L4",
+            cliente: "Cliente B",
+            cantidad: 3000
           }
         ],
         llegadas: []
@@ -877,6 +761,7 @@
 
     const elStart = document.getElementById("startDate");
     const elHorizon = document.getElementById("horizonDays");
+    const elFlorLimit = document.getElementById("florLimit");
     const elSearch = document.getElementById("searchInput");
     const elFilter = document.getElementById("quickFilter");
     const elSort = document.getElementById("sortBy");
@@ -885,33 +770,20 @@
 
     loadData();
 
-    if (!selectedId && materials.length) {
-      selectedId = materials[0].id;
+    if (!selectedMaterialId && materials.length) {
+      selectedMaterialId = materials[0].id;
     }
 
     render();
 
-    [elStart, elHorizon, elSearch, elFilter, elSort].forEach(element => {
+    [elStart, elHorizon, elFlorLimit, elSearch, elFilter, elSort].forEach(element => {
       element.addEventListener("input", render);
     });
 
     function addDaysISO(iso, days) {
-      const d = new Date(iso + "T00:00:00");
-      d.setDate(d.getDate() + Number(days));
-      return d.toISOString().slice(0, 10);
-    }
-
-    function daysBetween(start, end) {
-      return Math.round(
-        (new Date(end + "T00:00:00") - new Date(start + "T00:00:00")) / 86400000
-      );
-    }
-
-    function fmtDate(iso) {
-      return new Date(iso + "T00:00:00").toLocaleDateString("es-MX", {
-        day: "2-digit",
-        month: "short"
-      });
+      const date = new Date(iso + "T00:00:00");
+      date.setDate(date.getDate() + Number(days));
+      return date.toISOString().slice(0, 10);
     }
 
     function num(value) {
@@ -935,7 +807,19 @@
       return esc(value).replaceAll("\n", " ");
     }
 
-    function normalize(material) {
+    function getEndDate() {
+      return addDaysISO(elStart.value, Number(elHorizon.value) - 1);
+    }
+
+    function isDemandInHorizon(demand) {
+      return demand.fechaNecesidad <= getEndDate();
+    }
+
+    function isArrivalInHorizon(arrival) {
+      return arrival.fecha <= getEndDate();
+    }
+
+    function normalizeMaterial(material) {
       return {
         id: String(material.id || material.material || crypto.randomUUID()),
         material: String(material.material || material.descripcion || material.id || "Sin descripción"),
@@ -943,283 +827,218 @@
         inventarioSTCK: Number(material.inventarioSTCK ?? material.STCK ?? material.stck ?? 0),
         inventarioFLOR: Number(material.inventarioFLOR ?? material.FLOR ?? material.flor ?? 0),
         demandas: Array.isArray(material.demandas)
-          ? material.demandas.map(demanda => ({
-              id: String(demanda.id || crypto.randomUUID()),
-              orden: String(demanda.orden || demanda.workOrder || demanda.WO || ""),
-              fechaNecesidad: String(demanda.fechaNecesidad || demanda.fecha || todayISO),
-              sku: String(demanda.sku || demanda.SKU || demanda.producto || ""),
-              linea: String(demanda.linea || ""),
-              cliente: String(demanda.cliente || ""),
-              cantidad: Number(demanda.cantidad || demanda.demanda || 0)
+          ? material.demandas.map(d => ({
+              id: String(d.id || crypto.randomUUID()),
+              orden: String(d.orden || d.WO || d.workOrder || ""),
+              fechaNecesidad: String(d.fechaNecesidad || d.fecha || todayISO),
+              sku: String(d.sku || d.SKU || d.producto || ""),
+              linea: String(d.linea || ""),
+              cliente: String(d.cliente || ""),
+              cantidad: Number(d.cantidad || d.demanda || 0)
             }))
           : [],
         llegadas: Array.isArray(material.llegadas)
-          ? material.llegadas.map(llegada => ({
-              id: String(llegada.id || crypto.randomUUID()),
-              po: String(llegada.po || llegada.PO || ""),
-              fecha: String(llegada.fecha || todayISO),
-              cantidad: Number(llegada.cantidad || 0)
+          ? material.llegadas.map(a => ({
+              id: String(a.id || crypto.randomUUID()),
+              po: String(a.po || a.PO || ""),
+              fecha: String(a.fecha || todayISO),
+              cantidad: Number(a.cantidad || 0)
             }))
           : []
       };
     }
 
-    function calcMaterial(material, start, horizon) {
-      const end = addDaysISO(start, horizon - 1);
+    function calculateMaterial(material) {
+      const florLimit = Number(elFlorLimit.value || 40) / 100;
 
-      const demands = material.demandas.filter(d => d.fechaNecesidad <= end);
-      const overdue = demands.filter(d => d.fechaNecesidad < start);
-      const future = demands.filter(d => d.fechaNecesidad >= start);
+      const demands = material.demandas
+        .filter(isDemandInHorizon)
+        .slice()
+        .sort((a, b) =>
+          a.fechaNecesidad.localeCompare(b.fechaNecesidad) ||
+          String(a.orden).localeCompare(String(b.orden))
+        );
 
-      const totalNeed = demands.reduce((sum, d) => sum + Number(d.cantidad || 0), 0);
-      const overdueNeed = overdue.reduce((sum, d) => sum + Number(d.cantidad || 0), 0);
-      const futureNeed = future.reduce((sum, d) => sum + Number(d.cantidad || 0), 0);
+      const arrivals = material.llegadas.filter(isArrivalInHorizon);
 
-      const totalInv = Number(material.inventarioSTCK || 0) + Number(material.inventarioFLOR || 0);
-      const florPct = totalInv > 0 ? Number(material.inventarioFLOR || 0) / totalInv : 0;
+      const need = demands.reduce((sum, d) => sum + Number(d.cantidad || 0), 0);
+      const overdueNeed = demands
+        .filter(d => d.fechaNecesidad < elStart.value)
+        .reduce((sum, d) => sum + Number(d.cantidad || 0), 0);
 
-      let stck = Number(material.inventarioSTCK || 0);
-      let flor = Number(material.inventarioFLOR || 0);
+      const stck = Number(material.inventarioSTCK || 0);
+      const flor = Number(material.inventarioFLOR || 0);
+      const totalActual = stck + flor;
 
-      const arrivalsByDay = new Map();
-      const demandByDay = new Map();
+      const arrivalsQty = arrivals.reduce((sum, a) => sum + Number(a.cantidad || 0), 0);
+      const totalProjected = totalActual + arrivalsQty;
 
-      material.llegadas.forEach(arrival => {
-        const index = daysBetween(start, arrival.fecha);
+      const florPct = totalActual > 0 ? flor / totalActual : 0;
+      const shortageActual = Math.max(0, need - totalActual);
+      const shortageProjected = Math.max(0, need - totalProjected);
 
-        if (index >= 0 && index < horizon) {
-          arrivalsByDay.set(
-            index,
-            (arrivalsByDay.get(index) || 0) + Number(arrival.cantidad || 0)
-          );
-        }
-      });
+      const riskWithoutFlor = Math.max(0, need - stck);
+      const requiredFromFlor = Math.min(flor, Math.max(0, need - stck));
 
-      future.forEach(demand => {
-        const index = daysBetween(start, demand.fechaNecesidad);
+      let simSTCK = stck;
+      let simFLOR = flor;
 
-        if (index >= 0 && index < horizon) {
-          demandByDay.set(
-            index,
-            (demandByDay.get(index) || 0) + Number(demand.cantidad || 0)
-          );
-        }
-      });
+      const orderLines = demands.map(demand => {
+        const qty = Number(demand.cantidad || 0);
 
-      const orderLines = [];
-      const events = [];
-
-      material.llegadas.forEach(arrival => {
-        events.push({
-          type: "arrival",
-          date: arrival.fecha,
-          qty: Number(arrival.cantidad || 0),
-          data: arrival
-        });
-      });
-
-      demands.forEach(demand => {
-        events.push({
-          type: "demand",
-          date: demand.fechaNecesidad,
-          qty: Number(demand.cantidad || 0),
-          data: demand
-        });
-      });
-
-      events.sort((a, b) => {
-        const dateCompare = a.date.localeCompare(b.date);
-        if (dateCompare !== 0) return dateCompare;
-        return a.type === "arrival" ? -1 : 1;
-      });
-
-      events.forEach(event => {
-        if (event.date > end) return;
-
-        if (event.type === "arrival") {
-          stck += event.qty;
-          return;
-        }
-
-        const qty = event.qty;
-
-        const usedSTCK = Math.min(stck, qty);
-        stck -= usedSTCK;
+        const usedSTCK = Math.min(simSTCK, qty);
+        simSTCK -= usedSTCK;
 
         const remainingAfterSTCK = qty - usedSTCK;
 
-        const usedFLOR = Math.min(flor, remainingAfterSTCK);
-        flor -= usedFLOR;
+        const usedFLOR = Math.min(simFLOR, remainingAfterSTCK);
+        simFLOR -= usedFLOR;
 
         const shortage = remainingAfterSTCK - usedFLOR;
 
-        orderLines.push({
-          ...event.data,
-          cantidad: qty,
-          overdue: event.date < start,
+        return {
+          ...demand,
+          materialId: material.id,
+          material: material.material,
+          unidad: material.unidad,
+          overdue: demand.fechaNecesidad < elStart.value,
           cubiertoSTCK: usedSTCK,
           cubiertoFLOR: usedFLOR,
           faltante: shortage
-        });
+        };
       });
 
-      const shortTotal = orderLines.reduce((sum, order) => sum + order.faltante, 0);
-      const riskWithoutFlor = Math.max(0, totalNeed - Number(material.inventarioSTCK || 0));
-      const requiredFromFlor = orderLines.reduce((sum, order) => sum + order.cubiertoFLOR, 0);
       const ordersRisk = new Set(
         orderLines
-          .filter(order => order.faltante > 0 || order.cubiertoFLOR > 0)
-          .map(order => order.orden)
+          .filter(line => line.faltante > 0 || line.cubiertoFLOR > 0)
+          .map(line => line.orden)
       ).size;
 
-      const timeline = [];
-
-      let simStck = Number(material.inventarioSTCK || 0);
-      let simFlor = Number(material.inventarioFLOR || 0);
-
-      overdue
-        .slice()
-        .sort((a, b) => a.fechaNecesidad.localeCompare(b.fechaNecesidad))
-        .forEach(demand => {
-          let qty = Number(demand.cantidad || 0);
-
-          let used = Math.min(simStck, qty);
-          simStck -= used;
-          qty -= used;
-
-          used = Math.min(simFlor, qty);
-          simFlor -= used;
-          qty -= used;
-        });
-
-      for (let day = 0; day < horizon; day++) {
-        simStck += arrivalsByDay.get(day) || 0;
-
-        const demand = demandByDay.get(day) || 0;
-
-        let qty = demand;
-
-        const stckUsed = Math.min(simStck, qty);
-        simStck -= stckUsed;
-        qty -= stckUsed;
-
-        const florUsed = Math.min(simFlor, qty);
-        simFlor -= florUsed;
-        qty -= florUsed;
-
-        const shortage = qty;
-
-        timeline.push({
-          day,
-          fecha: addDaysISO(start, day),
-          arrival: arrivalsByDay.get(day) || 0,
-          demand,
-          stckUsed,
-          florUsed,
-          short: shortage,
-          finalStock: simStck + simFlor
-        });
-      }
-
       let status = "OK STCK";
-      let cls = "b-green";
-      let priority = 5;
+      let action = "OK PARA CORRER";
+      let badge = "b-ok";
+      let actionClass = "action-green";
+      let priority = 6;
 
-      if (shortTotal > 0) {
-        status = "FALTANTE";
-        cls = "b-red-strong";
+      if (shortageActual > 0 && shortageProjected > 0) {
+        status = "FALTANTE REAL";
+        action = "NO CARGAR / ESCALAR";
+        badge = "b-red-strong";
+        actionClass = "action-red";
         priority = 1;
-      } else if (riskWithoutFlor > 0 && florPct >= 0.40) {
-        status = "DEPENDE FLOR ALTO";
-        cls = "b-orange";
+      } else if (shortageActual > 0 && shortageProjected === 0) {
+        status = "FALTA AHORA";
+        action = "ESPERAR LLEGADA / NO CARGAR";
+        badge = "b-red";
+        actionClass = "action-red";
         priority = 2;
+      } else if (riskWithoutFlor > 0 && florPct >= florLimit) {
+        status = "DEPENDE FLOR ALTO";
+        action = "VALIDAR FLOR URGENTE";
+        badge = "b-orange";
+        actionClass = "action-orange";
+        priority = 3;
       } else if (riskWithoutFlor > 0) {
         status = "DEPENDE FLOR";
-        cls = "b-yellow";
-        priority = 3;
-      } else if (florPct >= 0.40) {
-        status = "FLOR ALTO";
-        cls = "b-purple";
+        action = "VALIDAR FLOR";
+        badge = "b-warn";
+        actionClass = "action-yellow";
         priority = 4;
+      } else if (florPct >= florLimit) {
+        status = "FLOR ALTO";
+        action = "REVISAR BALANCE FLOR";
+        badge = "b-purple";
+        actionClass = "action-purple";
+        priority = 5;
       }
 
       return {
-        totalNeed,
-        futureNeed,
+        need,
         overdueNeed,
-        totalInv,
+        stck,
+        flor,
+        totalActual,
+        arrivalsQty,
+        totalProjected,
         florPct,
-        shortTotal,
+        shortageActual,
+        shortageProjected,
         riskWithoutFlor,
         requiredFromFlor,
         ordersRisk,
-        status,
-        cls,
-        priority,
         orderLines,
-        timeline,
-        finalStock: stck + flor
+        status,
+        action,
+        badge,
+        actionClass,
+        priority
       };
     }
 
-    function enriched() {
-      const start = elStart.value;
-      const horizon = Number(elHorizon.value);
+    function getMaterialRows() {
       const search = elSearch.value.toLowerCase().trim();
       const filter = elFilter.value;
       const sort = elSort.value;
 
       let rows = materials.map(material => ({
         ...material,
-        calc: calcMaterial(material, start, horizon)
+        calc: calculateMaterial(material)
       }));
 
       if (search) {
-        rows = rows.filter(material =>
-          (
-            material.id +
-            " " +
-            material.material +
-            " " +
-            material.demandas.map(d => d.orden + " " + d.sku).join(" ")
-          ).toLowerCase().includes(search)
-        );
+        rows = rows.filter(material => {
+          const text = [
+            material.id,
+            material.material,
+            ...material.demandas.map(d => `${d.orden} ${d.sku} ${d.linea} ${d.cliente}`)
+          ].join(" ").toLowerCase();
+
+          return text.includes(search);
+        });
       }
 
-      if (filter === "short") {
-        rows = rows.filter(material => material.calc.shortTotal > 0);
+      if (filter === "noLoad") {
+        rows = rows.filter(m => m.calc.action.includes("NO CARGAR") || m.calc.action.includes("ESCALAR"));
       }
 
-      if (filter === "florDep") {
-        rows = rows.filter(material => material.calc.riskWithoutFlor > 0);
+      if (filter === "waitArrival") {
+        rows = rows.filter(m => m.calc.action.includes("ESPERAR"));
+      }
+
+      if (filter === "validateFlor") {
+        rows = rows.filter(m => m.calc.action.includes("VALIDAR FLOR"));
       }
 
       if (filter === "florHigh") {
-        rows = rows.filter(material => material.calc.florPct >= 0.40);
+        const limit = Number(elFlorLimit.value || 40) / 100;
+        rows = rows.filter(m => m.calc.florPct >= limit);
+      }
+
+      if (filter === "ok") {
+        rows = rows.filter(m => m.calc.action === "OK PARA CORRER");
       }
 
       if (filter === "overdue") {
-        rows = rows.filter(material => material.calc.overdueNeed > 0);
-      }
-
-      if (filter === "today") {
-        rows = rows.filter(material =>
-          material.demandas.some(demand => demand.fechaNecesidad === start)
-        );
+        rows = rows.filter(m => m.calc.overdueNeed > 0);
       }
 
       if (sort === "priority") {
         rows.sort((a, b) =>
-          a.calc.priority - b.calc.priority || b.calc.shortTotal - a.calc.shortTotal
+          a.calc.priority - b.calc.priority ||
+          b.calc.shortageActual - a.calc.shortageActual
         );
       }
 
       if (sort === "shortDesc") {
-        rows.sort((a, b) => b.calc.shortTotal - a.calc.shortTotal);
+        rows.sort((a, b) => b.calc.shortageActual - a.calc.shortageActual);
       }
 
       if (sort === "florPctDesc") {
         rows.sort((a, b) => b.calc.florPct - a.calc.florPct);
+      }
+
+      if (sort === "ordersDesc") {
+        rows.sort((a, b) => b.calc.ordersRisk - a.calc.ordersRisk);
       }
 
       if (sort === "name") {
@@ -1229,54 +1048,150 @@
       return rows;
     }
 
+    function getOrderRows() {
+      const materialRows = materials.map(material => ({
+        ...material,
+        calc: calculateMaterial(material)
+      }));
+
+      const orders = new Map();
+
+      materialRows.forEach(material => {
+        material.calc.orderLines.forEach(line => {
+          const key = line.orden || "SIN ORDEN";
+
+          if (!orders.has(key)) {
+            orders.set(key, {
+              orden: key,
+              fecha: line.fechaNecesidad,
+              sku: line.sku,
+              linea: line.linea,
+              cliente: line.cliente,
+              materiales: [],
+              totalReq: 0,
+              faltante: 0,
+              usaFlor: 0,
+              overdue: false
+            });
+          }
+
+          const order = orders.get(key);
+
+          if (line.fechaNecesidad < order.fecha) {
+            order.fecha = line.fechaNecesidad;
+          }
+
+          order.totalReq += Number(line.cantidad || 0);
+          order.faltante += Number(line.faltante || 0);
+          order.usaFlor += Number(line.cubiertoFLOR || 0);
+          order.overdue = order.overdue || line.overdue;
+
+          order.materiales.push({
+            materialId: material.id,
+            material: material.material,
+            unidad: material.unidad,
+            requerido: line.cantidad,
+            stck: line.cubiertoSTCK,
+            flor: line.cubiertoFLOR,
+            faltante: line.faltante
+          });
+        });
+      });
+
+      let rows = Array.from(orders.values());
+
+      rows.forEach(order => {
+        if (order.faltante > 0) {
+          order.estado = "NO CARGAR";
+          order.badge = "b-red-strong";
+          order.actionClass = "action-red";
+          order.priority = 1;
+        } else if (order.usaFlor > 0) {
+          order.estado = "CORRER CON VALIDACIÓN FLOR";
+          order.badge = "b-warn";
+          order.actionClass = "action-yellow";
+          order.priority = 2;
+        } else {
+          order.estado = "OK PARA CORRER";
+          order.badge = "b-ok";
+          order.actionClass = "action-green";
+          order.priority = 3;
+        }
+      });
+
+      rows.sort((a, b) =>
+        a.priority - b.priority ||
+        a.fecha.localeCompare(b.fecha)
+      );
+
+      return rows;
+    }
+
     function render() {
       saveData();
 
-      const rows = enriched();
+      document.getElementById("tabMaterials").classList.toggle("active", currentView === "materials");
+      document.getElementById("tabOrders").classList.toggle("active", currentView === "orders");
 
       renderKPIs();
 
-      document.getElementById("tabSummary").classList.toggle("active", currentView === "summary");
-      document.getElementById("tabGantt").classList.toggle("active", currentView === "gantt");
-
-      if (currentView === "summary") {
-        renderSummary(rows);
+      if (currentView === "materials") {
+        renderMaterialsTable();
       } else {
-        renderGantt(rows);
+        renderOrdersTable();
       }
 
       renderEditor();
-      renderArrival();
-      renderDetail();
+      renderArrivalPanel();
+      renderDetailPanel();
     }
 
     function renderKPIs() {
       const rows = materials.map(material => ({
         ...material,
-        calc: calcMaterial(material, elStart.value, Number(elHorizon.value))
+        calc: calculateMaterial(material)
       }));
 
-      document.getElementById("kpiMaterials").textContent = rows.length;
-      document.getElementById("kpiShort").textContent = rows.filter(m => m.calc.shortTotal > 0).length;
-      document.getElementById("kpiFlorDep").textContent = rows.filter(m => m.calc.riskWithoutFlor > 0).length;
-      document.getElementById("kpiFlorHigh").textContent = rows.filter(m => m.calc.florPct >= 0.40).length;
-      document.getElementById("kpiOrdersRisk").textContent = rows.reduce((sum, m) => sum + m.calc.ordersRisk, 0);
-      document.getElementById("kpiOverdue").textContent = rows.filter(m => m.calc.overdueNeed > 0).length;
+      const total = rows.length;
+      const ok = rows.filter(m => m.calc.action === "OK PARA CORRER").length;
+      const action = rows.filter(m => m.calc.action !== "OK PARA CORRER").length;
+      const noLoad = rows.filter(m =>
+        m.calc.action.includes("NO CARGAR") || m.calc.action.includes("ESCALAR")
+      ).length;
+      const validateFlor = rows.filter(m => m.calc.action.includes("VALIDAR FLOR")).length;
+
+      const limit = Number(elFlorLimit.value || 40) / 100;
+      const florHigh = rows.filter(m => m.calc.florPct >= limit).length;
+
+      const ordersRisk = getOrderRows().filter(o => o.estado !== "OK PARA CORRER").length;
+
+      const planOkPct = total > 0 ? ok / total : 0;
+
+      document.getElementById("kpiPlanOk").textContent = pct(planOkPct);
+      document.getElementById("kpiAction").textContent = action;
+      document.getElementById("kpiNoLoad").textContent = noLoad;
+      document.getElementById("kpiValidateFlor").textContent = validateFlor;
+      document.getElementById("kpiFlorHigh").textContent = florHigh;
+      document.getElementById("kpiOrdersRisk").textContent = ordersRisk;
     }
 
-    function renderSummary(rows) {
+    function renderMaterialsTable() {
+      const rows = getMaterialRows();
+
       let html = `
         <div class="table-wrap">
-          <table class="materials-table">
+          <table>
             <thead>
               <tr>
                 <th>Estado</th>
+                <th>Acción</th>
                 <th>Material</th>
                 <th class="num">Necesidad</th>
                 <th class="num">STCK</th>
                 <th class="num">FLOR</th>
+                <th class="num">Total actual</th>
                 <th class="num">% FLOR</th>
-                <th>Uso vs plan</th>
+                <th>Uso del plan</th>
                 <th class="num">Faltante</th>
                 <th class="num">Riesgo sin FLOR</th>
                 <th class="num">Órdenes riesgo</th>
@@ -1287,56 +1202,54 @@
       `;
 
       rows.forEach(material => {
-        const calc = material.calc;
-        const need = Math.max(calc.totalNeed, 1);
+        const c = material.calc;
 
-        const stckWidth = Math.min(
-          100,
-          (Math.min(material.inventarioSTCK, calc.totalNeed) / need) * 100
-        );
+        const base = Math.max(c.need, 1);
 
-        const florWidth = Math.min(
-          100 - stckWidth,
-          (Math.min(material.inventarioFLOR, Math.max(0, calc.totalNeed - material.inventarioSTCK)) / need) * 100
-        );
-
-        const missingWidth = Math.max(0, 100 - stckWidth - florWidth);
+        const stckWidth = Math.min(100, Math.min(c.stck, c.need) / base * 100);
+        const florWidth = Math.min(100 - stckWidth, c.requiredFromFlor / base * 100);
+        const shortWidth = Math.max(0, c.shortageActual / base * 100);
 
         html += `
-          <tr onclick="selectMaterial('${attr(material.id)}')" class="${material.id === selectedId ? "selected" : ""}">
-            <td>
-              <span class="badge ${calc.cls}">${calc.status}</span>
-            </td>
+          <tr onclick="selectMaterial('${attr(material.id)}')" class="${material.id === selectedMaterialId ? "selected" : ""}">
+            <td><span class="badge ${c.badge}">${c.status}</span></td>
+
+            <td class="action-cell ${c.actionClass}">${c.action}</td>
 
             <td>
               <div class="material-name" title="${attr(material.material)}">${esc(material.material)}</div>
               <div class="sub">${esc(material.id)} · ${esc(material.unidad)}</div>
             </td>
 
-            <td class="num">${num(calc.totalNeed)}</td>
-            <td class="num">${num(material.inventarioSTCK)}</td>
-            <td class="num">${num(material.inventarioFLOR)}</td>
+            <td class="num">${num(c.need)}</td>
+            <td class="num">${num(c.stck)}</td>
+            <td class="num">${num(c.flor)}</td>
+            <td class="num">${num(c.totalActual)}</td>
 
             <td class="num">
-              <span class="badge ${calc.florPct >= 0.40 ? "b-orange" : "b-gray"}">${pct(calc.florPct)}</span>
+              <span class="badge ${c.florPct >= Number(elFlorLimit.value || 40) / 100 ? "b-orange" : "b-gray"}">
+                ${pct(c.florPct)}
+              </span>
             </td>
 
             <td>
-              <div class="bar" title="Azul STCK, naranja FLOR, rojo faltante">
+              <div class="coverage-bar">
                 <div class="seg-stck" style="width:${stckWidth}%"></div>
                 <div class="seg-flor" style="width:${florWidth}%"></div>
-                <div class="seg-miss" style="width:${missingWidth}%"></div>
+                <div class="seg-short" style="width:${shortWidth}%"></div>
               </div>
-              <div class="bar-label">FLOR requerido: ${num(calc.requiredFromFlor)} · final: ${num(calc.finalStock)}</div>
+              <div class="bar-label">
+                FLOR requerido: ${num(c.requiredFromFlor)} · Llegadas: ${num(c.arrivalsQty)}
+              </div>
             </td>
 
             <td class="num">
-              <b style="color:${calc.shortTotal > 0 ? "#b91c1c" : "#166534"}">${num(calc.shortTotal)}</b>
+              <b style="color:${c.shortageActual > 0 ? "#991b1b" : "#166534"}">${num(c.shortageActual)}</b>
             </td>
 
-            <td class="num">${num(calc.riskWithoutFlor)}</td>
-            <td class="num">${num(calc.ordersRisk)}</td>
-            <td class="num">${num(calc.overdueNeed)}</td>
+            <td class="num">${num(c.riskWithoutFlor)}</td>
+            <td class="num">${num(c.ordersRisk)}</td>
+            <td class="num">${num(c.overdueNeed)}</td>
           </tr>
         `;
       });
@@ -1350,84 +1263,54 @@
       document.getElementById("mainView").innerHTML = html;
     }
 
-    function renderGantt(rows) {
-      const horizon = Number(elHorizon.value);
-      const start = elStart.value;
+    function renderOrdersTable() {
+      const orders = getOrderRows();
 
       let html = `
-        <div class="gantt-wrap">
-          <div class="gantt">
-            <div class="gantt-head">
-              <div>Material</div>
-              <div>Overdue</div>
-              <div class="days" style="grid-template-columns:repeat(${horizon},minmax(18px,1fr))">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Estado</th>
+                <th>Orden</th>
+                <th>Fecha</th>
+                <th>SKU</th>
+                <th>Línea</th>
+                <th>Cliente</th>
+                <th class="num">Materiales</th>
+                <th class="num">Faltante</th>
+                <th class="num">Usa FLOR</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody>
       `;
 
-      for (let i = 0; i < horizon; i++) {
-        html += `<div class="dayh">${fmtDate(addDaysISO(start, i))}</div>`;
-      }
-
-      html += `
-              </div>
-              <div style="text-align:right">Stock final</div>
-            </div>
-      `;
-
-      rows.forEach(material => {
-        const calc = material.calc;
-
+      orders.forEach(order => {
         html += `
-          <div class="gantt-row ${material.id === selectedId ? "selected" : ""}" onclick="selectMaterial('${attr(material.id)}')">
-            <div class="gmat">
-              <span class="badge ${calc.cls}">${calc.status}</span>
-              <div class="gtitle" title="${attr(material.material)}">${esc(material.material)}</div>
-              <div class="gsub">${esc(material.id)}</div>
-            </div>
-
-            <div class="overcell ${calc.overdueNeed > 0 ? "b-red" : "b-gray"}" title="Demanda overdue">
-              ${num(calc.overdueNeed)}
-            </div>
-
-            <div class="timeline" style="grid-template-columns:repeat(${horizon},minmax(18px,1fr))">
-        `;
-
-        calc.timeline.forEach(day => {
-          const total = Math.max(day.demand, 1);
-
-          const stckWidth = day.demand > 0 ? (day.stckUsed / total) * 100 : 100;
-          const florWidth = day.demand > 0 ? (day.florUsed / total) * 100 : 0;
-          const missingWidth = day.demand > 0 ? (day.short / total) * 100 : 0;
-
-          const tooltip =
-            `${day.fecha}\n` +
-            `Demanda: ${num(day.demand)}\n` +
-            `Llegada: ${num(day.arrival)}\n` +
-            `STCK usado: ${num(day.stckUsed)}\n` +
-            `FLOR usado: ${num(day.florUsed)}\n` +
-            `Faltante: ${num(day.short)}\n` +
-            `Stock final: ${num(day.finalStock)}`;
-
-          html += `
-            <div class="daycell" title="${attr(tooltip)}">
-              <div class="daybar seg-stck" style="width:${stckWidth}%"></div>
-              <div class="daybar seg-flor" style="left:${stckWidth}%;width:${florWidth}%"></div>
-              <div class="daybar seg-miss" style="left:${stckWidth + florWidth}%;width:${missingWidth}%"></div>
-              ${day.demand > 0 ? `<div class="demmark"></div>` : ""}
-              ${day.arrival > 0 ? `<div class="arrmark"></div>` : ""}
-            </div>
-          `;
-        });
-
-        html += `
-            </div>
-
-            <div class="finalstock">${num(calc.finalStock)}</div>
-          </div>
+          <tr>
+            <td><span class="badge ${order.badge}">${order.estado}</span></td>
+            <td><b>${esc(order.orden)}</b></td>
+            <td>
+              ${esc(order.fecha)}
+              ${order.overdue ? `<span class="badge b-red">Overdue</span>` : ""}
+            </td>
+            <td>${esc(order.sku)}</td>
+            <td>${esc(order.linea)}</td>
+            <td>${esc(order.cliente)}</td>
+            <td class="num">${order.materiales.length}</td>
+            <td class="num">
+              <b style="color:${order.faltante > 0 ? "#991b1b" : "#166534"}">${num(order.faltante)}</b>
+            </td>
+            <td class="num">${num(order.usaFlor)}</td>
+            <td class="action-cell ${order.actionClass}">${esc(order.estado)}</td>
+          </tr>
         `;
       });
 
       html += `
-          </div>
+            </tbody>
+          </table>
         </div>
       `;
 
@@ -1435,7 +1318,7 @@
     }
 
     function renderEditor() {
-      const material = materials.find(item => item.id === selectedId);
+      const material = materials.find(m => m.id === selectedMaterialId);
       const box = document.getElementById("selectedEditor");
 
       if (!material) {
@@ -1446,36 +1329,36 @@
       box.innerHTML = `
         <div class="form-group">
           <label>Código</label>
-          <input value="${attr(material.id)}" onchange="updateSelected('id', this.value)">
+          <input value="${attr(material.id)}" onchange="updateMaterial('id', this.value)">
         </div>
 
         <div class="form-group">
           <label>Descripción</label>
-          <input value="${attr(material.material)}" onchange="updateSelected('material', this.value)">
+          <input value="${attr(material.material)}" onchange="updateMaterial('material', this.value)">
         </div>
 
         <div class="form-row">
           <div>
             <label>STCK</label>
-            <input type="number" value="${material.inventarioSTCK}" onchange="updateSelected('inventarioSTCK', Number(this.value))">
+            <input type="number" value="${material.inventarioSTCK}" onchange="updateMaterial('inventarioSTCK', Number(this.value))">
           </div>
 
           <div>
             <label>FLOR</label>
-            <input type="number" value="${material.inventarioFLOR}" onchange="updateSelected('inventarioFLOR', Number(this.value))">
+            <input type="number" value="${material.inventarioFLOR}" onchange="updateMaterial('inventarioFLOR', Number(this.value))">
           </div>
         </div>
 
         <div class="form-group">
           <label>Unidad</label>
-          <input value="${attr(material.unidad)}" onchange="updateSelected('unidad', this.value)">
+          <input value="${attr(material.unidad)}" onchange="updateMaterial('unidad', this.value)">
         </div>
       `;
     }
 
-    function renderArrival() {
-      const material = materials.find(item => item.id === selectedId);
-      const box = document.getElementById("arrivalForm");
+    function renderArrivalPanel() {
+      const material = materials.find(m => m.id === selectedMaterialId);
+      const box = document.getElementById("arrivalPanel");
 
       if (!material) {
         box.innerHTML = `<p class="note">Selecciona un material.</p>`;
@@ -1484,7 +1367,7 @@
 
       box.innerHTML = `
         <div class="form-group">
-          <label>Material</label>
+          <label>Material seleccionado</label>
           <input value="${attr(material.material)}" disabled>
         </div>
 
@@ -1505,12 +1388,16 @@
           <input id="arrivalPO" placeholder="PO opcional">
         </div>
 
-        <button class="btn-primary btn-full" onclick="addArrival()">Agregar llegada a STCK</button>
+        <button class="btn-primary" style="width:100%;" onclick="addArrival()">Agregar llegada</button>
+
+        <p class="note">
+          La llegada se considera en el total proyectado, pero la alerta principal sigue evaluando el inventario actual.
+        </p>
       `;
     }
 
-    function renderDetail() {
-      const material = materials.find(item => item.id === selectedId);
+    function renderDetailPanel() {
+      const material = materials.find(m => m.id === selectedMaterialId);
       const box = document.getElementById("detailPanel");
 
       if (!material) {
@@ -1518,34 +1405,39 @@
         return;
       }
 
-      const calc = calcMaterial(material, elStart.value, Number(elHorizon.value));
+      const c = calculateMaterial(material);
 
       let html = `
-        <div class="mini-kpis">
+        <div class="mini-grid">
           <div class="mini">
             <span>Necesidad plan</span>
-            <strong>${num(calc.totalNeed)}</strong>
+            <strong>${num(c.need)}</strong>
           </div>
 
           <div class="mini">
-            <span>Faltante</span>
-            <strong style="color:${calc.shortTotal > 0 ? "#b91c1c" : "#166534"}">${num(calc.shortTotal)}</strong>
+            <span>Faltante actual</span>
+            <strong style="color:${c.shortageActual > 0 ? "#991b1b" : "#166534"}">${num(c.shortageActual)}</strong>
           </div>
 
           <div class="mini">
-            <span>Depende de FLOR</span>
-            <strong>${num(calc.riskWithoutFlor)}</strong>
+            <span>Riesgo sin FLOR</span>
+            <strong>${num(c.riskWithoutFlor)}</strong>
           </div>
 
           <div class="mini">
-            <span>% Inventario en FLOR</span>
-            <strong>${pct(calc.florPct)}</strong>
+            <span>% FLOR</span>
+            <strong>${pct(c.florPct)}</strong>
           </div>
         </div>
 
-        <hr class="small-separator">
+        <p class="note">
+          <b>Acción sugerida:</b>
+          <span class="${c.actionClass}" style="font-weight:800;">${esc(c.action)}</span>
+        </p>
 
-        <table class="detail-table">
+        <hr class="separator">
+
+        <table>
           <thead>
             <tr>
               <th>Fecha</th>
@@ -1553,47 +1445,48 @@
               <th>SKU</th>
               <th>Línea</th>
               <th>Cliente</th>
-              <th class="right">Req.</th>
-              <th class="right">STCK</th>
-              <th class="right">FLOR</th>
-              <th class="right">Faltante</th>
-              <th>Estado</th>
+              <th class="num">Req.</th>
+              <th class="num">STCK</th>
+              <th class="num">FLOR</th>
+              <th class="num">Faltante</th>
+              <th>Estado orden-material</th>
             </tr>
           </thead>
           <tbody>
       `;
 
-      calc.orderLines.forEach(order => {
-        const status =
-          order.faltante > 0
-            ? `<span class="badge b-red-strong">Faltante</span>`
-            : order.cubiertoFLOR > 0
-              ? `<span class="badge b-yellow">Usa FLOR</span>`
-              : `<span class="badge b-green">STCK</span>`;
+      c.orderLines.forEach(line => {
+        let badge = `<span class="badge b-ok">STCK</span>`;
+
+        if (line.faltante > 0) {
+          badge = `<span class="badge b-red-strong">Faltante</span>`;
+        } else if (line.cubiertoFLOR > 0) {
+          badge = `<span class="badge b-warn">Usa FLOR</span>`;
+        }
 
         html += `
           <tr>
             <td>
-              ${esc(order.fechaNecesidad)}
-              ${order.overdue ? `<span class="badge b-red">Overdue</span>` : ""}
+              ${esc(line.fechaNecesidad)}
+              ${line.overdue ? `<span class="badge b-red">Overdue</span>` : ""}
             </td>
-            <td>${esc(order.orden)}</td>
-            <td>${esc(order.sku)}</td>
-            <td>${esc(order.linea)}</td>
-            <td>${esc(order.cliente)}</td>
-            <td class="right">${num(order.cantidad)}</td>
-            <td class="right">${num(order.cubiertoSTCK)}</td>
-            <td class="right">${num(order.cubiertoFLOR)}</td>
-            <td class="right">${num(order.faltante)}</td>
-            <td>${status}</td>
+            <td>${esc(line.orden)}</td>
+            <td>${esc(line.sku)}</td>
+            <td>${esc(line.linea)}</td>
+            <td>${esc(line.cliente)}</td>
+            <td class="num">${num(line.cantidad)}</td>
+            <td class="num">${num(line.cubiertoSTCK)}</td>
+            <td class="num">${num(line.cubiertoFLOR)}</td>
+            <td class="num">${num(line.faltante)}</td>
+            <td>${badge}</td>
           </tr>
         `;
       });
 
-      if (!calc.orderLines.length) {
+      if (!c.orderLines.length) {
         html += `
           <tr>
-            <td colspan="10" class="muted">Sin demanda dentro del horizonte seleccionado.</td>
+            <td colspan="10" class="note">Sin demandas dentro del horizonte seleccionado.</td>
           </tr>
         `;
       }
@@ -1612,12 +1505,12 @@
     }
 
     function selectMaterial(id) {
-      selectedId = id;
+      selectedMaterialId = id;
       render();
     }
 
-    function updateSelected(field, value) {
-      const oldId = selectedId;
+    function updateMaterial(field, value) {
+      const oldId = selectedMaterialId;
 
       materials = materials.map(material => {
         if (material.id !== oldId) return material;
@@ -1628,7 +1521,7 @@
         };
 
         if (field === "id") {
-          selectedId = value;
+          selectedMaterialId = value;
         }
 
         return updated;
@@ -1638,7 +1531,7 @@
     }
 
     function addArrival() {
-      const material = materials.find(item => item.id === selectedId);
+      const material = materials.find(m => m.id === selectedMaterialId);
 
       if (!material) return;
 
@@ -1681,8 +1574,8 @@
             return;
           }
 
-          materials = data.map(normalize);
-          selectedId = materials[0]?.id || null;
+          materials = data.map(normalizeMaterial);
+          selectedMaterialId = materials[0]?.id || null;
 
           render();
 
@@ -1702,33 +1595,34 @@
 
       const url = URL.createObjectURL(blob);
 
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "plan_inventario_flor_stck.json";
-      a.click();
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "plan_inventario_flor_stck.json";
+      link.click();
 
       URL.revokeObjectURL(url);
     }
 
     function saveData() {
-      localStorage.setItem("validador_flor_stck_data", JSON.stringify(materials));
-      localStorage.setItem("validador_flor_stck_selected", selectedId || "");
+      localStorage.setItem("action_board_flor_stck_data", JSON.stringify(materials));
+      localStorage.setItem("action_board_flor_stck_selected", selectedMaterialId || "");
     }
 
     function loadData() {
       try {
-        const saved = localStorage.getItem("validador_flor_stck_data");
+        const saved = localStorage.getItem("action_board_flor_stck_data");
+        const selected = localStorage.getItem("action_board_flor_stck_selected");
 
         if (saved) {
           const parsed = JSON.parse(saved);
 
-          if (Array.isArray(parsed) && parsed.length) {
-            materials = parsed.map(normalize);
-            selectedId = localStorage.getItem("validador_flor_stck_selected") || materials[0].id;
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            materials = parsed.map(normalizeMaterial);
+            selectedMaterialId = selected || materials[0].id;
           }
         }
       } catch (error) {
-        console.warn(error);
+        console.warn("No se pudo cargar información guardada.", error);
       }
     }
   </script>
