@@ -7,6 +7,7 @@
   <title>Action Board Plan vs FLOR/STCK</title>
 
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
   <style>
     :root {
@@ -15,7 +16,6 @@
       --text: #0f172a;
       --muted: #64748b;
       --border: #dbe3ef;
-
       --stck: #2563eb;
       --flor: #f97316;
       --ok: #16a34a;
@@ -23,7 +23,6 @@
       --orange: #ea580c;
       --red: #dc2626;
       --purple: #7c3aed;
-
       --shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
     }
 
@@ -189,6 +188,11 @@
       cursor: pointer;
     }
 
+    button:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
     .btn-primary {
       background: #2563eb;
       color: white;
@@ -327,12 +331,6 @@
       text-overflow: ellipsis;
     }
 
-    .sub {
-      color: var(--muted);
-      font-size: 10px;
-      white-space: nowrap;
-    }
-
     .badge {
       display: inline-block;
       padding: 3px 7px;
@@ -465,27 +463,54 @@
       font-size: 17px;
     }
 
-    .legend {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      padding: 10px 12px;
-      background: #f8fafc;
-      border-top: 1px solid var(--border);
-      color: var(--muted);
-      font-size: 11px;
-    }
-
-    .legend-item {
-      display: flex;
+    .email-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      display: none;
       align-items: center;
-      gap: 5px;
+      justify-content: center;
+      z-index: 9999;
+      padding: 18px;
     }
 
-    .legend-color {
-      width: 20px;
-      height: 9px;
-      border-radius: 3px;
+    .email-modal {
+      width: min(720px, 100%);
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 25px 60px rgba(15, 23, 42, 0.35);
+      overflow: hidden;
+    }
+
+    .email-modal-header {
+      padding: 14px 16px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border);
+      font-weight: 800;
+    }
+
+    .email-modal-body {
+      padding: 16px;
+    }
+
+    .email-modal-footer {
+      padding: 12px 16px;
+      border-top: 1px solid var(--border);
+      background: #f8fafc;
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .email-help {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.45;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      padding: 10px;
+      border-radius: 12px;
     }
 
     @media (max-width: 1100px) {
@@ -617,6 +642,7 @@
             <button class="btn-secondary" onclick="document.getElementById('fileInput').click()">Importar JSON</button>
             <button class="btn-secondary" onclick="exportJSON()">Exportar JSON</button>
             <button class="btn-success" onclick="downloadActionExcel()">Descargar acciones Excel</button>
+            <button class="btn-primary" onclick="openEmailModal()">Enviar correo acciones</button>
             <input class="hidden-file" type="file" id="fileInput" accept="application/json" onchange="importJSON(event)">
           </div>
 
@@ -687,8 +713,50 @@
     </div>
   </div>
 
+  <div class="email-modal-backdrop" id="emailModal">
+    <div class="email-modal">
+      <div class="email-modal-header">
+        Enviar correo de materiales en acción
+      </div>
+
+      <div class="email-modal-body">
+        <div class="form-group">
+          <label>Destinatarios</label>
+          <input id="emailTo" placeholder="correo1@empresa.com; correo2@empresa.com">
+        </div>
+
+        <div class="form-group">
+          <label>CC opcional</label>
+          <input id="emailCc" placeholder="correo_cc@empresa.com">
+        </div>
+
+        <div class="form-group">
+          <label>Asunto</label>
+          <input id="emailSubject" value="Materiales con acción requerida - Plan vs FLOR/STCK">
+        </div>
+
+        <div class="email-help">
+          La aplicación enviará a Power Automate:
+          <br><br>
+          1. Screenshot PNG de materiales en acción.
+          <br>
+          2. CSV con todos los materiales que requieren acción.
+          <br><br>
+          Power Automate enviará el correo automáticamente con ambos adjuntos.
+        </div>
+      </div>
+
+      <div class="email-modal-footer">
+        <button class="btn-secondary" onclick="closeEmailModal()">Cancelar</button>
+        <button class="btn-primary" id="sendEmailButton" onclick="sendActionEmailPowerAutomate()">Enviar correo</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const todayISO = new Date().toISOString().slice(0, 10);
+
+    const POWER_AUTOMATE_URL = "https://default372ee9e09ce04033a64ac07073a91e.cd.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/62061dd47cd448e4bc01f680c6089f4f/triggers/manual/paths/invoke?api-version=1";
 
     let currentView = "materials";
     let selectedMaterialId = null;
@@ -1583,17 +1651,7 @@
     }
 
     function downloadActionExcel() {
-      const rows = materials
-        .map(material => ({
-          ...material,
-          calc: calculateMaterial(material)
-        }))
-        .filter(material => material.calc.action !== "OK PARA CORRER")
-        .sort((a, b) =>
-          a.calc.priority - b.calc.priority ||
-          b.calc.shortageActual - a.calc.shortageActual ||
-          b.calc.riskWithoutFlor - a.calc.riskWithoutFlor
-        );
+      const rows = getActionMaterialsForEmail();
 
       const exportRows = rows.map(material => {
         const c = material.calc;
@@ -1649,6 +1707,349 @@
 
         URL.revokeObjectURL(url);
       }
+    }
+
+    function openEmailModal() {
+      document.getElementById("emailModal").style.display = "flex";
+    }
+
+    function closeEmailModal() {
+      document.getElementById("emailModal").style.display = "none";
+    }
+
+    function getActionMaterialsForEmail() {
+      return materials
+        .map(material => ({
+          ...material,
+          calc: calculateMaterial(material)
+        }))
+        .filter(material => material.calc.action !== "OK PARA CORRER")
+        .sort((a, b) =>
+          a.calc.priority - b.calc.priority ||
+          b.calc.shortageActual - a.calc.shortageActual ||
+          b.calc.riskWithoutFlor - a.calc.riskWithoutFlor
+        );
+    }
+
+    async function sendActionEmailPowerAutomate() {
+      const to = document.getElementById("emailTo").value.trim();
+      const cc = document.getElementById("emailCc").value.trim();
+      const subject = document.getElementById("emailSubject").value.trim();
+
+      if (!to) {
+        alert("Captura al menos un destinatario.");
+        return;
+      }
+
+      const actionMaterials = getActionMaterialsForEmail();
+
+      if (actionMaterials.length === 0) {
+        alert("No hay materiales en acción para enviar.");
+        return;
+      }
+
+      const sendButton = document.getElementById("sendEmailButton");
+
+      try {
+        sendButton.disabled = true;
+        sendButton.textContent = "Enviando...";
+
+        const imageBase64 = await generateActionScreenshotBase64(actionMaterials);
+        const csvBase64 = generateActionCsvBase64(actionMaterials);
+        const bodyHtml = buildActionEmailHtml(actionMaterials);
+
+        const payload = {
+          to,
+          cc,
+          subject,
+          bodyHtml,
+          imageBase64,
+          csvBase64
+        };
+
+        let response;
+
+        try {
+          response = await fetch(POWER_AUTOMATE_URL, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+          });
+
+          if (!response.ok) {
+            throw new Error("Power Automate respondió con error HTTP: " + response.status);
+          }
+
+          alert("Correo enviado correctamente por Power Automate.");
+          closeEmailModal();
+
+        } catch (normalError) {
+          console.warn("Intento normal falló. Probando modo no-cors.", normalError);
+
+          await fetch(POWER_AUTOMATE_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+          });
+
+          alert("Solicitud enviada a Power Automate. Si el flujo está correcto, el correo llegará en unos momentos.");
+          closeEmailModal();
+        }
+
+      } catch (error) {
+        console.error(error);
+        alert(
+          "No se pudo enviar el correo.\n\n" +
+          "Revisa que el flujo de Power Automate esté guardado/publicado y que la URL sea correcta.\n\n" +
+          "Error: " + error.message
+        );
+      } finally {
+        sendButton.disabled = false;
+        sendButton.textContent = "Enviar correo";
+      }
+    }
+
+    async function generateActionScreenshotBase64(actionMaterials) {
+      if (!window.html2canvas) {
+        throw new Error("No cargó la librería html2canvas.");
+      }
+
+      const node = document.createElement("div");
+
+      node.style.position = "fixed";
+      node.style.left = "-99999px";
+      node.style.top = "0";
+      node.style.width = "1400px";
+      node.style.background = "white";
+      node.style.padding = "18px";
+      node.style.fontFamily = "Arial, Helvetica, sans-serif";
+      node.style.color = "#0f172a";
+
+      const generatedAt = new Date().toLocaleString("es-MX");
+
+      let html = `
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+          <div>
+            <div style="font-size:22px;font-weight:800;">Materiales con acción requerida</div>
+            <div style="font-size:12px;color:#64748b;margin-top:4px;">
+              Action Board Plan vs FLOR/STCK · Generado: ${generatedAt}
+            </div>
+          </div>
+
+          <div style="font-size:11px;color:#64748b;display:flex;gap:12px;align-items:center;">
+            <span><span style="display:inline-block;width:18px;height:9px;background:#2563eb;border-radius:4px;"></span> STCK</span>
+            <span><span style="display:inline-block;width:18px;height:9px;background:#f97316;border-radius:4px;"></span> FLOR</span>
+            <span><span style="display:inline-block;width:18px;height:9px;background:#dc2626;border-radius:4px;"></span> Faltante</span>
+          </div>
+        </div>
+
+        <table style="width:100%;border-collapse:collapse;font-size:11px;">
+          <thead>
+            <tr style="background:#f8fafc;color:#64748b;text-transform:uppercase;">
+              <th style="text-align:left;padding:7px;border-bottom:1px solid #dbe3ef;">Estado</th>
+              <th style="text-align:left;padding:7px;border-bottom:1px solid #dbe3ef;">Acción</th>
+              <th style="text-align:left;padding:7px;border-bottom:1px solid #dbe3ef;">Material</th>
+              <th style="text-align:right;padding:7px;border-bottom:1px solid #dbe3ef;">Necesidad</th>
+              <th style="text-align:right;padding:7px;border-bottom:1px solid #dbe3ef;">STCK</th>
+              <th style="text-align:right;padding:7px;border-bottom:1px solid #dbe3ef;">FLOR</th>
+              <th style="text-align:right;padding:7px;border-bottom:1px solid #dbe3ef;">% FLOR</th>
+              <th style="text-align:left;padding:7px;border-bottom:1px solid #dbe3ef;">Uso del plan</th>
+              <th style="text-align:right;padding:7px;border-bottom:1px solid #dbe3ef;">Faltante</th>
+              <th style="text-align:right;padding:7px;border-bottom:1px solid #dbe3ef;">Riesgo sin FLOR</th>
+              <th style="text-align:right;padding:7px;border-bottom:1px solid #dbe3ef;">Órdenes riesgo</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      actionMaterials.slice(0, 80).forEach(material => {
+        const c = material.calc;
+        const base = Math.max(c.need, 1);
+
+        const stckWidth = Math.min(100, Math.min(c.stck, c.need) / base * 100);
+        const florWidth = Math.min(100 - stckWidth, c.requiredFromFlor / base * 100);
+        const shortWidth = Math.max(0, c.shortageActual / base * 100);
+
+        html += `
+          <tr>
+            <td style="padding:7px;border-bottom:1px solid #edf2f7;font-weight:800;color:${c.shortageActual > 0 ? "#991b1b" : "#9a3412"};">
+              ${esc(c.status)}
+            </td>
+
+            <td style="padding:7px;border-bottom:1px solid #edf2f7;font-weight:800;color:${c.shortageActual > 0 ? "#991b1b" : "#9a3412"};">
+              ${esc(c.action)}
+            </td>
+
+            <td style="padding:7px;border-bottom:1px solid #edf2f7;">
+              <div style="font-weight:900;">${esc(material.id)}</div>
+              <div style="font-size:10px;color:#64748b;max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                ${esc(material.material)} · ${esc(material.unidad)}
+              </div>
+            </td>
+
+            <td style="padding:7px;border-bottom:1px solid #edf2f7;text-align:right;">${num(c.need)}</td>
+            <td style="padding:7px;border-bottom:1px solid #edf2f7;text-align:right;">${num(c.stck)}</td>
+            <td style="padding:7px;border-bottom:1px solid #edf2f7;text-align:right;">${num(c.flor)}</td>
+            <td style="padding:7px;border-bottom:1px solid #edf2f7;text-align:right;">${pct(c.florPct)}</td>
+
+            <td style="padding:7px;border-bottom:1px solid #edf2f7;">
+              <div style="width:200px;height:13px;border:1px solid #cbd5e1;border-radius:999px;overflow:hidden;display:flex;background:#e5e7eb;">
+                <div style="width:${stckWidth}%;background:#2563eb;"></div>
+                <div style="width:${florWidth}%;background:#f97316;"></div>
+                <div style="width:${shortWidth}%;background:#dc2626;"></div>
+              </div>
+              <div style="font-size:10px;color:#64748b;margin-top:2px;">
+                FLOR requerido: ${num(c.requiredFromFlor)}
+              </div>
+            </td>
+
+            <td style="padding:7px;border-bottom:1px solid #edf2f7;text-align:right;color:#991b1b;font-weight:800;">${num(c.shortageActual)}</td>
+            <td style="padding:7px;border-bottom:1px solid #edf2f7;text-align:right;">${num(c.riskWithoutFlor)}</td>
+            <td style="padding:7px;border-bottom:1px solid #edf2f7;text-align:right;">${num(c.ordersRisk)}</td>
+          </tr>
+        `;
+      });
+
+      html += `
+          </tbody>
+        </table>
+
+        <div style="font-size:11px;color:#64748b;margin-top:10px;">
+          Nota: screenshot limitado a los primeros 80 materiales en acción ordenados por prioridad.
+        </div>
+      `;
+
+      node.innerHTML = html;
+      document.body.appendChild(node);
+
+      const canvas = await html2canvas(node, {
+        backgroundColor: "#ffffff",
+        scale: 2
+      });
+
+      document.body.removeChild(node);
+
+      const dataUrl = canvas.toDataURL("image/png");
+
+      return dataUrl.split(",")[1];
+    }
+
+    function generateActionCsvBase64(actionMaterials) {
+      const rows = actionMaterials.map(material => {
+        const c = material.calc;
+
+        return {
+          Estado: c.status,
+          Accion: c.action,
+          Material: material.id,
+          Descripcion: material.material,
+          Unidad: material.unidad,
+          NecesidadPlan: c.need,
+          InventarioSTCK: c.stck,
+          InventarioFLOR: c.flor,
+          TotalActual: c.totalActual,
+          PorcentajeFLOR: Number((c.florPct * 100).toFixed(2)),
+          FlorRequerido: c.requiredFromFlor,
+          FaltanteActual: c.shortageActual,
+          FaltanteProyectado: c.shortageProjected,
+          RiesgoSinFLOR: c.riskWithoutFlor,
+          OrdenesRiesgo: c.ordersRisk,
+          Overdue: c.overdueNeed,
+          Llegadas: c.arrivalsQty
+        };
+      });
+
+      const headers = Object.keys(rows[0]);
+
+      const csv = [
+        headers.join(","),
+        ...rows.map(row => headers.map(header => csvCell(row[header])).join(","))
+      ].join("\n");
+
+      return utf8ToBase64(csv);
+    }
+
+    function buildActionEmailHtml(actionMaterials) {
+      const now = new Date().toLocaleString("es-MX");
+
+      const noLoad = actionMaterials.filter(m =>
+        m.calc.action.includes("NO CARGAR") || m.calc.action.includes("ESCALAR")
+      ).length;
+
+      const validateFlor = actionMaterials.filter(m =>
+        m.calc.action.includes("VALIDAR FLOR")
+      ).length;
+
+      const balanceFlor = actionMaterials.filter(m =>
+        m.calc.action.includes("BALANCE FLOR")
+      ).length;
+
+      let html = `
+        <p>Hola,</p>
+
+        <p>Comparto el resumen de materiales con acción requerida para el plan.</p>
+
+        <p><b>Fecha/hora de generación:</b> ${now}</p>
+
+        <ul>
+          <li><b>Total materiales en acción:</b> ${actionMaterials.length}</li>
+          <li><b>No cargar / Escalar:</b> ${noLoad}</li>
+          <li><b>Validar FLOR:</b> ${validateFlor}</li>
+          <li><b>Revisar balance FLOR:</b> ${balanceFlor}</li>
+        </ul>
+
+        <p><b>Top materiales en acción:</b></p>
+
+        <table border="1" cellspacing="0" cellpadding="5" style="border-collapse:collapse;font-family:Arial;font-size:12px;">
+          <thead>
+            <tr style="background:#f3f4f6;">
+              <th>Material</th>
+              <th>Acción</th>
+              <th>Necesidad</th>
+              <th>STCK</th>
+              <th>FLOR</th>
+              <th>Faltante</th>
+              <th>Riesgo sin FLOR</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      actionMaterials.slice(0, 20).forEach(material => {
+        const c = material.calc;
+
+        html += `
+          <tr>
+            <td><b>${esc(material.id)}</b><br>${esc(material.material)}</td>
+            <td>${esc(c.action)}</td>
+            <td align="right">${num(c.need)}</td>
+            <td align="right">${num(c.stck)}</td>
+            <td align="right">${num(c.flor)}</td>
+            <td align="right">${num(c.shortageActual)}</td>
+            <td align="right">${num(c.riskWithoutFlor)}</td>
+          </tr>
+        `;
+      });
+
+      html += `
+          </tbody>
+        </table>
+
+        <p>Se adjunta screenshot y archivo CSV con los materiales en acción.</p>
+
+        <p>Saludos.</p>
+      `;
+
+      return html;
+    }
+
+    function utf8ToBase64(text) {
+      return btoa(unescape(encodeURIComponent(text)));
     }
 
     function csvCell(value) {
