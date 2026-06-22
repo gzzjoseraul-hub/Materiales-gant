@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Cobertura de Materiales Gantt Compacto</title>
+  <title>Validador Plan vs Inventario FLOR/STCK</title>
 
   <style>
     :root {
@@ -14,12 +14,13 @@
       --muted: #64748b;
       --border: #dbe3ef;
       --blue: #2563eb;
-      --blue-dark: #1d4ed8;
+      --stck: #2563eb;
+      --flor: #f97316;
       --green: #22c55e;
       --yellow: #facc15;
       --red: #ef4444;
-      --gray: #e5e7eb;
-      --shadow: 0 8px 18px rgba(15, 23, 42, 0.07);
+      --purple: #7c3aed;
+      --shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
     }
 
     * {
@@ -45,20 +46,48 @@
     }
 
     header p {
-      margin: 5px 0 0;
+      margin: 6px 0 0;
       color: #dbeafe;
       font-size: 13px;
     }
 
     .container {
-      max-width: 1600px;
+      max-width: 1800px;
       margin: 0 auto;
       padding: 14px;
     }
 
-    .grid {
+    .summary {
       display: grid;
-      grid-template-columns: 320px 1fr;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .summary-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 11px;
+      box-shadow: var(--shadow);
+    }
+
+    .summary-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .summary-card strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 20px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 335px 1fr;
       gap: 14px;
       align-items: start;
     }
@@ -75,7 +104,7 @@
       padding: 10px 13px;
       border-bottom: 1px solid var(--border);
       background: #f8fafc;
-      font-weight: bold;
+      font-weight: 700;
       font-size: 14px;
     }
 
@@ -109,22 +138,11 @@
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
     }
 
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-bottom: 9px;
-    }
-
-    .form-group {
-      margin-bottom: 9px;
-    }
-
     button {
-      border: none;
+      border: 0;
       border-radius: 9px;
       padding: 7px 10px;
-      font-weight: bold;
+      font-weight: 700;
       cursor: pointer;
       font-size: 12px;
       transition: 0.15s;
@@ -135,26 +153,14 @@
       color: white;
     }
 
-    .btn-primary:hover {
-      background: var(--blue-dark);
-    }
-
     .btn-secondary {
       background: #e2e8f0;
       color: #0f172a;
     }
 
-    .btn-secondary:hover {
-      background: #cbd5e1;
-    }
-
     .btn-danger {
       background: #fee2e2;
       color: #b91c1c;
-    }
-
-    .btn-danger:hover {
-      background: #fecaca;
     }
 
     .btn-full {
@@ -169,193 +175,190 @@
       margin-bottom: 8px;
     }
 
-    .summary {
+    .form-row {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-bottom: 14px;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 9px;
     }
 
-    .summary-card {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 13px;
-      padding: 11px;
-      box-shadow: var(--shadow);
+    .form-group {
+      margin-bottom: 9px;
     }
 
-    .summary-card span {
+    .small-separator {
+      border: 0;
+      border-top: 1px solid var(--border);
+      margin: 12px 0;
+    }
+
+    .note {
       color: var(--muted);
       font-size: 11px;
-      font-weight: bold;
+      line-height: 1.35;
     }
 
-    .summary-card strong {
-      display: block;
-      margin-top: 5px;
-      font-size: 20px;
+    .hidden-file {
+      display: none;
     }
 
-    .gantt-wrapper {
-      overflow-x: auto;
-      overflow-y: hidden;
+    .tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin: 0 0 10px;
+    }
+
+    .tab {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .tab.active {
+      background: #0f172a;
+      color: white;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .table-wrap {
+      overflow: auto;
       max-height: 72vh;
     }
 
-    .gantt {
-      min-width: 1150px;
-    }
-
-    .gantt-header,
-    .gantt-row {
-      display: grid;
-      grid-template-columns: 300px 1fr 100px;
-    }
-
-    .gantt-header {
-      position: sticky;
-      top: 0;
-      z-index: 5;
-      background: #f8fafc;
-      border-bottom: 1px solid var(--border);
-      font-weight: bold;
+    .materials-table {
+      min-width: 1240px;
+      width: 100%;
+      border-collapse: collapse;
       font-size: 11px;
     }
 
-    .gantt-header > div {
-      padding: 5px 7px;
-    }
-
-    .days-header {
-      display: grid;
-      border-left: 1px solid var(--border);
-    }
-
-    .day-head {
-      font-size: 8px;
-      text-align: center;
-      padding: 5px 1px;
-      border-left: 1px solid var(--border);
+    .materials-table th {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      background: #f8fafc;
       color: var(--muted);
-      white-space: nowrap;
-      overflow: hidden;
+      text-transform: uppercase;
+      font-size: 10px;
+      border-bottom: 1px solid var(--border);
+      padding: 7px;
+      text-align: left;
     }
 
-    .gantt-row {
+    .materials-table td {
       border-bottom: 1px solid #edf2f7;
-      background: white;
-      cursor: pointer;
-      min-height: 18px;
+      padding: 5px 7px;
+      vertical-align: middle;
     }
 
-    .gantt-row:hover {
+    .materials-table tr {
+      cursor: pointer;
+      background: white;
+    }
+
+    .materials-table tr:hover {
       background: #eff6ff;
     }
 
-    .gantt-row.selected {
+    .materials-table tr.selected {
       background: #dbeafe;
     }
 
-    .material-info {
-      padding: 2px 6px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      min-width: 0;
+    .num {
+      text-align: right;
+      white-space: nowrap;
     }
 
-    .material-left {
-      min-width: 0;
-      flex: 1;
-      display: flex;
-      align-items: center;
-      gap: 5px;
+    .material-name {
+      font-weight: 700;
+      max-width: 190px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .material-title {
-      font-weight: bold;
+    .sub {
+      color: var(--muted);
       font-size: 10px;
       white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 155px;
-    }
-
-    .material-sub {
-      color: var(--muted);
-      font-size: 9px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      flex: 1;
-      min-width: 0;
     }
 
     .badge {
       display: inline-block;
-      padding: 2px 5px;
+      padding: 2px 6px;
       border-radius: 999px;
-      font-size: 8px;
-      font-weight: bold;
+      font-size: 9px;
+      font-weight: 800;
       white-space: nowrap;
     }
 
-    .badge-green {
+    .b-green {
       background: #dcfce7;
       color: #166534;
     }
 
-    .badge-yellow {
+    .b-yellow {
       background: #fef9c3;
       color: #854d0e;
     }
 
-    .badge-red {
+    .b-orange {
+      background: #ffedd5;
+      color: #9a3412;
+    }
+
+    .b-red {
       background: #fee2e2;
       color: #991b1b;
     }
 
-    .timeline {
-      display: grid;
-      align-items: center;
-      padding: 4px 0;
+    .b-red-strong {
+      background: #991b1b;
+      color: white;
     }
 
-    .day-cell {
-      position: relative;
-      height: 9px;
-      border-left: 1px solid #e2e8f0;
+    .b-purple {
+      background: #ede9fe;
+      color: #5b21b6;
+    }
+
+    .b-gray {
       background: #f1f5f9;
+      color: #64748b;
     }
 
-    .coverage-bar {
-      position: absolute;
-      left: 0;
-      top: 0;
-      height: 100%;
-    }
-
-    .arrival-marker {
-      position: absolute;
-      right: 0;
-      top: 0;
-      width: 3px;
-      height: 100%;
-      background: var(--blue);
-    }
-
-    .coverage-text {
-      padding: 2px 6px;
-      text-align: right;
-      font-weight: bold;
-      font-size: 10px;
+    .bar {
+      height: 12px;
+      background: #e5e7eb;
+      border-radius: 999px;
+      overflow: hidden;
       display: flex;
-      align-items: center;
-      justify-content: flex-end;
+      min-width: 190px;
+      border: 1px solid #cbd5e1;
     }
 
-    .coverage-text small {
-      display: none;
+    .seg-stck {
+      background: var(--stck);
+    }
+
+    .seg-flor {
+      background: var(--flor);
+    }
+
+    .seg-miss {
+      background: var(--red);
+    }
+
+    .bar-label {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 2px;
+      white-space: nowrap;
     }
 
     .legend {
@@ -381,59 +384,210 @@
       border-radius: 3px;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12px;
+    .gantt-wrap {
+      overflow: auto;
+      max-height: 72vh;
     }
 
-    th,
-    td {
+    .gantt {
+      min-width: 1300px;
+    }
+
+    .gantt-head,
+    .gantt-row {
+      display: grid;
+      grid-template-columns: 320px 90px 1fr 120px;
+    }
+
+    .gantt-head {
+      position: sticky;
+      top: 0;
+      z-index: 4;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border);
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--muted);
+    }
+
+    .gantt-head > div {
+      padding: 5px 7px;
+    }
+
+    .days {
+      display: grid;
+      border-left: 1px solid var(--border);
+    }
+
+    .dayh {
+      font-size: 8px;
+      text-align: center;
+      padding: 5px 1px;
+      border-left: 1px solid var(--border);
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .gantt-row {
+      min-height: 19px;
+      border-bottom: 1px solid #edf2f7;
+      background: white;
+      cursor: pointer;
+    }
+
+    .gantt-row:hover {
+      background: #eff6ff;
+    }
+
+    .gantt-row.selected {
+      background: #dbeafe;
+    }
+
+    .gmat {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 2px 6px;
+      min-width: 0;
+    }
+
+    .gtitle {
+      font-weight: 700;
+      font-size: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 150px;
+    }
+
+    .gsub {
+      font-size: 9px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .overcell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 800;
+      border-left: 1px solid var(--border);
+    }
+
+    .timeline {
+      display: grid;
+      align-items: center;
+      padding: 4px 0;
+    }
+
+    .daycell {
+      height: 9px;
+      background: #f1f5f9;
+      border-left: 1px solid #e2e8f0;
+      position: relative;
+    }
+
+    .daybar {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+    }
+
+    .arrmark {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      width: 3px;
+      background: #111827;
+    }
+
+    .demmark {
+      position: absolute;
+      left: 0;
+      top: -3px;
+      height: 2px;
+      width: 100%;
+      background: var(--purple);
+    }
+
+    .finalstock {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 2px 6px;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 330px 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .mini-kpis {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .mini {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 9px;
+    }
+
+    .mini span {
+      font-size: 10px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .mini strong {
+      display: block;
+      font-size: 17px;
+      margin-top: 3px;
+    }
+
+    .detail-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+
+    .detail-table th {
+      background: #f8fafc;
+      color: var(--muted);
+      font-size: 10px;
+      text-transform: uppercase;
       padding: 7px;
       border-bottom: 1px solid var(--border);
       text-align: left;
     }
 
-    th {
-      color: var(--muted);
-      background: #f8fafc;
-      font-size: 10px;
-      text-transform: uppercase;
+    .detail-table td {
+      padding: 7px;
+      border-bottom: 1px solid #edf2f7;
     }
 
-    td:last-child,
-    th:last-child {
+    .right {
       text-align: right;
     }
 
-    .footer-section {
-      margin-top: 14px;
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 14px;
-      align-items: start;
-    }
-
-    .note {
+    .muted {
       color: var(--muted);
-      font-size: 11px;
-      line-height: 1.35;
-      margin-top: 6px;
     }
 
-    .hidden-file {
-      display: none;
-    }
-
-    .small-separator {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 12px 0;
-    }
-
-    @media (max-width: 1000px) {
-      .grid,
-      .footer-section {
+    @media (max-width: 1100px) {
+      .layout,
+      .detail-grid {
         grid-template-columns: 1fr;
       }
 
@@ -443,10 +597,6 @@
     }
 
     @media (max-width: 600px) {
-      header h1 {
-        font-size: 20px;
-      }
-
       .summary {
         grid-template-columns: 1fr;
       }
@@ -454,129 +604,172 @@
       .form-row {
         grid-template-columns: 1fr;
       }
+
+      header h1 {
+        font-size: 20px;
+      }
     }
   </style>
 </head>
 
 <body>
   <header>
-    <h1>Cobertura de Materiales tipo Gantt</h1>
-    <p>Vista compacta para muchos materiales: inventario, demanda, llegadas y cobertura diaria.</p>
+    <h1>Validador de Plan vs Inventario FLOR/STCK</h1>
+    <p>Detecta faltantes, dependencia de FLOR, riesgo por FLOR &gt; 40% y órdenes afectadas antes de cargar la línea.</p>
   </header>
 
   <div class="container">
     <div class="summary">
       <div class="summary-card">
-        <span>Materiales</span>
+        <span>Materiales plan</span>
         <strong id="kpiMaterials">0</strong>
       </div>
+
       <div class="summary-card">
-        <span>Críticos</span>
-        <strong id="kpiCritical">0</strong>
+        <span>Faltantes reales</span>
+        <strong id="kpiShort">0</strong>
       </div>
+
       <div class="summary-card">
-        <span>Cobertura Promedio</span>
-        <strong id="kpiAvgCoverage">0</strong>
+        <span>Dependen FLOR</span>
+        <strong id="kpiFlorDep">0</strong>
       </div>
+
       <div class="summary-card">
-        <span>Próximo Faltante</span>
-        <strong id="kpiNextStockout">-</strong>
+        <span>FLOR &gt;= 40%</span>
+        <strong id="kpiFlorHigh">0</strong>
+      </div>
+
+      <div class="summary-card">
+        <span>Órdenes en riesgo</span>
+        <strong id="kpiOrdersRisk">0</strong>
+      </div>
+
+      <div class="summary-card">
+        <span>Overdue</span>
+        <strong id="kpiOverdue">0</strong>
       </div>
     </div>
 
-    <div class="grid">
+    <div class="layout">
       <aside class="card">
-        <div class="card-header">Parámetros y Material</div>
+        <div class="card-header">Parámetros</div>
+
         <div class="card-body">
           <div class="form-row">
             <div>
-              <label>Fecha inicio</label>
-              <input type="date" id="startDate" />
+              <label>Fecha corte / hoy</label>
+              <input type="date" id="startDate">
             </div>
+
             <div>
-              <label>Horizonte</label>
+              <label>Horizonte plan</label>
               <select id="horizonDays">
+                <option value="3">3 días</option>
+                <option value="7" selected>7 días</option>
                 <option value="14">14 días</option>
-                <option value="30" selected>30 días</option>
-                <option value="45">45 días</option>
+                <option value="30">30 días</option>
                 <option value="60">60 días</option>
-                <option value="90">90 días</option>
               </select>
             </div>
           </div>
 
           <div class="form-group">
-            <label>Buscar material</label>
-            <input type="text" id="searchInput" placeholder="Buscar código o descripción..." />
+            <label>Buscar material / orden / SKU</label>
+            <input id="searchInput" placeholder="Ej. MAT-1001, WO-123, SKU...">
+          </div>
+
+          <div class="form-group">
+            <label>Filtro rápido</label>
+            <select id="quickFilter">
+              <option value="all">Todos</option>
+              <option value="short">Solo faltantes reales</option>
+              <option value="florDep">Dependen de FLOR</option>
+              <option value="florHigh">FLOR >= 40%</option>
+              <option value="overdue">Con overdue</option>
+              <option value="today">Con demanda hoy</option>
+            </select>
           </div>
 
           <div class="form-group">
             <label>Ordenar</label>
             <select id="sortBy">
-              <option value="critical">Críticos primero</option>
-              <option value="coverageDesc">Mayor cobertura primero</option>
-              <option value="name">Nombre de material</option>
+              <option value="priority">Prioridad de riesgo</option>
+              <option value="shortDesc">Mayor faltante</option>
+              <option value="florPctDesc">Mayor % FLOR</option>
+              <option value="name">Nombre material</option>
             </select>
           </div>
 
           <div class="actions">
-            <button class="btn-primary" onclick="addMaterial()">+ Material</button>
-            <button class="btn-secondary" onclick="exportJSON()">Exportar</button>
-            <button class="btn-secondary" onclick="document.getElementById('fileInput').click()">Importar</button>
-            <input class="hidden-file" type="file" id="fileInput" accept="application/json" onchange="importJSON(event)" />
+            <button class="btn-secondary" onclick="document.getElementById('fileInput').click()">Importar JSON</button>
+            <button class="btn-secondary" onclick="exportJSON()">Exportar JSON</button>
+            <input class="hidden-file" type="file" id="fileInput" accept="application/json" onchange="importJSON(event)">
           </div>
 
-          <hr class="small-separator" />
+          <hr class="small-separator">
 
-          <div id="selectedEditor">
-            <p class="note">Selecciona un material para editarlo.</p>
-          </div>
+          <div id="selectedEditor"></div>
+
+          <p class="note">
+            <b>Regla clave:</b> si STCK no cubre el plan, el material depende de FLOR.
+            Si FLOR representa 40% o más del inventario total, se marca como riesgo alto.
+          </p>
         </div>
       </aside>
 
-      <main class="card">
-        <div class="card-header">Diagrama de Cobertura Compacto</div>
+      <main class="main-grid">
+        <section class="card">
+          <div class="card-header">Vista principal</div>
 
-        <div class="gantt-wrapper">
-          <div class="gantt" id="ganttContainer"></div>
-        </div>
+          <div class="card-body">
+            <div class="tabs">
+              <button id="tabSummary" class="tab active" onclick="setView('summary')">Semáforo</button>
+              <button id="tabGantt" class="tab" onclick="setView('gantt')">Gantt diario</button>
+            </div>
 
-        <div class="legend">
-          <div class="legend-item">
-            <span class="legend-color" style="background: var(--green);"></span>
-            Cubierto
+            <div id="mainView"></div>
           </div>
-          <div class="legend-item">
-            <span class="legend-color" style="background: var(--yellow);"></span>
-            Parcial
+
+          <div class="legend">
+            <div class="legend-item">
+              <span class="legend-color" style="background:var(--stck)"></span>
+              STCK usado
+            </div>
+
+            <div class="legend-item">
+              <span class="legend-color" style="background:var(--flor)"></span>
+              FLOR usado
+            </div>
+
+            <div class="legend-item">
+              <span class="legend-color" style="background:var(--red)"></span>
+              Faltante
+            </div>
+
+            <div class="legend-item">
+              <span class="legend-color" style="background:var(--purple)"></span>
+              Día con demanda
+            </div>
+
+            <div class="legend-item">
+              <span class="legend-color" style="background:#111827;width:5px"></span>
+              Llegada
+            </div>
           </div>
-          <div class="legend-item">
-            <span class="legend-color" style="background: var(--red);"></span>
-            Sin cobertura
-          </div>
-          <div class="legend-item">
-            <span class="legend-color" style="background: var(--blue); width: 5px;"></span>
-            Llegada
-          </div>
-        </div>
+        </section>
       </main>
     </div>
 
-    <div class="footer-section">
+    <div class="detail-grid">
       <section class="card">
-        <div class="card-header">Agregar Llegada</div>
-        <div class="card-body">
-          <div id="arrivalForm">
-            <p class="note">Selecciona un material para agregar llegadas.</p>
-          </div>
-        </div>
+        <div class="card-header">Agregar llegada a STCK</div>
+        <div class="card-body" id="arrivalForm"></div>
       </section>
 
       <section class="card">
-        <div class="card-header">Llegadas Programadas</div>
-        <div class="card-body" id="arrivalsTable">
-          <p class="note">Selecciona un material para ver sus llegadas.</p>
-        </div>
+        <div class="card-header">Detalle del material seleccionado</div>
+        <div class="card-body" id="detailPanel"></div>
       </section>
     </div>
   </div>
@@ -584,65 +777,123 @@
   <script>
     const todayISO = new Date().toISOString().slice(0, 10);
 
+    let currentView = "summary";
+    let selectedId = null;
+
     let materials = [
       {
         id: "MAT-1001",
         material: "Resina ABS Negra",
-        inventario: 1250,
-        demandaDiaria: 180,
         unidad: "kg",
+        inventarioSTCK: 800,
+        inventarioFLOR: 500,
+        demandas: [
+          {
+            orden: "WO-10001",
+            fechaNecesidad: addDaysISO(todayISO, -1),
+            sku: "SKU-A",
+            cantidad: 250,
+            linea: "L1",
+            cliente: "Cliente A"
+          },
+          {
+            orden: "WO-10008",
+            fechaNecesidad: addDaysISO(todayISO, 0),
+            sku: "SKU-B",
+            cantidad: 300,
+            linea: "L1",
+            cliente: "Cliente B"
+          },
+          {
+            orden: "WO-10015",
+            fechaNecesidad: addDaysISO(todayISO, 2),
+            sku: "SKU-C",
+            cantidad: 650,
+            linea: "L2",
+            cliente: "Cliente C"
+          }
+        ],
         llegadas: [
-          { id: crypto.randomUUID(), fecha: addDaysISO(todayISO, 5), cantidad: 900 },
-          { id: crypto.randomUUID(), fecha: addDaysISO(todayISO, 13), cantidad: 1200 }
+          {
+            po: "PO-50001",
+            fecha: addDaysISO(todayISO, 3),
+            cantidad: 600
+          }
         ]
       },
       {
         id: "MAT-2044",
         material: "Empaque Corrugado A",
-        inventario: 4200,
-        demandaDiaria: 650,
         unidad: "pzas",
-        llegadas: [
-          { id: crypto.randomUUID(), fecha: addDaysISO(todayISO, 8), cantidad: 5000 }
-        ]
-      },
-      {
-        id: "MAT-3309",
-        material: "Tornillo M4 x 12",
-        inventario: 8500,
-        demandaDiaria: 1600,
-        unidad: "pzas",
-        llegadas: [
-          { id: crypto.randomUUID(), fecha: addDaysISO(todayISO, 3), cantidad: 3000 },
-          { id: crypto.randomUUID(), fecha: addDaysISO(todayISO, 10), cantidad: 9000 }
-        ]
+        inventarioSTCK: 4200,
+        inventarioFLOR: 2600,
+        demandas: [
+          {
+            orden: "WO-20011",
+            fechaNecesidad: addDaysISO(todayISO, 1),
+            sku: "SKU-D",
+            cantidad: 3500,
+            linea: "L3",
+            cliente: "Cliente B"
+          },
+          {
+            orden: "WO-20018",
+            fechaNecesidad: addDaysISO(todayISO, 3),
+            sku: "SKU-E",
+            cantidad: 2500,
+            linea: "L3",
+            cliente: "Cliente A"
+          }
+        ],
+        llegadas: []
       },
       {
         id: "MAT-7781",
         material: "Etiqueta Frontal MX",
-        inventario: 950,
-        demandaDiaria: 240,
         unidad: "pzas",
+        inventarioSTCK: 100,
+        inventarioFLOR: 1200,
+        demandas: [
+          {
+            orden: "WO-30010",
+            fechaNecesidad: addDaysISO(todayISO, -3),
+            sku: "SKU-F",
+            cantidad: 900,
+            linea: "L2",
+            cliente: "Cliente D"
+          },
+          {
+            orden: "WO-30012",
+            fechaNecesidad: addDaysISO(todayISO, 2),
+            sku: "SKU-G",
+            cantidad: 700,
+            linea: "L2",
+            cliente: "Cliente D"
+          }
+        ],
         llegadas: []
       }
     ];
 
-    let selectedId = materials[0].id;
+    const elStart = document.getElementById("startDate");
+    const elHorizon = document.getElementById("horizonDays");
+    const elSearch = document.getElementById("searchInput");
+    const elFilter = document.getElementById("quickFilter");
+    const elSort = document.getElementById("sortBy");
 
-    const startDateInput = document.getElementById("startDate");
-    const horizonDaysInput = document.getElementById("horizonDays");
-    const searchInput = document.getElementById("searchInput");
-    const sortByInput = document.getElementById("sortBy");
-
-    startDateInput.value = todayISO;
+    elStart.value = todayISO;
 
     loadData();
+
+    if (!selectedId && materials.length) {
+      selectedId = materials[0].id;
+    }
+
     render();
 
-    startDateInput.addEventListener("change", render);
-    horizonDaysInput.addEventListener("change", render);
-    searchInput.addEventListener("input", render);
-    sortByInput.addEventListener("change", render);
+    [elStart, elHorizon, elSearch, elFilter, elSort].forEach(element => {
+      element.addEventListener("input", render);
+    });
 
     function addDaysISO(iso, days) {
       const d = new Date(iso + "T00:00:00");
@@ -650,372 +901,714 @@
       return d.toISOString().slice(0, 10);
     }
 
-    function daysBetween(startISO, endISO) {
+    function daysBetween(start, end) {
       return Math.round(
-        (new Date(endISO + "T00:00:00") - new Date(startISO + "T00:00:00")) / 86400000
+        (new Date(end + "T00:00:00") - new Date(start + "T00:00:00")) / 86400000
       );
     }
 
-    function formatDate(iso) {
-      const d = new Date(iso + "T00:00:00");
-      return d.toLocaleDateString("es-MX", {
+    function fmtDate(iso) {
+      return new Date(iso + "T00:00:00").toLocaleDateString("es-MX", {
         day: "2-digit",
         month: "short"
       });
     }
 
-    function formatNumber(value) {
+    function num(value) {
       return Number(value || 0).toLocaleString("es-MX");
     }
 
-    function getSelectedMaterial() {
-      return materials.find(m => m.id === selectedId) || materials[0] || null;
+    function pct(value) {
+      return (Number(value || 0) * 100).toFixed(0) + "%";
     }
 
-    function calculateCoverage(material, startISO, horizonDays) {
+    function esc(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function attr(value) {
+      return esc(value).replaceAll("\n", " ");
+    }
+
+    function normalize(material) {
+      return {
+        id: String(material.id || material.material || crypto.randomUUID()),
+        material: String(material.material || material.descripcion || material.id || "Sin descripción"),
+        unidad: String(material.unidad || "pzas"),
+        inventarioSTCK: Number(material.inventarioSTCK ?? material.STCK ?? material.stck ?? 0),
+        inventarioFLOR: Number(material.inventarioFLOR ?? material.FLOR ?? material.flor ?? 0),
+        demandas: Array.isArray(material.demandas)
+          ? material.demandas.map(demanda => ({
+              id: String(demanda.id || crypto.randomUUID()),
+              orden: String(demanda.orden || demanda.workOrder || demanda.WO || ""),
+              fechaNecesidad: String(demanda.fechaNecesidad || demanda.fecha || todayISO),
+              sku: String(demanda.sku || demanda.SKU || demanda.producto || ""),
+              linea: String(demanda.linea || ""),
+              cliente: String(demanda.cliente || ""),
+              cantidad: Number(demanda.cantidad || demanda.demanda || 0)
+            }))
+          : [],
+        llegadas: Array.isArray(material.llegadas)
+          ? material.llegadas.map(llegada => ({
+              id: String(llegada.id || crypto.randomUUID()),
+              po: String(llegada.po || llegada.PO || ""),
+              fecha: String(llegada.fecha || todayISO),
+              cantidad: Number(llegada.cantidad || 0)
+            }))
+          : []
+      };
+    }
+
+    function calcMaterial(material, start, horizon) {
+      const end = addDaysISO(start, horizon - 1);
+
+      const demands = material.demandas.filter(d => d.fechaNecesidad <= end);
+      const overdue = demands.filter(d => d.fechaNecesidad < start);
+      const future = demands.filter(d => d.fechaNecesidad >= start);
+
+      const totalNeed = demands.reduce((sum, d) => sum + Number(d.cantidad || 0), 0);
+      const overdueNeed = overdue.reduce((sum, d) => sum + Number(d.cantidad || 0), 0);
+      const futureNeed = future.reduce((sum, d) => sum + Number(d.cantidad || 0), 0);
+
+      const totalInv = Number(material.inventarioSTCK || 0) + Number(material.inventarioFLOR || 0);
+      const florPct = totalInv > 0 ? Number(material.inventarioFLOR || 0) / totalInv : 0;
+
+      let stck = Number(material.inventarioSTCK || 0);
+      let flor = Number(material.inventarioFLOR || 0);
+
       const arrivalsByDay = new Map();
+      const demandByDay = new Map();
 
       material.llegadas.forEach(arrival => {
-        const idx = daysBetween(startISO, arrival.fecha);
+        const index = daysBetween(start, arrival.fecha);
 
-        if (idx >= 0 && idx < horizonDays) {
+        if (index >= 0 && index < horizon) {
           arrivalsByDay.set(
-            idx,
-            (arrivalsByDay.get(idx) || 0) + Number(arrival.cantidad || 0)
+            index,
+            (arrivalsByDay.get(index) || 0) + Number(arrival.cantidad || 0)
           );
         }
       });
 
-      let stock = Number(material.inventario || 0);
-      const demand = Number(material.demandaDiaria || 0);
-      const timeline = [];
-      let stockoutDay = null;
+      future.forEach(demand => {
+        const index = daysBetween(start, demand.fechaNecesidad);
 
-      for (let day = 0; day < horizonDays; day++) {
-        const arrival = arrivalsByDay.get(day) || 0;
-        stock += arrival;
+        if (index >= 0 && index < horizon) {
+          demandByDay.set(
+            index,
+            (demandByDay.get(index) || 0) + Number(demand.cantidad || 0)
+          );
+        }
+      });
 
-        const startStock = stock;
+      const orderLines = [];
+      const events = [];
 
-        const coveredRatio = demand > 0
-          ? Math.min(1, Math.max(0, stock / demand))
-          : 1;
+      material.llegadas.forEach(arrival => {
+        events.push({
+          type: "arrival",
+          date: arrival.fecha,
+          qty: Number(arrival.cantidad || 0),
+          data: arrival
+        });
+      });
 
-        const fullyCovered = demand === 0 || stock >= demand;
+      demands.forEach(demand => {
+        events.push({
+          type: "demand",
+          date: demand.fechaNecesidad,
+          qty: Number(demand.cantidad || 0),
+          data: demand
+        });
+      });
 
-        if (!fullyCovered && stockoutDay === null) {
-          stockoutDay = day;
+      events.sort((a, b) => {
+        const dateCompare = a.date.localeCompare(b.date);
+        if (dateCompare !== 0) return dateCompare;
+        return a.type === "arrival" ? -1 : 1;
+      });
+
+      events.forEach(event => {
+        if (event.date > end) return;
+
+        if (event.type === "arrival") {
+          stck += event.qty;
+          return;
         }
 
-        stock = Math.max(0, stock - demand);
+        const qty = event.qty;
+
+        const usedSTCK = Math.min(stck, qty);
+        stck -= usedSTCK;
+
+        const remainingAfterSTCK = qty - usedSTCK;
+
+        const usedFLOR = Math.min(flor, remainingAfterSTCK);
+        flor -= usedFLOR;
+
+        const shortage = remainingAfterSTCK - usedFLOR;
+
+        orderLines.push({
+          ...event.data,
+          cantidad: qty,
+          overdue: event.date < start,
+          cubiertoSTCK: usedSTCK,
+          cubiertoFLOR: usedFLOR,
+          faltante: shortage
+        });
+      });
+
+      const shortTotal = orderLines.reduce((sum, order) => sum + order.faltante, 0);
+      const riskWithoutFlor = Math.max(0, totalNeed - Number(material.inventarioSTCK || 0));
+      const requiredFromFlor = orderLines.reduce((sum, order) => sum + order.cubiertoFLOR, 0);
+      const ordersRisk = new Set(
+        orderLines
+          .filter(order => order.faltante > 0 || order.cubiertoFLOR > 0)
+          .map(order => order.orden)
+      ).size;
+
+      const timeline = [];
+
+      let simStck = Number(material.inventarioSTCK || 0);
+      let simFlor = Number(material.inventarioFLOR || 0);
+
+      overdue
+        .slice()
+        .sort((a, b) => a.fechaNecesidad.localeCompare(b.fechaNecesidad))
+        .forEach(demand => {
+          let qty = Number(demand.cantidad || 0);
+
+          let used = Math.min(simStck, qty);
+          simStck -= used;
+          qty -= used;
+
+          used = Math.min(simFlor, qty);
+          simFlor -= used;
+          qty -= used;
+        });
+
+      for (let day = 0; day < horizon; day++) {
+        simStck += arrivalsByDay.get(day) || 0;
+
+        const demand = demandByDay.get(day) || 0;
+
+        let qty = demand;
+
+        const stckUsed = Math.min(simStck, qty);
+        simStck -= stckUsed;
+        qty -= stckUsed;
+
+        const florUsed = Math.min(simFlor, qty);
+        simFlor -= florUsed;
+        qty -= florUsed;
+
+        const shortage = qty;
 
         timeline.push({
           day,
-          fecha: addDaysISO(startISO, day),
-          arrival,
-          startStock,
-          endStock: stock,
-          coveredRatio,
-          fullyCovered
+          fecha: addDaysISO(start, day),
+          arrival: arrivalsByDay.get(day) || 0,
+          demand,
+          stckUsed,
+          florUsed,
+          short: shortage,
+          finalStock: simStck + simFlor
         });
       }
 
-      const totalArrivals = material.llegadas.reduce(
-        (sum, a) => sum + Number(a.cantidad || 0),
-        0
-      );
+      let status = "OK STCK";
+      let cls = "b-green";
+      let priority = 5;
 
-      const available = Number(material.inventario || 0) + totalArrivals;
-      const coverageDaysDecimal = demand > 0 ? available / demand : horizonDays;
+      if (shortTotal > 0) {
+        status = "FALTANTE";
+        cls = "b-red-strong";
+        priority = 1;
+      } else if (riskWithoutFlor > 0 && florPct >= 0.40) {
+        status = "DEPENDE FLOR ALTO";
+        cls = "b-orange";
+        priority = 2;
+      } else if (riskWithoutFlor > 0) {
+        status = "DEPENDE FLOR";
+        cls = "b-yellow";
+        priority = 3;
+      } else if (florPct >= 0.40) {
+        status = "FLOR ALTO";
+        cls = "b-purple";
+        priority = 4;
+      }
 
       return {
+        totalNeed,
+        futureNeed,
+        overdueNeed,
+        totalInv,
+        florPct,
+        shortTotal,
+        riskWithoutFlor,
+        requiredFromFlor,
+        ordersRisk,
+        status,
+        cls,
+        priority,
+        orderLines,
         timeline,
-        stockoutDay,
-        coverageDaysDecimal,
-        totalArrivals
+        finalStock: stck + flor
       };
     }
 
-    function getStatus(calc) {
-      if (calc.stockoutDay === null && calc.coverageDaysDecimal >= 21) {
-        return {
-          label: "Sano",
-          className: "badge-green"
-        };
+    function enriched() {
+      const start = elStart.value;
+      const horizon = Number(elHorizon.value);
+      const search = elSearch.value.toLowerCase().trim();
+      const filter = elFilter.value;
+      const sort = elSort.value;
+
+      let rows = materials.map(material => ({
+        ...material,
+        calc: calcMaterial(material, start, horizon)
+      }));
+
+      if (search) {
+        rows = rows.filter(material =>
+          (
+            material.id +
+            " " +
+            material.material +
+            " " +
+            material.demandas.map(d => d.orden + " " + d.sku).join(" ")
+          ).toLowerCase().includes(search)
+        );
       }
 
-      if (calc.coverageDaysDecimal >= 7) {
-        return {
-          label: "Cuidado",
-          className: "badge-yellow"
-        };
+      if (filter === "short") {
+        rows = rows.filter(material => material.calc.shortTotal > 0);
       }
 
-      return {
-        label: "Crítico",
-        className: "badge-red"
-      };
+      if (filter === "florDep") {
+        rows = rows.filter(material => material.calc.riskWithoutFlor > 0);
+      }
+
+      if (filter === "florHigh") {
+        rows = rows.filter(material => material.calc.florPct >= 0.40);
+      }
+
+      if (filter === "overdue") {
+        rows = rows.filter(material => material.calc.overdueNeed > 0);
+      }
+
+      if (filter === "today") {
+        rows = rows.filter(material =>
+          material.demandas.some(demand => demand.fechaNecesidad === start)
+        );
+      }
+
+      if (sort === "priority") {
+        rows.sort((a, b) =>
+          a.calc.priority - b.calc.priority || b.calc.shortTotal - a.calc.shortTotal
+        );
+      }
+
+      if (sort === "shortDesc") {
+        rows.sort((a, b) => b.calc.shortTotal - a.calc.shortTotal);
+      }
+
+      if (sort === "florPctDesc") {
+        rows.sort((a, b) => b.calc.florPct - a.calc.florPct);
+      }
+
+      if (sort === "name") {
+        rows.sort((a, b) => a.material.localeCompare(b.material));
+      }
+
+      return rows;
     }
 
     function render() {
       saveData();
 
-      const startISO = startDateInput.value;
-      const horizonDays = Number(horizonDaysInput.value);
-      const search = searchInput.value.toLowerCase().trim();
-      const sortBy = sortByInput.value;
+      const rows = enriched();
 
-      let enriched = materials.map(material => {
-        return {
-          ...material,
-          calc: calculateCoverage(material, startISO, horizonDays)
-        };
-      });
+      renderKPIs();
 
-      if (sortBy === "critical") {
-        enriched.sort((a, b) => a.calc.coverageDaysDecimal - b.calc.coverageDaysDecimal);
-      } else if (sortBy === "coverageDesc") {
-        enriched.sort((a, b) => b.calc.coverageDaysDecimal - a.calc.coverageDaysDecimal);
+      document.getElementById("tabSummary").classList.toggle("active", currentView === "summary");
+      document.getElementById("tabGantt").classList.toggle("active", currentView === "gantt");
+
+      if (currentView === "summary") {
+        renderSummary(rows);
       } else {
-        enriched.sort((a, b) => a.material.localeCompare(b.material));
+        renderGantt(rows);
       }
 
-      if (search) {
-        enriched = enriched.filter(m =>
-          `${m.id} ${m.material}`.toLowerCase().includes(search)
-        );
-      }
-
-      renderKPIs(startISO);
-      renderGantt(enriched, startISO, horizonDays);
-      renderSelectedEditor();
-      renderArrivalForm();
-      renderArrivalsTable();
+      renderEditor();
+      renderArrival();
+      renderDetail();
     }
 
-    function renderKPIs(startISO) {
-      const allCalculated = materials.map(m => ({
-        ...m,
-        calc: calculateCoverage(m, startISO, Number(horizonDaysInput.value))
+    function renderKPIs() {
+      const rows = materials.map(material => ({
+        ...material,
+        calc: calcMaterial(material, elStart.value, Number(elHorizon.value))
       }));
 
-      const total = materials.length;
-
-      const critical = allCalculated.filter(m => m.calc.coverageDaysDecimal < 7).length;
-
-      const avg = allCalculated.length
-        ? allCalculated.reduce((sum, m) => sum + m.calc.coverageDaysDecimal, 0) / allCalculated.length
-        : 0;
-
-      const stockouts = allCalculated
-        .filter(m => m.calc.stockoutDay !== null)
-        .map(m => m.calc.stockoutDay);
-
-      const nextStockout = stockouts.length ? Math.min(...stockouts) : null;
-
-      document.getElementById("kpiMaterials").textContent = total;
-      document.getElementById("kpiCritical").textContent = critical;
-      document.getElementById("kpiAvgCoverage").textContent = avg.toFixed(1) + " días";
-      document.getElementById("kpiNextStockout").textContent =
-        nextStockout === null ? "Sin faltante" : "Día " + (nextStockout + 1);
+      document.getElementById("kpiMaterials").textContent = rows.length;
+      document.getElementById("kpiShort").textContent = rows.filter(m => m.calc.shortTotal > 0).length;
+      document.getElementById("kpiFlorDep").textContent = rows.filter(m => m.calc.riskWithoutFlor > 0).length;
+      document.getElementById("kpiFlorHigh").textContent = rows.filter(m => m.calc.florPct >= 0.40).length;
+      document.getElementById("kpiOrdersRisk").textContent = rows.reduce((sum, m) => sum + m.calc.ordersRisk, 0);
+      document.getElementById("kpiOverdue").textContent = rows.filter(m => m.calc.overdueNeed > 0).length;
     }
 
-    function renderGantt(enriched, startISO, horizonDays) {
-      const gantt = document.getElementById("ganttContainer");
+    function renderSummary(rows) {
+      let html = `
+        <div class="table-wrap">
+          <table class="materials-table">
+            <thead>
+              <tr>
+                <th>Estado</th>
+                <th>Material</th>
+                <th class="num">Necesidad</th>
+                <th class="num">STCK</th>
+                <th class="num">FLOR</th>
+                <th class="num">% FLOR</th>
+                <th>Uso vs plan</th>
+                <th class="num">Faltante</th>
+                <th class="num">Riesgo sin FLOR</th>
+                <th class="num">Órdenes riesgo</th>
+                <th class="num">Overdue</th>
+              </tr>
+            </thead>
+            <tbody>
+      `;
 
-      let html = "";
+      rows.forEach(material => {
+        const calc = material.calc;
+        const need = Math.max(calc.totalNeed, 1);
+
+        const stckWidth = Math.min(
+          100,
+          (Math.min(material.inventarioSTCK, calc.totalNeed) / need) * 100
+        );
+
+        const florWidth = Math.min(
+          100 - stckWidth,
+          (Math.min(material.inventarioFLOR, Math.max(0, calc.totalNeed - material.inventarioSTCK)) / need) * 100
+        );
+
+        const missingWidth = Math.max(0, 100 - stckWidth - florWidth);
+
+        html += `
+          <tr onclick="selectMaterial('${attr(material.id)}')" class="${material.id === selectedId ? "selected" : ""}">
+            <td>
+              <span class="badge ${calc.cls}">${calc.status}</span>
+            </td>
+
+            <td>
+              <div class="material-name" title="${attr(material.material)}">${esc(material.material)}</div>
+              <div class="sub">${esc(material.id)} · ${esc(material.unidad)}</div>
+            </td>
+
+            <td class="num">${num(calc.totalNeed)}</td>
+            <td class="num">${num(material.inventarioSTCK)}</td>
+            <td class="num">${num(material.inventarioFLOR)}</td>
+
+            <td class="num">
+              <span class="badge ${calc.florPct >= 0.40 ? "b-orange" : "b-gray"}">${pct(calc.florPct)}</span>
+            </td>
+
+            <td>
+              <div class="bar" title="Azul STCK, naranja FLOR, rojo faltante">
+                <div class="seg-stck" style="width:${stckWidth}%"></div>
+                <div class="seg-flor" style="width:${florWidth}%"></div>
+                <div class="seg-miss" style="width:${missingWidth}%"></div>
+              </div>
+              <div class="bar-label">FLOR requerido: ${num(calc.requiredFromFlor)} · final: ${num(calc.finalStock)}</div>
+            </td>
+
+            <td class="num">
+              <b style="color:${calc.shortTotal > 0 ? "#b91c1c" : "#166534"}">${num(calc.shortTotal)}</b>
+            </td>
+
+            <td class="num">${num(calc.riskWithoutFlor)}</td>
+            <td class="num">${num(calc.ordersRisk)}</td>
+            <td class="num">${num(calc.overdueNeed)}</td>
+          </tr>
+        `;
+      });
 
       html += `
-        <div class="gantt-header">
-          <div>Material</div>
-          <div class="days-header" style="grid-template-columns: repeat(${horizonDays}, minmax(18px, 1fr));">
-            ${Array.from({ length: horizonDays }).map((_, index) => {
-              const date = addDaysISO(startISO, index);
-              return `<div class="day-head">${formatDate(date)}</div>`;
-            }).join("")}
-          </div>
-          <div style="text-align:right;">Días</div>
+            </tbody>
+          </table>
         </div>
       `;
 
-      if (enriched.length === 0) {
-        html += `
-          <div style="padding: 20px; color: var(--muted); font-size: 12px;">
-            No se encontraron materiales.
-          </div>
-        `;
+      document.getElementById("mainView").innerHTML = html;
+    }
+
+    function renderGantt(rows) {
+      const horizon = Number(elHorizon.value);
+      const start = elStart.value;
+
+      let html = `
+        <div class="gantt-wrap">
+          <div class="gantt">
+            <div class="gantt-head">
+              <div>Material</div>
+              <div>Overdue</div>
+              <div class="days" style="grid-template-columns:repeat(${horizon},minmax(18px,1fr))">
+      `;
+
+      for (let i = 0; i < horizon; i++) {
+        html += `<div class="dayh">${fmtDate(addDaysISO(start, i))}</div>`;
       }
 
-      enriched.forEach(material => {
-        const status = getStatus(material.calc);
-        const selectedClass = material.id === selectedId ? "selected" : "";
+      html += `
+              </div>
+              <div style="text-align:right">Stock final</div>
+            </div>
+      `;
+
+      rows.forEach(material => {
+        const calc = material.calc;
 
         html += `
-          <div class="gantt-row ${selectedClass}" onclick="selectMaterial('${escapeAttribute(material.id)}')">
-            <div class="material-info">
-              <div class="material-left">
-                <span class="badge ${status.className}">${status.label}</span>
-                <div class="material-title" title="${escapeAttribute(material.material)}">
-                  ${escapeHTML(material.material)}
-                </div>
-                <div class="material-sub" title="${escapeAttribute(material.id)} · Inv: ${formatNumber(material.inventario)} ${escapeAttribute(material.unidad)} · Dem: ${formatNumber(material.demandaDiaria)}">
-                  ${escapeHTML(material.id)} · Inv ${formatNumber(material.inventario)} · Dem ${formatNumber(material.demandaDiaria)}
-                </div>
-              </div>
+          <div class="gantt-row ${material.id === selectedId ? "selected" : ""}" onclick="selectMaterial('${attr(material.id)}')">
+            <div class="gmat">
+              <span class="badge ${calc.cls}">${calc.status}</span>
+              <div class="gtitle" title="${attr(material.material)}">${esc(material.material)}</div>
+              <div class="gsub">${esc(material.id)}</div>
             </div>
 
-            <div class="timeline" style="grid-template-columns: repeat(${horizonDays}, minmax(18px, 1fr));">
-              ${material.calc.timeline.map(day => {
-                let color = "var(--red)";
-
-                if (day.fullyCovered) {
-                  color = "var(--green)";
-                } else if (day.coveredRatio > 0) {
-                  color = "var(--yellow)";
-                }
-
-                const tooltip =
-                  `${day.fecha}\\n` +
-                  `Stock inicio: ${Math.round(day.startStock).toLocaleString("es-MX")}\\n` +
-                  `Llegada: ${formatNumber(day.arrival)}\\n` +
-                  `Cobertura del día: ${Math.round(day.coveredRatio * 100)}%`;
-
-                return `
-                  <div class="day-cell" title="${escapeAttribute(tooltip)}">
-                    <div class="coverage-bar" style="width:${day.coveredRatio * 100}%; background:${color};"></div>
-                    ${day.arrival > 0 ? `<div class="arrival-marker"></div>` : ""}
-                  </div>
-                `;
-              }).join("")}
+            <div class="overcell ${calc.overdueNeed > 0 ? "b-red" : "b-gray"}" title="Demanda overdue">
+              ${num(calc.overdueNeed)}
             </div>
 
-            <div class="coverage-text" title="Llegadas: ${formatNumber(material.calc.totalArrivals)}">
-              ${material.calc.coverageDaysDecimal.toFixed(1)}
-              <small>Llegadas: ${formatNumber(material.calc.totalArrivals)}</small>
+            <div class="timeline" style="grid-template-columns:repeat(${horizon},minmax(18px,1fr))">
+        `;
+
+        calc.timeline.forEach(day => {
+          const total = Math.max(day.demand, 1);
+
+          const stckWidth = day.demand > 0 ? (day.stckUsed / total) * 100 : 100;
+          const florWidth = day.demand > 0 ? (day.florUsed / total) * 100 : 0;
+          const missingWidth = day.demand > 0 ? (day.short / total) * 100 : 0;
+
+          const tooltip =
+            `${day.fecha}\n` +
+            `Demanda: ${num(day.demand)}\n` +
+            `Llegada: ${num(day.arrival)}\n` +
+            `STCK usado: ${num(day.stckUsed)}\n` +
+            `FLOR usado: ${num(day.florUsed)}\n` +
+            `Faltante: ${num(day.short)}\n` +
+            `Stock final: ${num(day.finalStock)}`;
+
+          html += `
+            <div class="daycell" title="${attr(tooltip)}">
+              <div class="daybar seg-stck" style="width:${stckWidth}%"></div>
+              <div class="daybar seg-flor" style="left:${stckWidth}%;width:${florWidth}%"></div>
+              <div class="daybar seg-miss" style="left:${stckWidth + florWidth}%;width:${missingWidth}%"></div>
+              ${day.demand > 0 ? `<div class="demmark"></div>` : ""}
+              ${day.arrival > 0 ? `<div class="arrmark"></div>` : ""}
             </div>
+          `;
+        });
+
+        html += `
+            </div>
+
+            <div class="finalstock">${num(calc.finalStock)}</div>
           </div>
         `;
       });
 
-      gantt.innerHTML = html;
+      html += `
+          </div>
+        </div>
+      `;
+
+      document.getElementById("mainView").innerHTML = html;
     }
 
-    function renderSelectedEditor() {
-      const selected = getSelectedMaterial();
-      const container = document.getElementById("selectedEditor");
+    function renderEditor() {
+      const material = materials.find(item => item.id === selectedId);
+      const box = document.getElementById("selectedEditor");
 
-      if (!selected) {
-        container.innerHTML = `<p class="note">Selecciona un material para editarlo.</p>`;
+      if (!material) {
+        box.innerHTML = `<p class="note">Selecciona un material.</p>`;
         return;
       }
 
-      container.innerHTML = `
+      box.innerHTML = `
         <div class="form-group">
           <label>Código</label>
-          <input type="text" value="${escapeAttribute(selected.id)}" onchange="updateSelected('id', this.value)" />
+          <input value="${attr(material.id)}" onchange="updateSelected('id', this.value)">
         </div>
 
         <div class="form-group">
           <label>Descripción</label>
-          <input type="text" value="${escapeAttribute(selected.material)}" onchange="updateSelected('material', this.value)" />
+          <input value="${attr(material.material)}" onchange="updateSelected('material', this.value)">
         </div>
 
         <div class="form-row">
           <div>
-            <label>Inventario</label>
-            <input type="number" value="${selected.inventario}" onchange="updateSelected('inventario', Number(this.value))" />
+            <label>STCK</label>
+            <input type="number" value="${material.inventarioSTCK}" onchange="updateSelected('inventarioSTCK', Number(this.value))">
           </div>
+
           <div>
-            <label>Demanda diaria</label>
-            <input type="number" value="${selected.demandaDiaria}" onchange="updateSelected('demandaDiaria', Number(this.value))" />
+            <label>FLOR</label>
+            <input type="number" value="${material.inventarioFLOR}" onchange="updateSelected('inventarioFLOR', Number(this.value))">
           </div>
         </div>
 
         <div class="form-group">
           <label>Unidad</label>
-          <input type="text" value="${escapeAttribute(selected.unidad)}" onchange="updateSelected('unidad', this.value)" />
+          <input value="${attr(material.unidad)}" onchange="updateSelected('unidad', this.value)">
         </div>
-
-        <button class="btn-danger btn-full" onclick="deleteSelectedMaterial()">Eliminar material</button>
       `;
     }
 
-    function renderArrivalForm() {
-      const selected = getSelectedMaterial();
-      const container = document.getElementById("arrivalForm");
+    function renderArrival() {
+      const material = materials.find(item => item.id === selectedId);
+      const box = document.getElementById("arrivalForm");
 
-      if (!selected) {
-        container.innerHTML = `<p class="note">Selecciona un material para agregar llegadas.</p>`;
+      if (!material) {
+        box.innerHTML = `<p class="note">Selecciona un material.</p>`;
         return;
       }
 
-      container.innerHTML = `
+      box.innerHTML = `
         <div class="form-group">
-          <label>Material seleccionado</label>
-          <input type="text" value="${escapeAttribute(selected.material)}" disabled />
+          <label>Material</label>
+          <input value="${attr(material.material)}" disabled>
         </div>
 
         <div class="form-row">
           <div>
             <label>Fecha llegada</label>
-            <input type="date" id="arrivalDate" value="${addDaysISO(todayISO, 2)}" />
+            <input type="date" id="arrivalDate" value="${addDaysISO(elStart.value, 1)}">
           </div>
+
           <div>
             <label>Cantidad</label>
-            <input type="number" id="arrivalQty" value="0" />
+            <input type="number" id="arrivalQty" value="0">
           </div>
         </div>
 
-        <button class="btn-primary btn-full" onclick="addArrival()">Agregar llegada</button>
+        <div class="form-group">
+          <label>PO</label>
+          <input id="arrivalPO" placeholder="PO opcional">
+        </div>
 
-        <p class="note">
-          La cobertura cambia automáticamente en el Gantt.
-        </p>
+        <button class="btn-primary btn-full" onclick="addArrival()">Agregar llegada a STCK</button>
       `;
     }
 
-    function renderArrivalsTable() {
-      const selected = getSelectedMaterial();
-      const container = document.getElementById("arrivalsTable");
+    function renderDetail() {
+      const material = materials.find(item => item.id === selectedId);
+      const box = document.getElementById("detailPanel");
 
-      if (!selected) {
-        container.innerHTML = `<p class="note">Selecciona un material para ver llegadas.</p>`;
+      if (!material) {
+        box.innerHTML = `<p class="note">Selecciona un material.</p>`;
         return;
       }
 
-      if (!selected.llegadas.length) {
-        container.innerHTML = `<p class="note">Este material no tiene llegadas programadas.</p>`;
-        return;
-      }
+      const calc = calcMaterial(material, elStart.value, Number(elHorizon.value));
 
-      const rows = selected.llegadas
-        .slice()
-        .sort((a, b) => a.fecha.localeCompare(b.fecha))
-        .map(a => `
-          <tr>
-            <td>${escapeHTML(a.fecha)}</td>
-            <td>${formatNumber(a.cantidad)} ${escapeHTML(selected.unidad)}</td>
-            <td>
-              <button class="btn-danger" onclick="deleteArrival('${escapeAttribute(a.id)}')">Eliminar</button>
-            </td>
-          </tr>
-        `)
-        .join("");
+      let html = `
+        <div class="mini-kpis">
+          <div class="mini">
+            <span>Necesidad plan</span>
+            <strong>${num(calc.totalNeed)}</strong>
+          </div>
 
-      container.innerHTML = `
-        <table>
+          <div class="mini">
+            <span>Faltante</span>
+            <strong style="color:${calc.shortTotal > 0 ? "#b91c1c" : "#166534"}">${num(calc.shortTotal)}</strong>
+          </div>
+
+          <div class="mini">
+            <span>Depende de FLOR</span>
+            <strong>${num(calc.riskWithoutFlor)}</strong>
+          </div>
+
+          <div class="mini">
+            <span>% Inventario en FLOR</span>
+            <strong>${pct(calc.florPct)}</strong>
+          </div>
+        </div>
+
+        <hr class="small-separator">
+
+        <table class="detail-table">
           <thead>
             <tr>
               <th>Fecha</th>
-              <th>Cantidad</th>
-              <th>Acción</th>
+              <th>Orden</th>
+              <th>SKU</th>
+              <th>Línea</th>
+              <th>Cliente</th>
+              <th class="right">Req.</th>
+              <th class="right">STCK</th>
+              <th class="right">FLOR</th>
+              <th class="right">Faltante</th>
+              <th>Estado</th>
             </tr>
           </thead>
           <tbody>
-            ${rows}
+      `;
+
+      calc.orderLines.forEach(order => {
+        const status =
+          order.faltante > 0
+            ? `<span class="badge b-red-strong">Faltante</span>`
+            : order.cubiertoFLOR > 0
+              ? `<span class="badge b-yellow">Usa FLOR</span>`
+              : `<span class="badge b-green">STCK</span>`;
+
+        html += `
+          <tr>
+            <td>
+              ${esc(order.fechaNecesidad)}
+              ${order.overdue ? `<span class="badge b-red">Overdue</span>` : ""}
+            </td>
+            <td>${esc(order.orden)}</td>
+            <td>${esc(order.sku)}</td>
+            <td>${esc(order.linea)}</td>
+            <td>${esc(order.cliente)}</td>
+            <td class="right">${num(order.cantidad)}</td>
+            <td class="right">${num(order.cubiertoSTCK)}</td>
+            <td class="right">${num(order.cubiertoFLOR)}</td>
+            <td class="right">${num(order.faltante)}</td>
+            <td>${status}</td>
+          </tr>
+        `;
+      });
+
+      if (!calc.orderLines.length) {
+        html += `
+          <tr>
+            <td colspan="10" class="muted">Sin demanda dentro del horizonte seleccionado.</td>
+          </tr>
+        `;
+      }
+
+      html += `
           </tbody>
         </table>
       `;
+
+      box.innerHTML = html;
+    }
+
+    function setView(view) {
+      currentView = view;
+      render();
     }
 
     function selectMaterial(id) {
@@ -1044,87 +1637,28 @@
       render();
     }
 
-    function addMaterial() {
-      const newId = "MAT-" + Math.floor(1000 + Math.random() * 9000);
-
-      const newMaterial = {
-        id: newId,
-        material: "Nuevo material",
-        inventario: 0,
-        demandaDiaria: 1,
-        unidad: "pzas",
-        llegadas: []
-      };
-
-      materials.unshift(newMaterial);
-      selectedId = newId;
-      render();
-    }
-
-    function deleteSelectedMaterial() {
-      const selected = getSelectedMaterial();
-
-      if (!selected) return;
-
-      const confirmDelete = confirm(`¿Eliminar el material ${selected.material}?`);
-
-      if (!confirmDelete) return;
-
-      materials = materials.filter(m => m.id !== selected.id);
-      selectedId = materials[0]?.id || null;
-      render();
-    }
-
     function addArrival() {
-      const selected = getSelectedMaterial();
+      const material = materials.find(item => item.id === selectedId);
 
-      if (!selected) return;
+      if (!material) return;
 
-      const date = document.getElementById("arrivalDate").value;
-      const qty = Number(document.getElementById("arrivalQty").value || 0);
+      const fecha = document.getElementById("arrivalDate").value;
+      const cantidad = Number(document.getElementById("arrivalQty").value || 0);
+      const po = document.getElementById("arrivalPO").value || "";
 
-      if (!date) {
-        alert("Selecciona una fecha de llegada.");
+      if (!fecha || cantidad <= 0) {
+        alert("Captura fecha y cantidad mayor a cero.");
         return;
       }
 
-      if (qty <= 0) {
-        alert("La cantidad debe ser mayor a cero.");
-        return;
-      }
-
-      selected.llegadas.push({
+      material.llegadas.push({
         id: crypto.randomUUID(),
-        fecha: date,
-        cantidad: qty
+        po,
+        fecha,
+        cantidad
       });
 
-      selected.llegadas.sort((a, b) => a.fecha.localeCompare(b.fecha));
-
       render();
-    }
-
-    function deleteArrival(arrivalId) {
-      const selected = getSelectedMaterial();
-
-      if (!selected) return;
-
-      selected.llegadas = selected.llegadas.filter(a => a.id !== arrivalId);
-
-      render();
-    }
-
-    function exportJSON() {
-      const data = JSON.stringify(materials, null, 2);
-      const blob = new Blob([data], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "cobertura_materiales.json";
-      a.click();
-
-      URL.revokeObjectURL(url);
     }
 
     function importJSON(event) {
@@ -1136,35 +1670,24 @@
 
       reader.onload = function () {
         try {
-          const imported = JSON.parse(reader.result);
+          let data = JSON.parse(reader.result);
 
-          if (!Array.isArray(imported)) {
-            alert("El archivo debe contener una lista de materiales.");
+          if (data.materiales) {
+            data = data.materiales;
+          }
+
+          if (!Array.isArray(data)) {
+            alert("El JSON debe ser una lista de materiales o un objeto con propiedad materiales.");
             return;
           }
 
-          materials = imported.map(m => ({
-            id: String(m.id || crypto.randomUUID()),
-            material: String(m.material || "Sin descripción"),
-            inventario: Number(m.inventario || 0),
-            demandaDiaria: Number(m.demandaDiaria || 0),
-            unidad: String(m.unidad || "pzas"),
-            llegadas: Array.isArray(m.llegadas)
-              ? m.llegadas
-                  .filter(a => a.fecha)
-                  .map(a => ({
-                    id: String(a.id || crypto.randomUUID()),
-                    fecha: String(a.fecha),
-                    cantidad: Number(a.cantidad || 0)
-                  }))
-              : []
-          }));
-
+          materials = data.map(normalize);
           selectedId = materials[0]?.id || null;
+
           render();
 
         } catch (error) {
-          alert("No se pudo leer el archivo JSON. Revisa el formato.");
+          alert("No se pudo leer el JSON. Revisa el formato.");
         }
       };
 
@@ -1172,42 +1695,42 @@
       event.target.value = "";
     }
 
+    function exportJSON() {
+      const blob = new Blob([JSON.stringify(materials, null, 2)], {
+        type: "application/json"
+      });
+
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "plan_inventario_flor_stck.json";
+      a.click();
+
+      URL.revokeObjectURL(url);
+    }
+
     function saveData() {
-      localStorage.setItem("cobertura_materiales_data", JSON.stringify(materials));
-      localStorage.setItem("cobertura_materiales_selected", selectedId || "");
+      localStorage.setItem("validador_flor_stck_data", JSON.stringify(materials));
+      localStorage.setItem("validador_flor_stck_selected", selectedId || "");
     }
 
     function loadData() {
-      const saved = localStorage.getItem("cobertura_materiales_data");
-      const savedSelected = localStorage.getItem("cobertura_materiales_selected");
+      try {
+        const saved = localStorage.getItem("validador_flor_stck_data");
 
-      if (saved) {
-        try {
+        if (saved) {
           const parsed = JSON.parse(saved);
 
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            materials = parsed;
-            selectedId = savedSelected || materials[0].id;
+          if (Array.isArray(parsed) && parsed.length) {
+            materials = parsed.map(normalize);
+            selectedId = localStorage.getItem("validador_flor_stck_selected") || materials[0].id;
           }
-        } catch (error) {
-          console.warn("No se pudo cargar información guardada.");
         }
+      } catch (error) {
+        console.warn(error);
       }
-    }
-
-    function escapeHTML(value) {
-      return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
-    function escapeAttribute(value) {
-      return escapeHTML(value).replaceAll("\n", " ");
     }
   </script>
 </body>
 </html>
-``
