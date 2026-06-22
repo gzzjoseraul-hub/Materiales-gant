@@ -26,9 +26,7 @@
       --shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -43,22 +41,10 @@
       padding: 18px 22px;
     }
 
-    header h1 {
-      margin: 0;
-      font-size: 24px;
-    }
+    header h1 { margin: 0; font-size: 24px; }
+    header p { margin: 6px 0 0; color: #dbeafe; font-size: 13px; }
 
-    header p {
-      margin: 6px 0 0;
-      color: #dbeafe;
-      font-size: 13px;
-    }
-
-    .container {
-      max-width: 1800px;
-      margin: 0 auto;
-      padding: 14px;
-    }
+    .container { max-width: 1800px; margin: 0 auto; padding: 14px; }
 
     .kpi-grid {
       display: grid;
@@ -83,11 +69,7 @@
       text-transform: uppercase;
     }
 
-    .kpi-card strong {
-      display: block;
-      margin-top: 5px;
-      font-size: 22px;
-    }
+    .kpi-card strong { display: block; margin-top: 5px; font-size: 22px; }
 
     .layout {
       display: grid;
@@ -120,11 +102,7 @@
       flex-wrap: wrap;
     }
 
-    .board-title {
-      font-weight: bold;
-      font-size: 14px;
-      white-space: nowrap;
-    }
+    .board-title { font-weight: bold; font-size: 14px; white-space: nowrap; }
 
     .header-legend {
       display: flex;
@@ -149,9 +127,7 @@
       display: inline-block;
     }
 
-    .card-body {
-      padding: 12px;
-    }
+    .card-body { padding: 12px; }
 
     label {
       display: block;
@@ -188,37 +164,14 @@
       cursor: pointer;
     }
 
-    button:disabled {
-      opacity: 0.65;
-      cursor: not-allowed;
-    }
+    button:disabled { opacity: 0.65; cursor: not-allowed; }
 
-    .btn-primary {
-      background: #2563eb;
-      color: white;
-    }
+    .btn-primary { background: #2563eb; color: white; }
+    .btn-secondary { background: #e2e8f0; color: #0f172a; }
+    .btn-success { background: #16a34a; color: white; }
+    .btn-danger { background: #fee2e2; color: #991b1b; }
 
-    .btn-secondary {
-      background: #e2e8f0;
-      color: #0f172a;
-    }
-
-    .btn-success {
-      background: #16a34a;
-      color: white;
-    }
-
-    .btn-danger {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 10px;
-    }
+    .actions { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
 
     .form-row {
       display: grid;
@@ -227,53 +180,18 @@
       margin-bottom: 9px;
     }
 
-    .form-group {
-      margin-bottom: 9px;
-    }
+    .form-group { margin-bottom: 9px; }
+    .hidden-file { display: none; }
+    .note { font-size: 11px; color: var(--muted); line-height: 1.4; }
+    .separator { border: 0; border-top: 1px solid var(--border); margin: 12px 0; }
 
-    .hidden-file {
-      display: none;
-    }
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+    .tab { background: #e2e8f0; color: #0f172a; }
+    .tab.active { background: #0f172a; color: white; }
 
-    .note {
-      font-size: 11px;
-      color: var(--muted);
-      line-height: 1.4;
-    }
+    .table-wrap { overflow: auto; max-height: 72vh; }
 
-    .separator {
-      border: 0;
-      border-top: 1px solid var(--border);
-      margin: 12px 0;
-    }
-
-    .tabs {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      margin-bottom: 10px;
-    }
-
-    .tab {
-      background: #e2e8f0;
-      color: #0f172a;
-    }
-
-    .tab.active {
-      background: #0f172a;
-      color: white;
-    }
-
-    .table-wrap {
-      overflow: auto;
-      max-height: 72vh;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 11px;
-    }
+    table { width: 100%; border-collapse: collapse; font-size: 11px; }
 
     th {
       position: sticky;
@@ -289,29 +207,12 @@
       white-space: nowrap;
     }
 
-    td {
-      padding: 6px 7px;
-      border-bottom: 1px solid #edf2f7;
-      vertical-align: middle;
-    }
+    td { padding: 6px 7px; border-bottom: 1px solid #edf2f7; vertical-align: middle; }
+    tr { background: white; cursor: pointer; }
+    tr:hover { background: #eff6ff; }
+    tr.selected { background: #dbeafe; }
 
-    tr {
-      background: white;
-      cursor: pointer;
-    }
-
-    tr:hover {
-      background: #eff6ff;
-    }
-
-    tr.selected {
-      background: #dbeafe;
-    }
-
-    .num {
-      text-align: right;
-      white-space: nowrap;
-    }
+    .num { text-align: right; white-space: nowrap; }
 
     .material-code {
       font-weight: 900;
@@ -340,65 +241,20 @@
       white-space: nowrap;
     }
 
-    .b-ok {
-      background: #dcfce7;
-      color: #166534;
-    }
+    .b-ok { background: #dcfce7; color: #166534; }
+    .b-warn { background: #fef9c3; color: #854d0e; }
+    .b-orange { background: #ffedd5; color: #9a3412; }
+    .b-red { background: #fee2e2; color: #991b1b; }
+    .b-red-strong { background: #991b1b; color: white; }
+    .b-purple { background: #ede9fe; color: #5b21b6; }
+    .b-gray { background: #f1f5f9; color: #475569; }
 
-    .b-warn {
-      background: #fef9c3;
-      color: #854d0e;
-    }
-
-    .b-orange {
-      background: #ffedd5;
-      color: #9a3412;
-    }
-
-    .b-red {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-
-    .b-red-strong {
-      background: #991b1b;
-      color: white;
-    }
-
-    .b-purple {
-      background: #ede9fe;
-      color: #5b21b6;
-    }
-
-    .b-gray {
-      background: #f1f5f9;
-      color: #475569;
-    }
-
-    .action-cell {
-      font-weight: 800;
-      white-space: nowrap;
-    }
-
-    .action-red {
-      color: #991b1b;
-    }
-
-    .action-orange {
-      color: #9a3412;
-    }
-
-    .action-yellow {
-      color: #854d0e;
-    }
-
-    .action-purple {
-      color: #5b21b6;
-    }
-
-    .action-green {
-      color: #166534;
-    }
+    .action-cell { font-weight: 800; white-space: nowrap; }
+    .action-red { color: #991b1b; }
+    .action-orange { color: #9a3412; }
+    .action-yellow { color: #854d0e; }
+    .action-purple { color: #5b21b6; }
+    .action-green { color: #166534; }
 
     .coverage-bar {
       height: 14px;
@@ -410,24 +266,10 @@
       border: 1px solid #cbd5e1;
     }
 
-    .seg-stck {
-      background: var(--stck);
-    }
-
-    .seg-flor {
-      background: var(--flor);
-    }
-
-    .seg-short {
-      background: var(--red);
-    }
-
-    .bar-label {
-      margin-top: 2px;
-      color: var(--muted);
-      font-size: 10px;
-      white-space: nowrap;
-    }
+    .seg-stck { background: var(--stck); }
+    .seg-flor { background: var(--flor); }
+    .seg-short { background: var(--red); }
+    .bar-label { margin-top: 2px; color: var(--muted); font-size: 10px; white-space: nowrap; }
 
     .detail-grid {
       display: grid;
@@ -450,18 +292,8 @@
       padding: 9px;
     }
 
-    .mini span {
-      color: var(--muted);
-      font-size: 10px;
-      font-weight: bold;
-      text-transform: uppercase;
-    }
-
-    .mini strong {
-      display: block;
-      margin-top: 3px;
-      font-size: 17px;
-    }
+    .mini span { color: var(--muted); font-size: 10px; font-weight: bold; text-transform: uppercase; }
+    .mini strong { display: block; margin-top: 3px; font-size: 17px; }
 
     .email-modal-backdrop {
       position: fixed;
@@ -489,9 +321,7 @@
       font-weight: 800;
     }
 
-    .email-modal-body {
-      padding: 16px;
-    }
+    .email-modal-body { padding: 16px; }
 
     .email-modal-footer {
       padding: 12px 16px;
@@ -514,28 +344,14 @@
     }
 
     @media (max-width: 1100px) {
-      .layout,
-      .detail-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .kpi-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+      .layout, .detail-grid { grid-template-columns: 1fr; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
     @media (max-width: 600px) {
-      .kpi-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .form-row {
-        grid-template-columns: 1fr;
-      }
-
-      header h1 {
-        font-size: 20px;
-      }
+      .kpi-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      header h1 { font-size: 20px; }
     }
   </style>
 </head>
@@ -548,48 +364,20 @@
 
   <div class="container">
     <div class="kpi-grid">
-      <div class="kpi-card">
-        <span>Plan OK</span>
-        <strong id="kpiPlanOk">0%</strong>
-      </div>
-
-      <div class="kpi-card">
-        <span>Acción requerida</span>
-        <strong id="kpiAction">0</strong>
-      </div>
-
-      <div class="kpi-card">
-        <span>No cargar</span>
-        <strong id="kpiNoLoad">0</strong>
-      </div>
-
-      <div class="kpi-card">
-        <span>Validar FLOR</span>
-        <strong id="kpiValidateFlor">0</strong>
-      </div>
-
-      <div class="kpi-card">
-        <span>FLOR &gt;= límite</span>
-        <strong id="kpiFlorHigh">0</strong>
-      </div>
-
-      <div class="kpi-card">
-        <span>Órdenes en riesgo</span>
-        <strong id="kpiOrdersRisk">0</strong>
-      </div>
+      <div class="kpi-card"><span>Plan OK</span><strong id="kpiPlanOk">0%</strong></div>
+      <div class="kpi-card"><span>Acción requerida</span><strong id="kpiAction">0</strong></div>
+      <div class="kpi-card"><span>No cargar</span><strong id="kpiNoLoad">0</strong></div>
+      <div class="kpi-card"><span>Validar FLOR</span><strong id="kpiValidateFlor">0</strong></div>
+      <div class="kpi-card"><span>FLOR &gt;= límite</span><strong id="kpiFlorHigh">0</strong></div>
+      <div class="kpi-card"><span>Órdenes en riesgo</span><strong id="kpiOrdersRisk">0</strong></div>
     </div>
 
     <div class="layout">
       <aside class="card">
         <div class="card-header">Parámetros</div>
-
         <div class="card-body">
           <div class="form-row">
-            <div>
-              <label>Fecha corte</label>
-              <input type="date" id="startDate">
-            </div>
-
+            <div><label>Fecha corte</label><input type="date" id="startDate"></div>
             <div>
               <label>Horizonte plan</label>
               <select id="horizonDays">
@@ -603,11 +391,7 @@
           </div>
 
           <div class="form-row">
-            <div>
-              <label>Límite % FLOR</label>
-              <input type="number" id="florLimit" value="40">
-            </div>
-
+            <div><label>Límite % FLOR</label><input type="number" id="florLimit" value="40"></div>
             <div>
               <label>Ordenar</label>
               <select id="sortBy">
@@ -647,7 +431,6 @@
           </div>
 
           <hr class="separator">
-
           <div id="selectedEditor"></div>
 
           <p class="note">
@@ -660,32 +443,12 @@
       <main class="card">
         <div class="card-header board-header">
           <div class="board-title">Tablero de acción</div>
-
           <div class="header-legend">
-            <span class="header-legend-item">
-              <span class="header-legend-color" style="background:var(--stck)"></span>
-              STCK cubre
-            </span>
-
-            <span class="header-legend-item">
-              <span class="header-legend-color" style="background:var(--flor)"></span>
-              FLOR requerido
-            </span>
-
-            <span class="header-legend-item">
-              <span class="header-legend-color" style="background:var(--red)"></span>
-              Faltante
-            </span>
-
-            <span class="header-legend-item">
-              <span class="badge b-red-strong">NO CARGAR</span>
-              Faltante real
-            </span>
-
-            <span class="header-legend-item">
-              <span class="badge b-orange">VALIDAR</span>
-              Riesgo FLOR alto
-            </span>
+            <span class="header-legend-item"><span class="header-legend-color" style="background:var(--stck)"></span>STCK cubre</span>
+            <span class="header-legend-item"><span class="header-legend-color" style="background:var(--flor)"></span>FLOR requerido</span>
+            <span class="header-legend-item"><span class="header-legend-color" style="background:var(--red)"></span>Faltante</span>
+            <span class="header-legend-item"><span class="badge b-red-strong">NO CARGAR</span>Faltante real</span>
+            <span class="header-legend-item"><span class="badge b-orange">VALIDAR</span>Riesgo FLOR alto</span>
           </div>
         </div>
 
@@ -694,58 +457,31 @@
             <button id="tabMaterials" class="tab active" onclick="setView('materials')">Materiales de acción</button>
             <button id="tabOrders" class="tab" onclick="setView('orders')">Órdenes afectadas</button>
           </div>
-
           <div id="mainView"></div>
         </div>
       </main>
     </div>
 
     <div class="detail-grid">
-      <section class="card">
-        <div class="card-header">Agregar llegada</div>
-        <div class="card-body" id="arrivalPanel"></div>
-      </section>
-
-      <section class="card">
-        <div class="card-header">Detalle seleccionado</div>
-        <div class="card-body" id="detailPanel"></div>
-      </section>
+      <section class="card"><div class="card-header">Agregar llegada</div><div class="card-body" id="arrivalPanel"></div></section>
+      <section class="card"><div class="card-header">Detalle seleccionado</div><div class="card-body" id="detailPanel"></div></section>
     </div>
   </div>
 
   <div class="email-modal-backdrop" id="emailModal">
     <div class="email-modal">
-      <div class="email-modal-header">
-        Enviar correo de materiales en acción
-      </div>
-
+      <div class="email-modal-header">Enviar correo de materiales en acción</div>
       <div class="email-modal-body">
-        <div class="form-group">
-          <label>Destinatarios</label>
-          <input id="emailTo" placeholder="correo1@empresa.com; correo2@empresa.com">
-        </div>
-
-        <div class="form-group">
-          <label>CC opcional</label>
-          <input id="emailCc" placeholder="correo_cc@empresa.com">
-        </div>
-
-        <div class="form-group">
-          <label>Asunto</label>
-          <input id="emailSubject" value="Materiales con acción requerida - Plan vs FLOR/STCK">
-        </div>
-
+        <div class="form-group"><label>Destinatarios</label><input id="emailTo" placeholder="correo1@empresa.com; correo2@empresa.com"></div>
+        <div class="form-group"><label>CC opcional</label><input id="emailCc" placeholder="correo_cc@empresa.com"></div>
+        <div class="form-group"><label>Asunto</label><input id="emailSubject" value="Materiales con acción requerida - Plan vs FLOR/STCK"></div>
         <div class="email-help">
-          La aplicación enviará a Power Automate:
-          <br><br>
-          1. Screenshot PNG de materiales en acción.
-          <br>
-          2. CSV con todos los materiales que requieren acción.
-          <br><br>
-          Power Automate enviará el correo automáticamente con ambos adjuntos.
+          La aplicación enviará a Power Automate:<br><br>
+          1. Screenshot PNG de materiales en acción.<br>
+          2. CSV con todos los materiales que requieren acción.<br><br>
+          Además intentará mostrar la imagen dentro del cuerpo del correo; si Outlook no la muestra, quedará el adjunto.
         </div>
       </div>
-
       <div class="email-modal-footer">
         <button class="btn-secondary" onclick="closeEmailModal()">Cancelar</button>
         <button class="btn-primary" id="sendEmailButton" onclick="sendActionEmailPowerAutomate()">Enviar correo</button>
@@ -769,37 +505,12 @@
         inventarioSTCK: 800,
         inventarioFLOR: 500,
         demandas: [
-          {
-            orden: "WO-10001",
-            fechaNecesidad: addDaysISO(todayISO, -1),
-            sku: "SKU-A",
-            linea: "L1",
-            cliente: "Cliente A",
-            cantidad: 250
-          },
-          {
-            orden: "WO-10008",
-            fechaNecesidad: addDaysISO(todayISO, 0),
-            sku: "SKU-B",
-            linea: "L1",
-            cliente: "Cliente B",
-            cantidad: 300
-          },
-          {
-            orden: "WO-10015",
-            fechaNecesidad: addDaysISO(todayISO, 2),
-            sku: "SKU-C",
-            linea: "L2",
-            cliente: "Cliente C",
-            cantidad: 650
-          }
+          { orden: "WO-10001", fechaNecesidad: addDaysISO(todayISO, -1), sku: "SKU-A", linea: "L1", cliente: "Cliente A", cantidad: 250 },
+          { orden: "WO-10008", fechaNecesidad: addDaysISO(todayISO, 0), sku: "SKU-B", linea: "L1", cliente: "Cliente B", cantidad: 300 },
+          { orden: "WO-10015", fechaNecesidad: addDaysISO(todayISO, 2), sku: "SKU-C", linea: "L2", cliente: "Cliente C", cantidad: 650 }
         ],
         llegadas: [
-          {
-            po: "PO-50001",
-            fecha: addDaysISO(todayISO, 2),
-            cantidad: 600
-          }
+          { po: "PO-50001", fecha: addDaysISO(todayISO, 2), cantidad: 600 }
         ]
       }
     ];
@@ -812,12 +523,9 @@
     const elSort = document.getElementById("sortBy");
 
     elStart.value = todayISO;
-
     loadData();
 
-    if (!selectedMaterialId && materials.length) {
-      selectedMaterialId = materials[0].id;
-    }
+    if (!selectedMaterialId && materials.length) selectedMaterialId = materials[0].id;
 
     render();
 
@@ -921,7 +629,6 @@
       const florPct = totalActual > 0 ? flor / totalActual : 0;
       const shortageActual = Math.max(0, need - totalActual);
       const shortageProjected = Math.max(0, need - totalProjected);
-
       const riskWithoutFlor = Math.max(0, need - stck);
       const requiredFromFlor = Math.min(flor, Math.max(0, need - stck));
 
@@ -930,15 +637,11 @@
 
       const orderLines = demands.map(demand => {
         const qty = Number(demand.cantidad || 0);
-
         const usedSTCK = Math.min(simSTCK, qty);
         simSTCK -= usedSTCK;
-
         const remainingAfterSTCK = qty - usedSTCK;
-
         const usedFLOR = Math.min(simFLOR, remainingAfterSTCK);
         simFLOR -= usedFLOR;
-
         const shortage = remainingAfterSTCK - usedFLOR;
 
         return {
@@ -1037,58 +740,25 @@
             material.material,
             ...material.demandas.map(d => `${d.orden} ${d.sku} ${d.linea} ${d.cliente}`)
           ].join(" ").toLowerCase();
-
           return text.includes(search);
         });
       }
 
-      if (filter === "noLoad") {
-        rows = rows.filter(m => m.calc.action.includes("NO CARGAR") || m.calc.action.includes("ESCALAR"));
-      }
-
-      if (filter === "waitArrival") {
-        rows = rows.filter(m => m.calc.action.includes("ESPERAR"));
-      }
-
-      if (filter === "validateFlor") {
-        rows = rows.filter(m => m.calc.action.includes("VALIDAR FLOR"));
-      }
-
+      if (filter === "noLoad") rows = rows.filter(m => m.calc.action.includes("NO CARGAR") || m.calc.action.includes("ESCALAR"));
+      if (filter === "waitArrival") rows = rows.filter(m => m.calc.action.includes("ESPERAR"));
+      if (filter === "validateFlor") rows = rows.filter(m => m.calc.action.includes("VALIDAR FLOR"));
       if (filter === "florHigh") {
         const limit = Number(elFlorLimit.value || 40) / 100;
         rows = rows.filter(m => m.calc.florPct >= limit);
       }
+      if (filter === "ok") rows = rows.filter(m => m.calc.action === "OK PARA CORRER");
+      if (filter === "overdue") rows = rows.filter(m => m.calc.overdueNeed > 0);
 
-      if (filter === "ok") {
-        rows = rows.filter(m => m.calc.action === "OK PARA CORRER");
-      }
-
-      if (filter === "overdue") {
-        rows = rows.filter(m => m.calc.overdueNeed > 0);
-      }
-
-      if (sort === "priority") {
-        rows.sort((a, b) =>
-          a.calc.priority - b.calc.priority ||
-          b.calc.shortageActual - a.calc.shortageActual
-        );
-      }
-
-      if (sort === "shortDesc") {
-        rows.sort((a, b) => b.calc.shortageActual - a.calc.shortageActual);
-      }
-
-      if (sort === "florPctDesc") {
-        rows.sort((a, b) => b.calc.florPct - a.calc.florPct);
-      }
-
-      if (sort === "ordersDesc") {
-        rows.sort((a, b) => b.calc.ordersRisk - a.calc.ordersRisk);
-      }
-
-      if (sort === "name") {
-        rows.sort((a, b) => a.id.localeCompare(b.id));
-      }
+      if (sort === "priority") rows.sort((a, b) => a.calc.priority - b.calc.priority || b.calc.shortageActual - a.calc.shortageActual);
+      if (sort === "shortDesc") rows.sort((a, b) => b.calc.shortageActual - a.calc.shortageActual);
+      if (sort === "florPctDesc") rows.sort((a, b) => b.calc.florPct - a.calc.florPct);
+      if (sort === "ordersDesc") rows.sort((a, b) => b.calc.ordersRisk - a.calc.ordersRisk);
+      if (sort === "name") rows.sort((a, b) => a.id.localeCompare(b.id));
 
       return rows;
     }
@@ -1121,16 +791,11 @@
           }
 
           const order = orders.get(key);
-
-          if (line.fechaNecesidad < order.fecha) {
-            order.fecha = line.fechaNecesidad;
-          }
-
+          if (line.fechaNecesidad < order.fecha) order.fecha = line.fechaNecesidad;
           order.totalReq += Number(line.cantidad || 0);
           order.faltante += Number(line.faltante || 0);
           order.usaFlor += Number(line.cubiertoFLOR || 0);
           order.overdue = order.overdue || line.overdue;
-
           order.materiales.push({
             materialId: material.id,
             material: material.material,
@@ -1164,52 +829,32 @@
         }
       });
 
-      rows.sort((a, b) =>
-        a.priority - b.priority ||
-        a.fecha.localeCompare(b.fecha)
-      );
-
+      rows.sort((a, b) => a.priority - b.priority || a.fecha.localeCompare(b.fecha));
       return rows;
     }
 
     function render() {
       saveData();
-
       document.getElementById("tabMaterials").classList.toggle("active", currentView === "materials");
       document.getElementById("tabOrders").classList.toggle("active", currentView === "orders");
-
       renderKPIs();
-
-      if (currentView === "materials") {
-        renderMaterialsTable();
-      } else {
-        renderOrdersTable();
-      }
-
+      if (currentView === "materials") renderMaterialsTable();
+      else renderOrdersTable();
       renderEditor();
       renderArrivalPanel();
       renderDetailPanel();
     }
 
     function renderKPIs() {
-      const rows = materials.map(material => ({
-        ...material,
-        calc: calculateMaterial(material)
-      }));
-
+      const rows = materials.map(material => ({ ...material, calc: calculateMaterial(material) }));
       const total = rows.length;
       const ok = rows.filter(m => m.calc.action === "OK PARA CORRER").length;
       const action = rows.filter(m => m.calc.action !== "OK PARA CORRER").length;
-      const noLoad = rows.filter(m =>
-        m.calc.action.includes("NO CARGAR") || m.calc.action.includes("ESCALAR")
-      ).length;
+      const noLoad = rows.filter(m => m.calc.action.includes("NO CARGAR") || m.calc.action.includes("ESCALAR")).length;
       const validateFlor = rows.filter(m => m.calc.action.includes("VALIDAR FLOR")).length;
-
       const limit = Number(elFlorLimit.value || 40) / 100;
       const florHigh = rows.filter(m => m.calc.florPct >= limit).length;
-
       const ordersRisk = getOrderRows().filter(o => o.estado !== "OK PARA CORRER").length;
-
       const planOkPct = total > 0 ? ok / total : 0;
 
       document.getElementById("kpiPlanOk").textContent = pct(planOkPct);
@@ -1222,7 +867,6 @@
 
     function renderMaterialsTable() {
       const rows = getMaterialRows();
-
       let html = `
         <div class="table-wrap">
           <table>
@@ -1249,7 +893,6 @@
       rows.forEach(material => {
         const c = material.calc;
         const base = Math.max(c.need, 1);
-
         const stckWidth = Math.min(100, Math.min(c.stck, c.need) / base * 100);
         const florWidth = Math.min(100 - stckWidth, c.requiredFromFlor / base * 100);
         const shortWidth = Math.max(0, c.shortageActual / base * 100);
@@ -1257,40 +900,27 @@
         html += `
           <tr onclick="selectMaterial('${attr(material.id)}')" class="${material.id === selectedMaterialId ? "selected" : ""}">
             <td><span class="badge ${c.badge}">${c.status}</span></td>
-
             <td class="action-cell ${c.actionClass}">${c.action}</td>
-
             <td>
               <div class="material-code" title="${attr(material.id)}">${esc(material.id)}</div>
               <div class="material-desc" title="${attr(material.material)}">${esc(material.material)} · ${esc(material.unidad)}</div>
             </td>
-
             <td class="num">${num(c.need)}</td>
             <td class="num">${num(c.stck)}</td>
             <td class="num">${num(c.flor)}</td>
             <td class="num">${num(c.totalActual)}</td>
-
             <td class="num">
-              <span class="badge ${c.florPct >= Number(elFlorLimit.value || 40) / 100 ? "b-orange" : "b-gray"}">
-                ${pct(c.florPct)}
-              </span>
+              <span class="badge ${c.florPct >= Number(elFlorLimit.value || 40) / 100 ? "b-orange" : "b-gray"}">${pct(c.florPct)}</span>
             </td>
-
             <td>
               <div class="coverage-bar">
                 <div class="seg-stck" style="width:${stckWidth}%"></div>
                 <div class="seg-flor" style="width:${florWidth}%"></div>
                 <div class="seg-short" style="width:${shortWidth}%"></div>
               </div>
-              <div class="bar-label">
-                FLOR requerido: ${num(c.requiredFromFlor)} · Llegadas: ${num(c.arrivalsQty)}
-              </div>
+              <div class="bar-label">FLOR requerido: ${num(c.requiredFromFlor)} · Llegadas: ${num(c.arrivalsQty)}</div>
             </td>
-
-            <td class="num">
-              <b style="color:${c.shortageActual > 0 ? "#991b1b" : "#166534"}">${num(c.shortageActual)}</b>
-            </td>
-
+            <td class="num"><b style="color:${c.shortageActual > 0 ? "#991b1b" : "#166534"}">${num(c.shortageActual)}</b></td>
             <td class="num">${num(c.riskWithoutFlor)}</td>
             <td class="num">${num(c.ordersRisk)}</td>
             <td class="num">${num(c.overdueNeed)}</td>
@@ -1303,13 +933,11 @@
           </table>
         </div>
       `;
-
       document.getElementById("mainView").innerHTML = html;
     }
 
     function renderOrdersTable() {
       const orders = getOrderRows();
-
       let html = `
         <div class="table-wrap">
           <table>
@@ -1335,17 +963,12 @@
           <tr>
             <td><span class="badge ${order.badge}">${order.estado}</span></td>
             <td><b>${esc(order.orden)}</b></td>
-            <td>
-              ${esc(order.fecha)}
-              ${order.overdue ? `<span class="badge b-red">Overdue</span>` : ""}
-            </td>
+            <td>${esc(order.fecha)} ${order.overdue ? `<span class="badge b-red">Overdue</span>` : ""}</td>
             <td>${esc(order.sku)}</td>
             <td>${esc(order.linea)}</td>
             <td>${esc(order.cliente)}</td>
             <td class="num">${order.materiales.length}</td>
-            <td class="num">
-              <b style="color:${order.faltante > 0 ? "#991b1b" : "#166534"}">${num(order.faltante)}</b>
-            </td>
+            <td class="num"><b style="color:${order.faltante > 0 ? "#991b1b" : "#166534"}">${num(order.faltante)}</b></td>
             <td class="num">${num(order.usaFlor)}</td>
             <td class="action-cell ${order.actionClass}">${esc(order.estado)}</td>
           </tr>
@@ -1357,7 +980,6 @@
           </table>
         </div>
       `;
-
       document.getElementById("mainView").innerHTML = html;
     }
 
@@ -1371,32 +993,13 @@
       }
 
       box.innerHTML = `
-        <div class="form-group">
-          <label>Código</label>
-          <input value="${attr(material.id)}" onchange="updateMaterial('id', this.value)">
-        </div>
-
-        <div class="form-group">
-          <label>Descripción</label>
-          <input value="${attr(material.material)}" onchange="updateMaterial('material', this.value)">
-        </div>
-
+        <div class="form-group"><label>Código</label><input value="${attr(material.id)}" onchange="updateMaterial('id', this.value)"></div>
+        <div class="form-group"><label>Descripción</label><input value="${attr(material.material)}" onchange="updateMaterial('material', this.value)"></div>
         <div class="form-row">
-          <div>
-            <label>STCK</label>
-            <input type="number" value="${material.inventarioSTCK}" onchange="updateMaterial('inventarioSTCK', Number(this.value))">
-          </div>
-
-          <div>
-            <label>FLOR</label>
-            <input type="number" value="${material.inventarioFLOR}" onchange="updateMaterial('inventarioFLOR', Number(this.value))">
-          </div>
+          <div><label>STCK</label><input type="number" value="${material.inventarioSTCK}" onchange="updateMaterial('inventarioSTCK', Number(this.value))"></div>
+          <div><label>FLOR</label><input type="number" value="${material.inventarioFLOR}" onchange="updateMaterial('inventarioFLOR', Number(this.value))"></div>
         </div>
-
-        <div class="form-group">
-          <label>Unidad</label>
-          <input value="${attr(material.unidad)}" onchange="updateMaterial('unidad', this.value)">
-        </div>
+        <div class="form-group"><label>Unidad</label><input value="${attr(material.unidad)}" onchange="updateMaterial('unidad', this.value)"></div>
       `;
     }
 
@@ -1410,33 +1013,14 @@
       }
 
       box.innerHTML = `
-        <div class="form-group">
-          <label>Material seleccionado</label>
-          <input value="${attr(material.id + " - " + material.material)}" disabled>
-        </div>
-
+        <div class="form-group"><label>Material seleccionado</label><input value="${attr(material.id + " - " + material.material)}" disabled></div>
         <div class="form-row">
-          <div>
-            <label>Fecha llegada</label>
-            <input type="date" id="arrivalDate" value="${addDaysISO(elStart.value, 1)}">
-          </div>
-
-          <div>
-            <label>Cantidad</label>
-            <input type="number" id="arrivalQty" value="0">
-          </div>
+          <div><label>Fecha llegada</label><input type="date" id="arrivalDate" value="${addDaysISO(elStart.value, 1)}"></div>
+          <div><label>Cantidad</label><input type="number" id="arrivalQty" value="0"></div>
         </div>
-
-        <div class="form-group">
-          <label>PO</label>
-          <input id="arrivalPO" placeholder="PO opcional">
-        </div>
-
+        <div class="form-group"><label>PO</label><input id="arrivalPO" placeholder="PO opcional"></div>
         <button class="btn-primary" style="width:100%;" onclick="addArrival()">Agregar llegada</button>
-
-        <p class="note">
-          La llegada se considera en el total proyectado, pero la alerta principal sigue evaluando el inventario actual.
-        </p>
+        <p class="note">La llegada se considera en el total proyectado, pero la alerta principal sigue evaluando el inventario actual.</p>
       `;
     }
 
@@ -1450,53 +1034,25 @@
       }
 
       const c = calculateMaterial(material);
-
       let html = `
         <div class="mini-grid">
-          <div class="mini">
-            <span>Material</span>
-            <strong>${esc(material.id)}</strong>
-          </div>
-
-          <div class="mini">
-            <span>Necesidad plan</span>
-            <strong>${num(c.need)}</strong>
-          </div>
-
-          <div class="mini">
-            <span>Faltante actual</span>
-            <strong style="color:${c.shortageActual > 0 ? "#991b1b" : "#166534"}">${num(c.shortageActual)}</strong>
-          </div>
-
-          <div class="mini">
-            <span>Riesgo sin FLOR</span>
-            <strong>${num(c.riskWithoutFlor)}</strong>
-          </div>
+          <div class="mini"><span>Material</span><strong>${esc(material.id)}</strong></div>
+          <div class="mini"><span>Necesidad plan</span><strong>${num(c.need)}</strong></div>
+          <div class="mini"><span>Faltante actual</span><strong style="color:${c.shortageActual > 0 ? "#991b1b" : "#166534"}">${num(c.shortageActual)}</strong></div>
+          <div class="mini"><span>Riesgo sin FLOR</span><strong>${num(c.riskWithoutFlor)}</strong></div>
         </div>
-
         <p class="note">
           <b>Descripción:</b> ${esc(material.material)}<br>
           <b>Unidad:</b> ${esc(material.unidad)}<br>
           <b>% FLOR:</b> ${pct(c.florPct)}<br>
-          <b>Acción sugerida:</b>
-          <span class="${c.actionClass}" style="font-weight:800;">${esc(c.action)}</span>
+          <b>Acción sugerida:</b> <span class="${c.actionClass}" style="font-weight:800;">${esc(c.action)}</span>
         </p>
-
         <hr class="separator">
-
         <table>
           <thead>
             <tr>
-              <th>Fecha</th>
-              <th>Orden</th>
-              <th>SKU</th>
-              <th>Línea</th>
-              <th>Cliente</th>
-              <th class="num">Req.</th>
-              <th class="num">STCK</th>
-              <th class="num">FLOR</th>
-              <th class="num">Faltante</th>
-              <th>Estado orden-material</th>
+              <th>Fecha</th><th>Orden</th><th>SKU</th><th>Línea</th><th>Cliente</th>
+              <th class="num">Req.</th><th class="num">STCK</th><th class="num">FLOR</th><th class="num">Faltante</th><th>Estado orden-material</th>
             </tr>
           </thead>
           <tbody>
@@ -1504,19 +1060,12 @@
 
       c.orderLines.forEach(line => {
         let badge = `<span class="badge b-ok">STCK</span>`;
-
-        if (line.faltante > 0) {
-          badge = `<span class="badge b-red-strong">Faltante</span>`;
-        } else if (line.cubiertoFLOR > 0) {
-          badge = `<span class="badge b-warn">Usa FLOR</span>`;
-        }
+        if (line.faltante > 0) badge = `<span class="badge b-red-strong">Faltante</span>`;
+        else if (line.cubiertoFLOR > 0) badge = `<span class="badge b-warn">Usa FLOR</span>`;
 
         html += `
           <tr>
-            <td>
-              ${esc(line.fechaNecesidad)}
-              ${line.overdue ? `<span class="badge b-red">Overdue</span>` : ""}
-            </td>
+            <td>${esc(line.fechaNecesidad)} ${line.overdue ? `<span class="badge b-red">Overdue</span>` : ""}</td>
             <td>${esc(line.orden)}</td>
             <td>${esc(line.sku)}</td>
             <td>${esc(line.linea)}</td>
@@ -1530,19 +1079,12 @@
         `;
       });
 
-      if (!c.orderLines.length) {
-        html += `
-          <tr>
-            <td colspan="10" class="note">Sin demandas dentro del horizonte seleccionado.</td>
-          </tr>
-        `;
-      }
+      if (!c.orderLines.length) html += `<tr><td colspan="10" class="note">Sin demandas dentro del horizonte seleccionado.</td></tr>`;
 
       html += `
           </tbody>
         </table>
       `;
-
       box.innerHTML = html;
     }
 
@@ -1558,30 +1100,18 @@
 
     function updateMaterial(field, value) {
       const oldId = selectedMaterialId;
-
       materials = materials.map(material => {
         if (material.id !== oldId) return material;
-
-        const updated = {
-          ...material,
-          [field]: value
-        };
-
-        if (field === "id") {
-          selectedMaterialId = value;
-        }
-
+        const updated = { ...material, [field]: value };
+        if (field === "id") selectedMaterialId = value;
         return updated;
       });
-
       render();
     }
 
     function addArrival() {
       const material = materials.find(m => m.id === selectedMaterialId);
-
       if (!material) return;
-
       const fecha = document.getElementById("arrivalDate").value;
       const cantidad = Number(document.getElementById("arrivalQty").value || 0);
       const po = document.getElementById("arrivalPO").value || "";
@@ -1591,71 +1121,47 @@
         return;
       }
 
-      material.llegadas.push({
-        id: crypto.randomUUID(),
-        po,
-        fecha,
-        cantidad
-      });
-
+      material.llegadas.push({ id: crypto.randomUUID(), po, fecha, cantidad });
       render();
     }
 
     function importJSON(event) {
       const file = event.target.files[0];
-
       if (!file) return;
-
       const reader = new FileReader();
-
       reader.onload = function () {
         try {
           let data = JSON.parse(reader.result);
-
-          if (data.materiales) {
-            data = data.materiales;
-          }
-
+          if (data.materiales) data = data.materiales;
           if (!Array.isArray(data)) {
             alert("El JSON debe ser una lista de materiales o un objeto con propiedad materiales.");
             return;
           }
-
           materials = data.map(normalizeMaterial);
           selectedMaterialId = materials[0]?.id || null;
-
           render();
-
         } catch (error) {
           alert("No se pudo leer el JSON. Revisa el formato.");
         }
       };
-
       reader.readAsText(file);
       event.target.value = "";
     }
 
     function exportJSON() {
-      const blob = new Blob([JSON.stringify(materials, null, 2)], {
-        type: "application/json"
-      });
-
+      const blob = new Blob([JSON.stringify(materials, null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
-
       const link = document.createElement("a");
       link.href = url;
       link.download = "plan_inventario_flor_stck.json";
       link.click();
-
       URL.revokeObjectURL(url);
     }
 
     function downloadActionExcel() {
       const rows = getActionMaterialsForEmail();
-
       const exportRows = rows.map(material => {
         const c = material.calc;
-
         return {
           "Estado": c.status,
           "Acción": c.action,
@@ -1693,18 +1199,12 @@
           headers.join(","),
           ...exportRows.map(row => headers.map(header => csvCell(row[header])).join(","))
         ].join("\n");
-
-        const blob = new Blob([csv], {
-          type: "text/csv;charset=utf-8"
-        });
-
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
         const url = URL.createObjectURL(blob);
-
         const link = document.createElement("a");
         link.href = url;
         link.download = "materiales_en_accion_flor_stck.csv";
         link.click();
-
         URL.revokeObjectURL(url);
       }
     }
@@ -1719,10 +1219,7 @@
 
     function getActionMaterialsForEmail() {
       return materials
-        .map(material => ({
-          ...material,
-          calc: calculateMaterial(material)
-        }))
+        .map(material => ({ ...material, calc: calculateMaterial(material) }))
         .filter(material => material.calc.action !== "OK PARA CORRER")
         .sort((a, b) =>
           a.calc.priority - b.calc.priority ||
@@ -1742,7 +1239,6 @@
       }
 
       const actionMaterials = getActionMaterialsForEmail();
-
       if (actionMaterials.length === 0) {
         alert("No hay materiales en acción para enviar.");
         return;
@@ -1756,51 +1252,35 @@
 
         const imageBase64 = await generateActionScreenshotBase64(actionMaterials);
         const csvBase64 = generateActionCsvBase64(actionMaterials);
-        const bodyHtml = buildActionEmailHtml(actionMaterials);
+        const bodyHtml = buildActionEmailHtml(actionMaterials, imageBase64);
 
-        const payload = {
-          to,
-          cc,
-          subject,
-          bodyHtml,
-          imageBase64,
-          csvBase64
-        };
+        const payload = { to, cc, subject, bodyHtml, imageBase64, csvBase64 };
 
         let response;
-
         try {
           response = await fetch(POWER_AUTOMATE_URL, {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
           });
 
-          if (!response.ok) {
-            throw new Error("Power Automate respondió con error HTTP: " + response.status);
-          }
+          if (!response.ok) throw new Error("Power Automate respondió con error HTTP: " + response.status);
 
           alert("Correo enviado correctamente por Power Automate.");
           closeEmailModal();
-
         } catch (normalError) {
           console.warn("Intento normal falló. Probando modo no-cors.", normalError);
 
           await fetch(POWER_AUTOMATE_URL, {
             method: "POST",
             mode: "no-cors",
-            headers: {
-              "Content-Type": "application/json"
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
           });
 
           alert("Solicitud enviada a Power Automate. Si el flujo está correcto, el correo llegará en unos momentos.");
           closeEmailModal();
         }
-
       } catch (error) {
         console.error(error);
         alert(
@@ -1815,12 +1295,9 @@
     }
 
     async function generateActionScreenshotBase64(actionMaterials) {
-      if (!window.html2canvas) {
-        throw new Error("No cargó la librería html2canvas.");
-      }
+      if (!window.html2canvas) throw new Error("No cargó la librería html2canvas.");
 
       const node = document.createElement("div");
-
       node.style.position = "fixed";
       node.style.left = "-99999px";
       node.style.top = "0";
@@ -1831,23 +1308,18 @@
       node.style.color = "#0f172a";
 
       const generatedAt = new Date().toLocaleString("es-MX");
-
       let html = `
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
           <div>
             <div style="font-size:22px;font-weight:800;">Materiales con acción requerida</div>
-            <div style="font-size:12px;color:#64748b;margin-top:4px;">
-              Action Board Plan vs FLOR/STCK · Generado: ${generatedAt}
-            </div>
+            <div style="font-size:12px;color:#64748b;margin-top:4px;">Action Board Plan vs FLOR/STCK · Generado: ${generatedAt}</div>
           </div>
-
           <div style="font-size:11px;color:#64748b;display:flex;gap:12px;align-items:center;">
             <span><span style="display:inline-block;width:18px;height:9px;background:#2563eb;border-radius:4px;"></span> STCK</span>
             <span><span style="display:inline-block;width:18px;height:9px;background:#f97316;border-radius:4px;"></span> FLOR</span>
             <span><span style="display:inline-block;width:18px;height:9px;background:#dc2626;border-radius:4px;"></span> Faltante</span>
           </div>
         </div>
-
         <table style="width:100%;border-collapse:collapse;font-size:11px;">
           <thead>
             <tr style="background:#f8fafc;color:#64748b;text-transform:uppercase;">
@@ -1870,44 +1342,30 @@
       actionMaterials.slice(0, 80).forEach(material => {
         const c = material.calc;
         const base = Math.max(c.need, 1);
-
         const stckWidth = Math.min(100, Math.min(c.stck, c.need) / base * 100);
         const florWidth = Math.min(100 - stckWidth, c.requiredFromFlor / base * 100);
         const shortWidth = Math.max(0, c.shortageActual / base * 100);
 
         html += `
           <tr>
-            <td style="padding:7px;border-bottom:1px solid #edf2f7;font-weight:800;color:${c.shortageActual > 0 ? "#991b1b" : "#9a3412"};">
-              ${esc(c.status)}
-            </td>
-
-            <td style="padding:7px;border-bottom:1px solid #edf2f7;font-weight:800;color:${c.shortageActual > 0 ? "#991b1b" : "#9a3412"};">
-              ${esc(c.action)}
-            </td>
-
+            <td style="padding:7px;border-bottom:1px solid #edf2f7;font-weight:800;color:${c.shortageActual > 0 ? "#991b1b" : "#9a3412"};">${esc(c.status)}</td>
+            <td style="padding:7px;border-bottom:1px solid #edf2f7;font-weight:800;color:${c.shortageActual > 0 ? "#991b1b" : "#9a3412"};">${esc(c.action)}</td>
             <td style="padding:7px;border-bottom:1px solid #edf2f7;">
               <div style="font-weight:900;">${esc(material.id)}</div>
-              <div style="font-size:10px;color:#64748b;max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                ${esc(material.material)} · ${esc(material.unidad)}
-              </div>
+              <div style="font-size:10px;color:#64748b;max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(material.material)} · ${esc(material.unidad)}</div>
             </td>
-
             <td style="padding:7px;border-bottom:1px solid #edf2f7;text-align:right;">${num(c.need)}</td>
             <td style="padding:7px;border-bottom:1px solid #edf2f7;text-align:right;">${num(c.stck)}</td>
             <td style="padding:7px;border-bottom:1px solid #edf2f7;text-align:right;">${num(c.flor)}</td>
             <td style="padding:7px;border-bottom:1px solid #edf2f7;text-align:right;">${pct(c.florPct)}</td>
-
             <td style="padding:7px;border-bottom:1px solid #edf2f7;">
               <div style="width:200px;height:13px;border:1px solid #cbd5e1;border-radius:999px;overflow:hidden;display:flex;background:#e5e7eb;">
                 <div style="width:${stckWidth}%;background:#2563eb;"></div>
                 <div style="width:${florWidth}%;background:#f97316;"></div>
                 <div style="width:${shortWidth}%;background:#dc2626;"></div>
               </div>
-              <div style="font-size:10px;color:#64748b;margin-top:2px;">
-                FLOR requerido: ${num(c.requiredFromFlor)}
-              </div>
+              <div style="font-size:10px;color:#64748b;margin-top:2px;">FLOR requerido: ${num(c.requiredFromFlor)}</div>
             </td>
-
             <td style="padding:7px;border-bottom:1px solid #edf2f7;text-align:right;color:#991b1b;font-weight:800;">${num(c.shortageActual)}</td>
             <td style="padding:7px;border-bottom:1px solid #edf2f7;text-align:right;">${num(c.riskWithoutFlor)}</td>
             <td style="padding:7px;border-bottom:1px solid #edf2f7;text-align:right;">${num(c.ordersRisk)}</td>
@@ -1918,31 +1376,20 @@
       html += `
           </tbody>
         </table>
-
-        <div style="font-size:11px;color:#64748b;margin-top:10px;">
-          Nota: screenshot limitado a los primeros 80 materiales en acción ordenados por prioridad.
-        </div>
+        <div style="font-size:11px;color:#64748b;margin-top:10px;">Nota: screenshot limitado a los primeros 80 materiales en acción ordenados por prioridad.</div>
       `;
 
       node.innerHTML = html;
       document.body.appendChild(node);
-
-      const canvas = await html2canvas(node, {
-        backgroundColor: "#ffffff",
-        scale: 2
-      });
-
+      const canvas = await html2canvas(node, { backgroundColor: "#ffffff", scale: 2 });
       document.body.removeChild(node);
-
       const dataUrl = canvas.toDataURL("image/png");
-
       return dataUrl.split(",")[1];
     }
 
     function generateActionCsvBase64(actionMaterials) {
       const rows = actionMaterials.map(material => {
         const c = material.calc;
-
         return {
           Estado: c.status,
           Accion: c.action,
@@ -1965,16 +1412,14 @@
       });
 
       const headers = Object.keys(rows[0]);
-
       const csv = [
         headers.join(","),
         ...rows.map(row => headers.map(header => csvCell(row[header])).join(","))
       ].join("\n");
-
       return utf8ToBase64(csv);
     }
 
-    function buildActionEmailHtml(actionMaterials) {
+    function buildActionEmailHtml(actionMaterials, imageBase64) {
       const now = new Date().toLocaleString("es-MX");
 
       const noLoad = actionMaterials.filter(m =>
@@ -1991,20 +1436,15 @@
 
       let html = `
         <p>Hola,</p>
-
         <p>Comparto el resumen de materiales con acción requerida para el plan.</p>
-
         <p><b>Fecha/hora de generación:</b> ${now}</p>
-
         <ul>
           <li><b>Total materiales en acción:</b> ${actionMaterials.length}</li>
           <li><b>No cargar / Escalar:</b> ${noLoad}</li>
           <li><b>Validar FLOR:</b> ${validateFlor}</li>
           <li><b>Revisar balance FLOR:</b> ${balanceFlor}</li>
         </ul>
-
         <p><b>Top materiales en acción:</b></p>
-
         <table border="1" cellspacing="0" cellpadding="5" style="border-collapse:collapse;font-family:Arial;font-size:12px;">
           <thead>
             <tr style="background:#f3f4f6;">
@@ -2022,7 +1462,6 @@
 
       actionMaterials.slice(0, 20).forEach(material => {
         const c = material.calc;
-
         html += `
           <tr>
             <td><b>${esc(material.id)}</b><br>${esc(material.material)}</td>
@@ -2039,9 +1478,13 @@
       html += `
           </tbody>
         </table>
-
         <p>Se adjunta screenshot y archivo CSV con los materiales en acción.</p>
-
+        <hr>
+        <p><b>Vista visual de materiales en acción:</b></p>
+        <p style="font-size:12px;color:#64748b;">Si la imagen no se visualiza correctamente en Outlook, también va incluida como archivo adjunto.</p>
+        <p>
+          <img src="data:image/png;base64,${imageBase64}" alt="Screenshot de materiales con acción requerida" style="max-width:100%;height:auto;border:1px solid #dbe3ef;border-radius:10px;">
+        </p>
         <p>Saludos.</p>
       `;
 
@@ -2054,11 +1497,7 @@
 
     function csvCell(value) {
       const text = String(value ?? "");
-
-      if (/[",\n]/.test(text)) {
-        return '"' + text.replace(/"/g, '""') + '"';
-      }
-
+      if (/[",\n]/.test(text)) return '"' + text.replace(/"/g, '""') + '"';
       return text;
     }
 
@@ -2071,10 +1510,8 @@
       try {
         const saved = localStorage.getItem("action_board_flor_stck_data");
         const selected = localStorage.getItem("action_board_flor_stck_selected");
-
         if (saved) {
           const parsed = JSON.parse(saved);
-
           if (Array.isArray(parsed) && parsed.length > 0) {
             materials = parsed.map(normalizeMaterial);
             selectedMaterialId = selected || materials[0].id;
@@ -2086,4 +1523,4 @@
     }
   </script>
 </body>
-</html
+</html>
