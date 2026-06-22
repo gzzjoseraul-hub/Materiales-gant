@@ -742,7 +742,7 @@
           <br>
           2. CSV con todos los materiales que requieren acción.
           <br><br>
-          Power Automate enviará el correo automáticamente con ambos adjuntos.
+          Power Automate enviará el correo automáticamente con ambos adjuntos y también intentará mostrar la imagen dentro del cuerpo del correo.
         </div>
       </div>
 
@@ -1756,7 +1756,7 @@
 
         const imageBase64 = await generateActionScreenshotBase64(actionMaterials);
         const csvBase64 = generateActionCsvBase64(actionMaterials);
-        const bodyHtml = buildActionEmailHtml(actionMaterials);
+        const bodyHtml = buildActionEmailHtml(actionMaterials, imageBase64);
 
         const payload = {
           to,
@@ -1974,7 +1974,7 @@
       return utf8ToBase64(csv);
     }
 
-    function buildActionEmailHtml(actionMaterials) {
+    function buildActionEmailHtml(actionMaterials, imageBase64) {
       const now = new Date().toLocaleString("es-MX");
 
       const noLoad = actionMaterials.filter(m =>
@@ -2042,17 +2042,20 @@
 
         <p>Se adjunta screenshot y archivo CSV con los materiales en acción.</p>
 
-        <p>Saludos.</p>
-      `;
+        <hr>
 
-      return html;
-    }
+        <p><b>Vista visual de materiales en acción:</b></p>
 
-    function utf8ToBase64(text) {
-      return btoa(unescape(encodeURIComponent(text)));
-    }
+        <p style="font-size:12px;color:#64748b;">
+          Si la imagen no se visualiza correctamente en Outlook, también va incluida como archivo adjunto.
+        </p>
 
-    function csvCell(value) {
+        <p>
+          <img 
+            src="data:image/png;base64,${imageBase64}" 
+            alt="Screenshot de materiales con acción requerida"
+            style="max-width:100%;height:auto;border:1px solid #dbe3ef;border-radius:10px;"
+         
       const text = String(value ?? "");
 
       if (/[",\n]/.test(text)) {
