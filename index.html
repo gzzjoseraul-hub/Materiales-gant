@@ -6,6 +6,8 @@
 
   <title>Action Board Plan vs FLOR/STCK</title>
 
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
   <style>
     :root {
       --bg: #f4f7fb;
@@ -20,9 +22,7 @@
       --warn: #facc15;
       --orange: #ea580c;
       --red: #dc2626;
-      --darkred: #7f1d1d;
       --purple: #7c3aed;
-      --gray: #e2e8f0;
 
       --shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
     }
@@ -113,6 +113,43 @@
       font-size: 14px;
     }
 
+    .board-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .board-title {
+      font-weight: bold;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .header-legend {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .header-legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+    }
+
+    .header-legend-color {
+      width: 19px;
+      height: 8px;
+      border-radius: 999px;
+      display: inline-block;
+    }
+
     .card-body {
       padding: 12px;
     }
@@ -160,6 +197,11 @@
     .btn-secondary {
       background: #e2e8f0;
       color: #0f172a;
+    }
+
+    .btn-success {
+      background: #16a34a;
+      color: white;
     }
 
     .btn-danger {
@@ -267,9 +309,19 @@
       white-space: nowrap;
     }
 
-    .material-name {
-      font-weight: bold;
-      max-width: 210px;
+    .material-code {
+      font-weight: 900;
+      max-width: 230px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      letter-spacing: 0.2px;
+    }
+
+    .material-desc {
+      color: var(--muted);
+      font-size: 10px;
+      max-width: 260px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -564,6 +616,7 @@
           <div class="actions">
             <button class="btn-secondary" onclick="document.getElementById('fileInput').click()">Importar JSON</button>
             <button class="btn-secondary" onclick="exportJSON()">Exportar JSON</button>
+            <button class="btn-success" onclick="downloadActionExcel()">Descargar acciones Excel</button>
             <input class="hidden-file" type="file" id="fileInput" accept="application/json" onchange="importJSON(event)">
           </div>
 
@@ -579,7 +632,36 @@
       </aside>
 
       <main class="card">
-        <div class="card-header">Tablero de acción</div>
+        <div class="card-header board-header">
+          <div class="board-title">Tablero de acción</div>
+
+          <div class="header-legend">
+            <span class="header-legend-item">
+              <span class="header-legend-color" style="background:var(--stck)"></span>
+              STCK cubre
+            </span>
+
+            <span class="header-legend-item">
+              <span class="header-legend-color" style="background:var(--flor)"></span>
+              FLOR requerido
+            </span>
+
+            <span class="header-legend-item">
+              <span class="header-legend-color" style="background:var(--red)"></span>
+              Faltante
+            </span>
+
+            <span class="header-legend-item">
+              <span class="badge b-red-strong">NO CARGAR</span>
+              Faltante real
+            </span>
+
+            <span class="header-legend-item">
+              <span class="badge b-orange">VALIDAR</span>
+              Riesgo FLOR alto
+            </span>
+          </div>
+        </div>
 
         <div class="card-body">
           <div class="tabs">
@@ -588,33 +670,6 @@
           </div>
 
           <div id="mainView"></div>
-        </div>
-
-        <div class="legend">
-          <div class="legend-item">
-            <span class="legend-color" style="background:var(--stck)"></span>
-            STCK cubre
-          </div>
-
-          <div class="legend-item">
-            <span class="legend-color" style="background:var(--flor)"></span>
-            FLOR requerido
-          </div>
-
-          <div class="legend-item">
-            <span class="legend-color" style="background:var(--red)"></span>
-            Faltante
-          </div>
-
-          <div class="legend-item">
-            <span class="badge b-red-strong">NO CARGAR</span>
-            Faltante real
-          </div>
-
-          <div class="legend-item">
-            <span class="badge b-orange">VALIDAR</span>
-            Riesgo FLOR alto
-          </div>
         </div>
       </main>
     </div>
@@ -678,84 +733,6 @@
             cantidad: 600
           }
         ]
-      },
-      {
-        id: "MAT-2044",
-        material: "Empaque Corrugado A",
-        unidad: "pzas",
-        inventarioSTCK: 4200,
-        inventarioFLOR: 2600,
-        demandas: [
-          {
-            orden: "WO-20011",
-            fechaNecesidad: addDaysISO(todayISO, 1),
-            sku: "SKU-D",
-            linea: "L3",
-            cliente: "Cliente B",
-            cantidad: 3500
-          },
-          {
-            orden: "WO-20018",
-            fechaNecesidad: addDaysISO(todayISO, 2),
-            sku: "SKU-E",
-            linea: "L3",
-            cliente: "Cliente A",
-            cantidad: 2500
-          }
-        ],
-        llegadas: []
-      },
-      {
-        id: "MAT-7781",
-        material: "Etiqueta Frontal MX",
-        unidad: "pzas",
-        inventarioSTCK: 100,
-        inventarioFLOR: 1200,
-        demandas: [
-          {
-            orden: "WO-30010",
-            fechaNecesidad: addDaysISO(todayISO, -3),
-            sku: "SKU-F",
-            linea: "L2",
-            cliente: "Cliente D",
-            cantidad: 900
-          },
-          {
-            orden: "WO-30012",
-            fechaNecesidad: addDaysISO(todayISO, 2),
-            sku: "SKU-G",
-            linea: "L2",
-            cliente: "Cliente D",
-            cantidad: 700
-          }
-        ],
-        llegadas: []
-      },
-      {
-        id: "MAT-3309",
-        material: "Tornillo M4 x 12",
-        unidad: "pzas",
-        inventarioSTCK: 8500,
-        inventarioFLOR: 300,
-        demandas: [
-          {
-            orden: "WO-40001",
-            fechaNecesidad: addDaysISO(todayISO, 1),
-            sku: "SKU-H",
-            linea: "L4",
-            cliente: "Cliente A",
-            cantidad: 2500
-          },
-          {
-            orden: "WO-40002",
-            fechaNecesidad: addDaysISO(todayISO, 2),
-            sku: "SKU-I",
-            linea: "L4",
-            cliente: "Cliente B",
-            cantidad: 3000
-          }
-        ],
-        llegadas: []
       }
     ];
 
@@ -1042,7 +1019,7 @@
       }
 
       if (sort === "name") {
-        rows.sort((a, b) => a.material.localeCompare(b.material));
+        rows.sort((a, b) => a.id.localeCompare(b.id));
       }
 
       return rows;
@@ -1203,7 +1180,6 @@
 
       rows.forEach(material => {
         const c = material.calc;
-
         const base = Math.max(c.need, 1);
 
         const stckWidth = Math.min(100, Math.min(c.stck, c.need) / base * 100);
@@ -1217,8 +1193,8 @@
             <td class="action-cell ${c.actionClass}">${c.action}</td>
 
             <td>
-              <div class="material-name" title="${attr(material.material)}">${esc(material.material)}</div>
-              <div class="sub">${esc(material.id)} · ${esc(material.unidad)}</div>
+              <div class="material-code" title="${attr(material.id)}">${esc(material.id)}</div>
+              <div class="material-desc" title="${attr(material.material)}">${esc(material.material)} · ${esc(material.unidad)}</div>
             </td>
 
             <td class="num">${num(c.need)}</td>
@@ -1368,7 +1344,7 @@
       box.innerHTML = `
         <div class="form-group">
           <label>Material seleccionado</label>
-          <input value="${attr(material.material)}" disabled>
+          <input value="${attr(material.id + " - " + material.material)}" disabled>
         </div>
 
         <div class="form-row">
@@ -1410,6 +1386,11 @@
       let html = `
         <div class="mini-grid">
           <div class="mini">
+            <span>Material</span>
+            <strong>${esc(material.id)}</strong>
+          </div>
+
+          <div class="mini">
             <span>Necesidad plan</span>
             <strong>${num(c.need)}</strong>
           </div>
@@ -1423,14 +1404,12 @@
             <span>Riesgo sin FLOR</span>
             <strong>${num(c.riskWithoutFlor)}</strong>
           </div>
-
-          <div class="mini">
-            <span>% FLOR</span>
-            <strong>${pct(c.florPct)}</strong>
-          </div>
         </div>
 
         <p class="note">
+          <b>Descripción:</b> ${esc(material.material)}<br>
+          <b>Unidad:</b> ${esc(material.unidad)}<br>
+          <b>% FLOR:</b> ${pct(c.florPct)}<br>
           <b>Acción sugerida:</b>
           <span class="${c.actionClass}" style="font-weight:800;">${esc(c.action)}</span>
         </p>
@@ -1601,6 +1580,85 @@
       link.click();
 
       URL.revokeObjectURL(url);
+    }
+
+    function downloadActionExcel() {
+      const rows = materials
+        .map(material => ({
+          ...material,
+          calc: calculateMaterial(material)
+        }))
+        .filter(material => material.calc.action !== "OK PARA CORRER")
+        .sort((a, b) =>
+          a.calc.priority - b.calc.priority ||
+          b.calc.shortageActual - a.calc.shortageActual ||
+          b.calc.riskWithoutFlor - a.calc.riskWithoutFlor
+        );
+
+      const exportRows = rows.map(material => {
+        const c = material.calc;
+
+        return {
+          "Estado": c.status,
+          "Acción": c.action,
+          "Material": material.id,
+          "Descripción": material.material,
+          "Unidad": material.unidad,
+          "Necesidad Plan": c.need,
+          "Inventario STCK": c.stck,
+          "Inventario FLOR": c.flor,
+          "Inventario Total Actual": c.totalActual,
+          "% FLOR": Number((c.florPct * 100).toFixed(2)),
+          "FLOR Requerido": c.requiredFromFlor,
+          "Faltante Actual": c.shortageActual,
+          "Faltante Proyectado": c.shortageProjected,
+          "Riesgo sin FLOR": c.riskWithoutFlor,
+          "Órdenes en Riesgo": c.ordersRisk,
+          "Overdue": c.overdueNeed,
+          "Llegadas": c.arrivalsQty
+        };
+      });
+
+      if (exportRows.length === 0) {
+        alert("No hay materiales en acción para descargar.");
+        return;
+      }
+
+      if (window.XLSX) {
+        const workbook = XLSX.utils.book_new();
+        const worksheet = XLSX.utils.json_to_sheet(exportRows);
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Materiales en accion");
+        XLSX.writeFile(workbook, "materiales_en_accion_flor_stck.xlsx");
+      } else {
+        const headers = Object.keys(exportRows[0]);
+        const csv = [
+          headers.join(","),
+          ...exportRows.map(row => headers.map(header => csvCell(row[header])).join(","))
+        ].join("\n");
+
+        const blob = new Blob([csv], {
+          type: "text/csv;charset=utf-8"
+        });
+
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "materiales_en_accion_flor_stck.csv";
+        link.click();
+
+        URL.revokeObjectURL(url);
+      }
+    }
+
+    function csvCell(value) {
+      const text = String(value ?? "");
+
+      if (/[",\n]/.test(text)) {
+        return '"' + text.replace(/"/g, '""') + '"';
+      }
+
+      return text;
     }
 
     function saveData() {
