@@ -1,10 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="es-MX">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>Action Board Plan vs FLOR/STCK</title>
 
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -19,11 +17,7 @@
       --border: #dbe3ef;
       --stck: #2563eb;
       --flor: #f97316;
-      --ok: #16a34a;
-      --warn: #facc15;
-      --orange: #ea580c;
       --red: #dc2626;
-      --purple: #7c3aed;
       --shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
     }
 
@@ -39,160 +33,189 @@
     header {
       background: linear-gradient(135deg, #1e40af, #2563eb);
       color: white;
-      padding: 18px 22px;
+      padding: 16px 20px;
     }
 
-    header h1 { margin: 0; font-size: 24px; }
-    header p { margin: 6px 0 0; color: #dbeafe; font-size: 13px; }
+    header h1 { margin: 0; font-size: 23px; }
+    header p { margin: 5px 0 0; color: #dbeafe; font-size: 12px; }
 
-    .container { max-width: 1800px; margin: 0 auto; padding: 14px; }
+    .container {
+      max-width: 1920px;
+      margin: 0 auto;
+      padding: 10px;
+    }
 
     .kpi-grid {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
-      gap: 10px;
-      margin-bottom: 14px;
+      gap: 8px;
+      margin-bottom: 10px;
     }
 
     .kpi-card {
       background: white;
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 12px;
+      border-radius: 12px;
+      padding: 9px;
       box-shadow: var(--shadow);
     }
 
     .kpi-card span {
       display: block;
-      font-size: 11px;
+      font-size: 10px;
       color: var(--muted);
       font-weight: bold;
       text-transform: uppercase;
     }
 
-    .kpi-card strong { display: block; margin-top: 5px; font-size: 22px; }
+    .kpi-card strong {
+      display: block;
+      margin-top: 3px;
+      font-size: 20px;
+    }
 
     .layout {
       display: grid;
-      grid-template-columns: 340px 1fr;
-      gap: 14px;
+      grid-template-columns: 320px 1fr;
+      gap: 10px;
       align-items: start;
     }
 
     .card {
       background: white;
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-radius: 12px;
       box-shadow: var(--shadow);
       overflow: hidden;
     }
 
     .card-header {
-      padding: 10px 13px;
+      padding: 8px 10px;
       border-bottom: 1px solid var(--border);
       background: #f8fafc;
       font-weight: bold;
-      font-size: 14px;
+      font-size: 13px;
     }
 
     .board-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 8px;
       flex-wrap: wrap;
     }
 
-    .board-title { font-weight: bold; font-size: 14px; white-space: nowrap; }
+    .board-title {
+      font-weight: bold;
+      font-size: 13px;
+      white-space: nowrap;
+    }
 
     .header-legend {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
-      font-size: 11px;
+      font-size: 10px;
       color: var(--muted);
     }
 
     .header-legend-item {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
       white-space: nowrap;
     }
 
     .header-legend-color {
-      width: 19px;
-      height: 8px;
+      width: 16px;
+      height: 7px;
       border-radius: 999px;
       display: inline-block;
     }
 
-    .card-body { padding: 12px; }
+    .card-body { padding: 9px; }
 
     label {
       display: block;
-      font-size: 11px;
+      font-size: 10px;
       color: var(--muted);
       font-weight: bold;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
 
-    input,
-    select {
+    input, select {
       width: 100%;
-      padding: 8px 9px;
-      border-radius: 9px;
+      padding: 7px 8px;
+      border-radius: 8px;
       border: 1px solid var(--border);
       outline: none;
-      font-size: 12px;
+      font-size: 11px;
       background: white;
       color: var(--text);
     }
 
-    input:focus,
-    select:focus {
+    input:focus, select:focus {
       border-color: #2563eb;
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
     }
 
     button {
       border: 0;
-      border-radius: 9px;
-      padding: 8px 10px;
-      font-size: 12px;
+      border-radius: 8px;
+      padding: 7px 9px;
+      font-size: 11px;
       font-weight: bold;
       cursor: pointer;
     }
 
     button:disabled { opacity: 0.65; cursor: not-allowed; }
-
     .btn-primary { background: #2563eb; color: white; }
     .btn-secondary { background: #e2e8f0; color: #0f172a; }
     .btn-success { background: #16a34a; color: white; }
-    .btn-danger { background: #fee2e2; color: #991b1b; }
 
-    .actions { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 8px;
+    }
 
     .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-bottom: 9px;
+      gap: 7px;
+      margin-bottom: 8px;
     }
 
-    .form-group { margin-bottom: 9px; }
+    .form-group { margin-bottom: 8px; }
     .hidden-file { display: none; }
-    .note { font-size: 11px; color: var(--muted); line-height: 1.4; }
-    .separator { border: 0; border-top: 1px solid var(--border); margin: 12px 0; }
+    .note { font-size: 10px; color: var(--muted); line-height: 1.35; }
+    .separator { border: 0; border-top: 1px solid var(--border); margin: 10px 0; }
 
-    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+    .tabs {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
     .tab { background: #e2e8f0; color: #0f172a; }
     .tab.active { background: #0f172a; color: white; }
 
-    .table-wrap { overflow: auto; max-height: 72vh; }
+    .table-wrap {
+      overflow-x: hidden;
+      overflow-y: auto;
+      max-height: 72vh;
+      width: 100%;
+    }
 
-    table { width: 100%; border-collapse: collapse; font-size: 11px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5px;
+      table-layout: fixed;
+    }
 
     th {
       position: sticky;
@@ -200,34 +223,48 @@
       z-index: 5;
       background: #f8fafc;
       color: var(--muted);
-      font-size: 10px;
+      font-size: 8.5px;
       text-transform: uppercase;
       text-align: left;
-      padding: 7px;
+      padding: 4px 4px;
       border-bottom: 1px solid var(--border);
-      white-space: nowrap;
+      white-space: normal;
+      line-height: 1.1;
     }
 
-    td { padding: 6px 7px; border-bottom: 1px solid #edf2f7; vertical-align: middle; }
+    td {
+      padding: 4px 4px;
+      border-bottom: 1px solid #edf2f7;
+      vertical-align: middle;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
     tr { background: white; cursor: pointer; }
     tr:hover { background: #eff6ff; }
     tr.selected { background: #dbeafe; }
 
     .num { text-align: right; white-space: nowrap; }
 
+    .col-estado { width: 7%; }
+    .col-accion { width: 8%; }
+    .col-material { width: 13%; }
+    .col-num-sm { width: 6%; }
+    .col-pct { width: 5%; }
+    .col-uso { width: 14%; }
+    .col-risk { width: 6%; }
+
     .material-code {
       font-weight: 900;
-      max-width: 230px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      letter-spacing: 0.2px;
+      letter-spacing: 0.1px;
     }
 
     .material-desc {
       color: var(--muted);
-      font-size: 10px;
-      max-width: 260px;
+      font-size: 8.5px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -235,11 +272,12 @@
 
     .badge {
       display: inline-block;
-      padding: 3px 7px;
+      padding: 2px 5px;
       border-radius: 999px;
-      font-size: 9px;
+      font-size: 8px;
       font-weight: 800;
-      white-space: nowrap;
+      white-space: normal;
+      line-height: 1.1;
     }
 
     .b-ok { background: #dcfce7; color: #166534; }
@@ -250,7 +288,12 @@
     .b-purple { background: #ede9fe; color: #5b21b6; }
     .b-gray { background: #f1f5f9; color: #475569; }
 
-    .action-cell { font-weight: 800; white-space: nowrap; }
+    .action-cell {
+      font-weight: 800;
+      white-space: normal;
+      line-height: 1.1;
+    }
+
     .action-red { color: #991b1b; }
     .action-orange { color: #9a3412; }
     .action-yellow { color: #854d0e; }
@@ -258,8 +301,8 @@
     .action-green { color: #166534; }
 
     .coverage-bar {
-      height: 14px;
-      min-width: 210px;
+      height: 12px;
+      width: 100%;
       background: #e5e7eb;
       border-radius: 999px;
       overflow: hidden;
@@ -270,31 +313,49 @@
     .seg-stck { background: var(--stck); }
     .seg-flor { background: var(--flor); }
     .seg-short { background: var(--red); }
-    .bar-label { margin-top: 2px; color: var(--muted); font-size: 10px; white-space: nowrap; }
+
+    .bar-label {
+      margin-top: 1px;
+      color: var(--muted);
+      font-size: 8.5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
     .detail-grid {
       display: grid;
-      grid-template-columns: 340px 1fr;
-      gap: 14px;
-      margin-top: 14px;
+      grid-template-columns: 320px 1fr;
+      gap: 10px;
+      margin-top: 10px;
     }
 
     .mini-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-      margin-bottom: 10px;
+      gap: 7px;
+      margin-bottom: 9px;
     }
 
     .mini {
       background: #f8fafc;
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 9px;
+      border-radius: 10px;
+      padding: 8px;
     }
 
-    .mini span { color: var(--muted); font-size: 10px; font-weight: bold; text-transform: uppercase; }
-    .mini strong { display: block; margin-top: 3px; font-size: 17px; }
+    .mini span {
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .mini strong {
+      display: block;
+      margin-top: 2px;
+      font-size: 15px;
+    }
 
     .email-modal-backdrop {
       position: fixed;
@@ -344,9 +405,18 @@
       border-radius: 12px;
     }
 
+    @media (max-width: 1300px) {
+      table { font-size: 8.6px; }
+      th { font-size: 7.8px; padding: 3px; }
+      td { padding: 3px; }
+      .badge { font-size: 7.4px; padding: 2px 4px; }
+      .bar-label { font-size: 7.8px; }
+    }
+
     @media (max-width: 1100px) {
       .layout, .detail-grid { grid-template-columns: 1fr; }
       .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .table-wrap { overflow-x: auto; }
     }
 
     @media (max-width: 600px) {
@@ -360,14 +430,14 @@
 <body>
   <header>
     <h1>Action Board Plan vs FLOR/STCK</h1>
-    <p>Valida si el plan se puede correr, si depende de FLOR y qué órdenes requieren acción antes de cargar línea.</p>
+    <p>Valida si el plan se puede correr, si depende de FLOR y qué órdenes requieren acción antes de surtir línea.</p>
   </header>
 
   <div class="container">
     <div class="kpi-grid">
       <div class="kpi-card"><span>Plan OK</span><strong id="kpiPlanOk">0%</strong></div>
       <div class="kpi-card"><span>Acción requerida</span><strong id="kpiAction">0</strong></div>
-      <div class="kpi-card"><span>No cargar</span><strong id="kpiNoLoad">0</strong></div>
+      <div class="kpi-card"><span>No surtir</span><strong id="kpiNoSurtir">0</strong></div>
       <div class="kpi-card"><span>Validar FLOR</span><strong id="kpiValidateFlor">0</strong></div>
       <div class="kpi-card"><span>FLOR &gt;= límite</span><strong id="kpiFlorHigh">0</strong></div>
       <div class="kpi-card"><span>Órdenes en riesgo</span><strong id="kpiOrdersRisk">0</strong></div>
@@ -414,7 +484,7 @@
             <label>Filtro rápido</label>
             <select id="quickFilter">
               <option value="all">Todos</option>
-              <option value="noLoad">No cargar / Escalar</option>
+              <option value="noLoad">No surtir / Escalar</option>
               <option value="waitArrival">Esperar llegada</option>
               <option value="validateFlor">Validar FLOR</option>
               <option value="florHigh">FLOR alto</option>
@@ -433,11 +503,7 @@
 
           <hr class="separator">
           <div id="selectedEditor"></div>
-
-          <p class="note">
-            <b>Regla:</b> si STCK no cubre la necesidad del plan, el material depende de FLOR.
-            Si además FLOR representa más del límite definido, se dispara acción urgente.
-          </p>
+          <p class="note"><b>Regla:</b> si STCK no cubre la necesidad del plan, el material depende de FLOR. Si además FLOR representa más del límite definido, se dispara acción urgente.</p>
         </div>
       </aside>
 
@@ -445,14 +511,13 @@
         <div class="card-header board-header">
           <div class="board-title">Tablero de acción</div>
           <div class="header-legend">
-            <span class="header-legend-item"><span class="header-legend-color" style="background:var(--stck)"></span>STCK cubre</span>
-            <span class="header-legend-item"><span class="header-legend-color" style="background:var(--flor)"></span>FLOR requerido</span>
+            <span class="header-legend-item"><span class="header-legend-color" style="background:var(--stck)"></span>STCK</span>
+            <span class="header-legend-item"><span class="header-legend-color" style="background:var(--flor)"></span>FLOR</span>
             <span class="header-legend-item"><span class="header-legend-color" style="background:var(--red)"></span>Faltante</span>
-            <span class="header-legend-item"><span class="badge b-red-strong">NO CARGAR</span>Faltante real</span>
+            <span class="header-legend-item"><span class="badge b-red-strong">NO SURTIR</span>Faltante real</span>
             <span class="header-legend-item"><span class="badge b-orange">VALIDAR</span>Riesgo FLOR alto</span>
           </div>
         </div>
-
         <div class="card-body">
           <div class="tabs">
             <button id="tabMaterials" class="tab active" onclick="setView('materials')">Materiales de acción</button>
@@ -476,12 +541,7 @@
         <div class="form-group"><label>Destinatarios</label><input id="emailTo" placeholder="correo1@empresa.com; correo2@empresa.com"></div>
         <div class="form-group"><label>CC opcional</label><input id="emailCc" placeholder="correo_cc@empresa.com"></div>
         <div class="form-group"><label>Asunto</label><input id="emailSubject" value="Materiales con acción requerida - Plan vs FLOR/STCK"></div>
-        <div class="email-help">
-          La aplicación enviará a Power Automate:<br><br>
-          1. Screenshot PNG de materiales en acción.<br>
-          2. CSV con todos los materiales que requieren acción.<br><br>
-          Además intentará mostrar la imagen dentro del cuerpo del correo; si Outlook no la muestra, quedará el adjunto.
-        </div>
+        <div class="email-help">La aplicación enviará a Power Automate:<br><br>1. Screenshot PNG de materiales en acción.<br>2. CSV con todos los materiales que requieren acción.<br><br>El correo llevará ambos adjuntos y también intentará mostrar la imagen dentro del cuerpo.</div>
       </div>
       <div class="email-modal-footer">
         <button class="btn-secondary" onclick="closeEmailModal()">Cancelar</button>
@@ -492,27 +552,19 @@
 
   <script>
     const todayISO = new Date().toISOString().slice(0, 10);
-
     const POWER_AUTOMATE_URL = "https://default372ee9e09ce04033a64ac07073a91e.cd.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/62061dd47cd448e4bc01f680c6089f4f/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=qJ7BrHXOr2q3rOV_m-MgPqBR7y8h_pNRcqzVp30AGD8";
 
     let currentView = "materials";
     let selectedMaterialId = null;
 
     let materials = [
-      {
-        id: "MAT-1001",
-        material: "Resina ABS Negra",
-        unidad: "kg",
-        inventarioSTCK: 800,
-        inventarioFLOR: 500,
+      { id: "MAT-1001", material: "Resina ABS Negra", unidad: "kg", inventarioSTCK: 800, inventarioFLOR: 500,
         demandas: [
           { orden: "WO-10001", fechaNecesidad: addDaysISO(todayISO, -1), sku: "SKU-A", linea: "L1", cliente: "Cliente A", cantidad: 250 },
           { orden: "WO-10008", fechaNecesidad: addDaysISO(todayISO, 0), sku: "SKU-B", linea: "L1", cliente: "Cliente B", cantidad: 300 },
           { orden: "WO-10015", fechaNecesidad: addDaysISO(todayISO, 2), sku: "SKU-C", linea: "L2", cliente: "Cliente C", cantidad: 650 }
         ],
-        llegadas: [
-          { po: "PO-50001", fecha: addDaysISO(todayISO, 2), cantidad: 600 }
-        ]
+        llegadas: [{ po: "PO-50001", fecha: addDaysISO(todayISO, 2), cantidad: 600 }]
       }
     ];
 
@@ -525,14 +577,9 @@
 
     elStart.value = todayISO;
     loadData();
-
     if (!selectedMaterialId && materials.length) selectedMaterialId = materials[0].id;
-
     render();
-
-    [elStart, elHorizon, elFlorLimit, elSearch, elFilter, elSort].forEach(element => {
-      element.addEventListener("input", render);
-    });
+    [elStart, elHorizon, elFlorLimit, elSearch, elFilter, elSort].forEach(element => element.addEventListener("input", render));
 
     function addDaysISO(iso, days) {
       const date = new Date(iso + "T00:00:00");
@@ -540,13 +587,8 @@
       return date.toISOString().slice(0, 10);
     }
 
-    function num(value) {
-      return Number(value || 0).toLocaleString("es-MX");
-    }
-
-    function pct(value) {
-      return (Number(value || 0) * 100).toFixed(0) + "%";
-    }
+    function num(value) { return Number(value || 0).toLocaleString("es-MX"); }
+    function pct(value) { return (Number(value || 0) * 100).toFixed(0) + "%"; }
 
     function esc(value) {
       return String(value ?? "")
@@ -557,21 +599,10 @@
         .replaceAll("'", "&#039;");
     }
 
-    function attr(value) {
-      return esc(value).replaceAll("\n", " ");
-    }
-
-    function getEndDate() {
-      return addDaysISO(elStart.value, Number(elHorizon.value) - 1);
-    }
-
-    function isDemandInHorizon(demand) {
-      return demand.fechaNecesidad <= getEndDate();
-    }
-
-    function isArrivalInHorizon(arrival) {
-      return arrival.fecha <= getEndDate();
-    }
+    function attr(value) { return esc(value).replaceAll("\n", " "); }
+    function getEndDate() { return addDaysISO(elStart.value, Number(elHorizon.value) - 1); }
+    function isDemandInHorizon(demand) { return demand.fechaNecesidad <= getEndDate(); }
+    function isArrivalInHorizon(arrival) { return arrival.fecha <= getEndDate(); }
 
     function normalizeMaterial(material) {
       return {
@@ -580,53 +611,35 @@
         unidad: String(material.unidad || "pzas"),
         inventarioSTCK: Number(material.inventarioSTCK ?? material.STCK ?? material.stck ?? 0),
         inventarioFLOR: Number(material.inventarioFLOR ?? material.FLOR ?? material.flor ?? 0),
-        demandas: Array.isArray(material.demandas)
-          ? material.demandas.map(d => ({
-              id: String(d.id || crypto.randomUUID()),
-              orden: String(d.orden || d.WO || d.workOrder || ""),
-              fechaNecesidad: String(d.fechaNecesidad || d.fecha || todayISO),
-              sku: String(d.sku || d.SKU || d.producto || ""),
-              linea: String(d.linea || ""),
-              cliente: String(d.cliente || ""),
-              cantidad: Number(d.cantidad || d.demanda || 0)
-            }))
-          : [],
-        llegadas: Array.isArray(material.llegadas)
-          ? material.llegadas.map(a => ({
-              id: String(a.id || crypto.randomUUID()),
-              po: String(a.po || a.PO || ""),
-              fecha: String(a.fecha || todayISO),
-              cantidad: Number(a.cantidad || 0)
-            }))
-          : []
+        demandas: Array.isArray(material.demandas) ? material.demandas.map(d => ({
+          id: String(d.id || crypto.randomUUID()),
+          orden: String(d.orden || d.WO || d.workOrder || ""),
+          fechaNecesidad: String(d.fechaNecesidad || d.fecha || todayISO),
+          sku: String(d.sku || d.SKU || d.producto || ""),
+          linea: String(d.linea || ""),
+          cliente: String(d.cliente || ""),
+          cantidad: Number(d.cantidad || d.demanda || 0)
+        })) : [],
+        llegadas: Array.isArray(material.llegadas) ? material.llegadas.map(a => ({
+          id: String(a.id || crypto.randomUUID()),
+          po: String(a.po || a.PO || ""),
+          fecha: String(a.fecha || todayISO),
+          cantidad: Number(a.cantidad || 0)
+        })) : []
       };
     }
 
     function calculateMaterial(material) {
       const florLimit = Number(elFlorLimit.value || 40) / 100;
-
-      const demands = material.demandas
-        .filter(isDemandInHorizon)
-        .slice()
-        .sort((a, b) =>
-          a.fechaNecesidad.localeCompare(b.fechaNecesidad) ||
-          String(a.orden).localeCompare(String(b.orden))
-        );
-
+      const demands = material.demandas.filter(isDemandInHorizon).slice().sort((a, b) => a.fechaNecesidad.localeCompare(b.fechaNecesidad) || String(a.orden).localeCompare(String(b.orden)));
       const arrivals = material.llegadas.filter(isArrivalInHorizon);
-
       const need = demands.reduce((sum, d) => sum + Number(d.cantidad || 0), 0);
-      const overdueNeed = demands
-        .filter(d => d.fechaNecesidad < elStart.value)
-        .reduce((sum, d) => sum + Number(d.cantidad || 0), 0);
-
+      const overdueNeed = demands.filter(d => d.fechaNecesidad < elStart.value).reduce((sum, d) => sum + Number(d.cantidad || 0), 0);
       const stck = Number(material.inventarioSTCK || 0);
       const flor = Number(material.inventarioFLOR || 0);
       const totalActual = stck + flor;
-
       const arrivalsQty = arrivals.reduce((sum, a) => sum + Number(a.cantidad || 0), 0);
       const totalProjected = totalActual + arrivalsQty;
-
       const florPct = totalActual > 0 ? flor / totalActual : 0;
       const shortageActual = Math.max(0, need - totalActual);
       const shortageProjected = Math.max(0, need - totalProjected);
@@ -644,24 +657,10 @@
         const usedFLOR = Math.min(simFLOR, remainingAfterSTCK);
         simFLOR -= usedFLOR;
         const shortage = remainingAfterSTCK - usedFLOR;
-
-        return {
-          ...demand,
-          materialId: material.id,
-          material: material.material,
-          unidad: material.unidad,
-          overdue: demand.fechaNecesidad < elStart.value,
-          cubiertoSTCK: usedSTCK,
-          cubiertoFLOR: usedFLOR,
-          faltante: shortage
-        };
+        return { ...demand, materialId: material.id, material: material.material, unidad: material.unidad, overdue: demand.fechaNecesidad < elStart.value, cubiertoSTCK: usedSTCK, cubiertoFLOR: usedFLOR, faltante: shortage };
       });
 
-      const ordersRisk = new Set(
-        orderLines
-          .filter(line => line.faltante > 0 || line.cubiertoFLOR > 0)
-          .map(line => line.orden)
-      ).size;
+      const ordersRisk = new Set(orderLines.filter(line => line.faltante > 0 || line.cubiertoFLOR > 0).map(line => line.orden)).size;
 
       let status = "OK STCK";
       let action = "OK PARA CORRER";
@@ -671,13 +670,13 @@
 
       if (shortageActual > 0 && shortageProjected > 0) {
         status = "FALTANTE REAL";
-        action = "NO CARGAR / ESCALAR";
+        action = "NO SURTIR";
         badge = "b-red-strong";
         actionClass = "action-red";
         priority = 1;
       } else if (shortageActual > 0 && shortageProjected === 0) {
         status = "FALTA AHORA";
-        action = "ESPERAR LLEGADA / NO CARGAR";
+        action = "ESPERAR LLEGADA / NO SURTIR";
         badge = "b-red";
         actionClass = "action-red";
         priority = 2;
@@ -701,94 +700,45 @@
         priority = 5;
       }
 
-      return {
-        need,
-        overdueNeed,
-        stck,
-        flor,
-        totalActual,
-        arrivalsQty,
-        totalProjected,
-        florPct,
-        shortageActual,
-        shortageProjected,
-        riskWithoutFlor,
-        requiredFromFlor,
-        ordersRisk,
-        orderLines,
-        status,
-        action,
-        badge,
-        actionClass,
-        priority
-      };
+      return { need, overdueNeed, stck, flor, totalActual, arrivalsQty, totalProjected, florPct, shortageActual, shortageProjected, riskWithoutFlor, requiredFromFlor, ordersRisk, orderLines, status, action, badge, actionClass, priority };
     }
 
     function getMaterialRows() {
       const search = elSearch.value.toLowerCase().trim();
       const filter = elFilter.value;
       const sort = elSort.value;
-
-      let rows = materials.map(material => ({
-        ...material,
-        calc: calculateMaterial(material)
-      }));
+      let rows = materials.map(material => ({ ...material, calc: calculateMaterial(material) }));
 
       if (search) {
         rows = rows.filter(material => {
-          const text = [
-            material.id,
-            material.material,
-            ...material.demandas.map(d => `${d.orden} ${d.sku} ${d.linea} ${d.cliente}`)
-          ].join(" ").toLowerCase();
+          const text = [material.id, material.material, ...material.demandas.map(d => `${d.orden} ${d.sku} ${d.linea} ${d.cliente}`)].join(" ").toLowerCase();
           return text.includes(search);
         });
       }
 
-      if (filter === "noLoad") rows = rows.filter(m => m.calc.action.includes("NO CARGAR") || m.calc.action.includes("ESCALAR"));
+      if (filter === "noLoad") rows = rows.filter(m => m.calc.action.includes("NO SURTIR") || m.calc.action.includes("ESCALAR"));
       if (filter === "waitArrival") rows = rows.filter(m => m.calc.action.includes("ESPERAR"));
       if (filter === "validateFlor") rows = rows.filter(m => m.calc.action.includes("VALIDAR FLOR"));
-      if (filter === "florHigh") {
-        const limit = Number(elFlorLimit.value || 40) / 100;
-        rows = rows.filter(m => m.calc.florPct >= limit);
-      }
+      if (filter === "florHigh") rows = rows.filter(m => m.calc.florPct >= Number(elFlorLimit.value || 40) / 100);
       if (filter === "ok") rows = rows.filter(m => m.calc.action === "OK PARA CORRER");
       if (filter === "overdue") rows = rows.filter(m => m.calc.overdueNeed > 0);
-
       if (sort === "priority") rows.sort((a, b) => a.calc.priority - b.calc.priority || b.calc.shortageActual - a.calc.shortageActual);
       if (sort === "shortDesc") rows.sort((a, b) => b.calc.shortageActual - a.calc.shortageActual);
       if (sort === "florPctDesc") rows.sort((a, b) => b.calc.florPct - a.calc.florPct);
       if (sort === "ordersDesc") rows.sort((a, b) => b.calc.ordersRisk - a.calc.ordersRisk);
       if (sort === "name") rows.sort((a, b) => a.id.localeCompare(b.id));
-
       return rows;
     }
 
     function getOrderRows() {
-      const materialRows = materials.map(material => ({
-        ...material,
-        calc: calculateMaterial(material)
-      }));
-
+      const materialRows = materials.map(material => ({ ...material, calc: calculateMaterial(material) }));
       const orders = new Map();
 
       materialRows.forEach(material => {
         material.calc.orderLines.forEach(line => {
           const key = line.orden || "SIN ORDEN";
-
           if (!orders.has(key)) {
-            orders.set(key, {
-              orden: key,
-              fecha: line.fechaNecesidad,
-              sku: line.sku,
-              linea: line.linea,
-              cliente: line.cliente,
-              materiales: [],
-              totalReq: 0,
-              faltante: 0,
-              usaFlor: 0,
-              overdue: false
-            });
+            orders.set(key, { orden: key, fecha: line.fechaNecesidad, sku: line.sku, linea: line.linea, cliente: line.cliente, materiales: [], totalReq: 0, faltante: 0, usaFlor: 0, overdue: false });
           }
 
           const order = orders.get(key);
@@ -797,23 +747,14 @@
           order.faltante += Number(line.faltante || 0);
           order.usaFlor += Number(line.cubiertoFLOR || 0);
           order.overdue = order.overdue || line.overdue;
-          order.materiales.push({
-            materialId: material.id,
-            material: material.material,
-            unidad: material.unidad,
-            requerido: line.cantidad,
-            stck: line.cubiertoSTCK,
-            flor: line.cubiertoFLOR,
-            faltante: line.faltante
-          });
+          order.materiales.push({ materialId: material.id, material: material.material, unidad: material.unidad, requerido: line.cantidad, stck: line.cubiertoSTCK, flor: line.cubiertoFLOR, faltante: line.faltante });
         });
       });
 
       let rows = Array.from(orders.values());
-
       rows.forEach(order => {
         if (order.faltante > 0) {
-          order.estado = "NO CARGAR";
+          order.estado = "NO SURTIR";
           order.badge = "b-red-strong";
           order.actionClass = "action-red";
           order.priority = 1;
@@ -839,8 +780,7 @@
       document.getElementById("tabMaterials").classList.toggle("active", currentView === "materials");
       document.getElementById("tabOrders").classList.toggle("active", currentView === "orders");
       renderKPIs();
-      if (currentView === "materials") renderMaterialsTable();
-      else renderOrdersTable();
+      if (currentView === "materials") renderMaterialsTable(); else renderOrdersTable();
       renderEditor();
       renderArrivalPanel();
       renderDetailPanel();
@@ -851,16 +791,13 @@
       const total = rows.length;
       const ok = rows.filter(m => m.calc.action === "OK PARA CORRER").length;
       const action = rows.filter(m => m.calc.action !== "OK PARA CORRER").length;
-      const noLoad = rows.filter(m => m.calc.action.includes("NO CARGAR") || m.calc.action.includes("ESCALAR")).length;
+      const noSurtir = rows.filter(m => m.calc.action.includes("NO SURTIR") || m.calc.action.includes("ESCALAR")).length;
       const validateFlor = rows.filter(m => m.calc.action.includes("VALIDAR FLOR")).length;
-      const limit = Number(elFlorLimit.value || 40) / 100;
-      const florHigh = rows.filter(m => m.calc.florPct >= limit).length;
+      const florHigh = rows.filter(m => m.calc.florPct >= Number(elFlorLimit.value || 40) / 100).length;
       const ordersRisk = getOrderRows().filter(o => o.estado !== "OK PARA CORRER").length;
-      const planOkPct = total > 0 ? ok / total : 0;
-
-      document.getElementById("kpiPlanOk").textContent = pct(planOkPct);
+      document.getElementById("kpiPlanOk").textContent = pct(total > 0 ? ok / total : 0);
       document.getElementById("kpiAction").textContent = action;
-      document.getElementById("kpiNoLoad").textContent = noLoad;
+      document.getElementById("kpiNoSurtir").textContent = noSurtir;
       document.getElementById("kpiValidateFlor").textContent = validateFlor;
       document.getElementById("kpiFlorHigh").textContent = florHigh;
       document.getElementById("kpiOrdersRisk").textContent = ordersRisk;
@@ -873,19 +810,19 @@
           <table>
             <thead>
               <tr>
-                <th>Estado</th>
-                <th>Acción</th>
-                <th>Material</th>
-                <th class="num">Necesidad</th>
-                <th class="num">STCK</th>
-                <th class="num">FLOR</th>
-                <th class="num">Total actual</th>
-                <th class="num">% FLOR</th>
-                <th>Uso del plan</th>
-                <th class="num">Faltante</th>
-                <th class="num">Riesgo sin FLOR</th>
-                <th class="num">Órdenes riesgo</th>
-                <th class="num">Overdue</th>
+                <th class="col-estado">Estado</th>
+                <th class="col-accion">Acción</th>
+                <th class="col-material">Material</th>
+                <th class="col-num-sm num">Neces.</th>
+                <th class="col-num-sm num">STCK</th>
+                <th class="col-num-sm num">FLOR</th>
+                <th class="col-num-sm num">Total</th>
+                <th class="col-pct num">%F</th>
+                <th class="col-uso">Uso plan</th>
+                <th class="col-num-sm num">Falt.</th>
+                <th class="col-risk num">Riesgo</th>
+                <th class="col-risk num">Órd.</th>
+                <th class="col-risk num">Over</th>
               </tr>
             </thead>
             <tbody>
@@ -897,43 +834,25 @@
         const stckWidth = Math.min(100, Math.min(c.stck, c.need) / base * 100);
         const florWidth = Math.min(100 - stckWidth, c.requiredFromFlor / base * 100);
         const shortWidth = Math.max(0, c.shortageActual / base * 100);
-
         html += `
           <tr onclick="selectMaterial('${attr(material.id)}')" class="${material.id === selectedMaterialId ? "selected" : ""}">
             <td><span class="badge ${c.badge}">${c.status}</span></td>
             <td class="action-cell ${c.actionClass}">${c.action}</td>
-            <td>
-              <div class="material-code" title="${attr(material.id)}">${esc(material.id)}</div>
-              <div class="material-desc" title="${attr(material.material)}">${esc(material.material)} · ${esc(material.unidad)}</div>
-            </td>
+            <td><div class="material-code" title="${attr(material.id)}">${esc(material.id)}</div><div class="material-desc" title="${attr(material.material)}">${esc(material.material)} · ${esc(material.unidad)}</div></td>
             <td class="num">${num(c.need)}</td>
             <td class="num">${num(c.stck)}</td>
             <td class="num">${num(c.flor)}</td>
             <td class="num">${num(c.totalActual)}</td>
-            <td class="num">
-              <span class="badge ${c.florPct >= Number(elFlorLimit.value || 40) / 100 ? "b-orange" : "b-gray"}">${pct(c.florPct)}</span>
-            </td>
-            <td>
-              <div class="coverage-bar">
-                <div class="seg-stck" style="width:${stckWidth}%"></div>
-                <div class="seg-flor" style="width:${florWidth}%"></div>
-                <div class="seg-short" style="width:${shortWidth}%"></div>
-              </div>
-              <div class="bar-label">FLOR requerido: ${num(c.requiredFromFlor)} · Llegadas: ${num(c.arrivalsQty)}</div>
-            </td>
+            <td class="num"><span class="badge ${c.florPct >= Number(elFlorLimit.value || 40) / 100 ? "b-orange" : "b-gray"}">${pct(c.florPct)}</span></td>
+            <td><div class="coverage-bar"><div class="seg-stck" style="width:${stckWidth}%"></div><div class="seg-flor" style="width:${florWidth}%"></div><div class="seg-short" style="width:${shortWidth}%"></div></div><div class="bar-label">FLOR req: ${num(c.requiredFromFlor)} · Llg: ${num(c.arrivalsQty)}</div></td>
             <td class="num"><b style="color:${c.shortageActual > 0 ? "#991b1b" : "#166534"}">${num(c.shortageActual)}</b></td>
             <td class="num">${num(c.riskWithoutFlor)}</td>
             <td class="num">${num(c.ordersRisk)}</td>
             <td class="num">${num(c.overdueNeed)}</td>
-          </tr>
-        `;
+          </tr>`;
       });
 
-      html += `
-            </tbody>
-          </table>
-        </div>
-      `;
+      html += `</tbody></table></div>`;
       document.getElementById("mainView").innerHTML = html;
     }
 
@@ -942,162 +861,48 @@
       let html = `
         <div class="table-wrap">
           <table>
-            <thead>
-              <tr>
-                <th>Estado</th>
-                <th>Orden</th>
-                <th>Fecha</th>
-                <th>SKU</th>
-                <th>Línea</th>
-                <th>Cliente</th>
-                <th class="num">Materiales</th>
-                <th class="num">Faltante</th>
-                <th class="num">Usa FLOR</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody>
-      `;
-
+            <thead><tr><th>Estado</th><th>Orden</th><th>Fecha</th><th>SKU</th><th>Línea</th><th>Cliente</th><th class="num">Mat.</th><th class="num">Falt.</th><th class="num">FLOR</th><th>Acción</th></tr></thead>
+            <tbody>`;
       orders.forEach(order => {
-        html += `
-          <tr>
-            <td><span class="badge ${order.badge}">${order.estado}</span></td>
-            <td><b>${esc(order.orden)}</b></td>
-            <td>${esc(order.fecha)} ${order.overdue ? `<span class="badge b-red">Overdue</span>` : ""}</td>
-            <td>${esc(order.sku)}</td>
-            <td>${esc(order.linea)}</td>
-            <td>${esc(order.cliente)}</td>
-            <td class="num">${order.materiales.length}</td>
-            <td class="num"><b style="color:${order.faltante > 0 ? "#991b1b" : "#166534"}">${num(order.faltante)}</b></td>
-            <td class="num">${num(order.usaFlor)}</td>
-            <td class="action-cell ${order.actionClass}">${esc(order.estado)}</td>
-          </tr>
-        `;
+        html += `<tr><td><span class="badge ${order.badge}">${order.estado}</span></td><td><b>${esc(order.orden)}</b></td><td>${esc(order.fecha)} ${order.overdue ? `<span class="badge b-red">Overdue</span>` : ""}</td><td>${esc(order.sku)}</td><td>${esc(order.linea)}</td><td>${esc(order.cliente)}</td><td class="num">${order.materiales.length}</td><td class="num"><b style="color:${order.faltante > 0 ? "#991b1b" : "#166534"}">${num(order.faltante)}</b></td><td class="num">${num(order.usaFlor)}</td><td class="action-cell ${order.actionClass}">${esc(order.estado)}</td></tr>`;
       });
-
-      html += `
-            </tbody>
-          </table>
-        </div>
-      `;
+      html += `</tbody></table></div>`;
       document.getElementById("mainView").innerHTML = html;
     }
 
     function renderEditor() {
       const material = materials.find(m => m.id === selectedMaterialId);
       const box = document.getElementById("selectedEditor");
-
-      if (!material) {
-        box.innerHTML = `<p class="note">Selecciona un material.</p>`;
-        return;
-      }
-
-      box.innerHTML = `
-        <div class="form-group"><label>Código</label><input value="${attr(material.id)}" onchange="updateMaterial('id', this.value)"></div>
-        <div class="form-group"><label>Descripción</label><input value="${attr(material.material)}" onchange="updateMaterial('material', this.value)"></div>
-        <div class="form-row">
-          <div><label>STCK</label><input type="number" value="${material.inventarioSTCK}" onchange="updateMaterial('inventarioSTCK', Number(this.value))"></div>
-          <div><label>FLOR</label><input type="number" value="${material.inventarioFLOR}" onchange="updateMaterial('inventarioFLOR', Number(this.value))"></div>
-        </div>
-        <div class="form-group"><label>Unidad</label><input value="${attr(material.unidad)}" onchange="updateMaterial('unidad', this.value)"></div>
-      `;
+      if (!material) { box.innerHTML = `<p class="note">Selecciona un material.</p>`; return; }
+      box.innerHTML = `<div class="form-group"><label>Código</label><input value="${attr(material.id)}" onchange="updateMaterial('id', this.value)"></div><div class="form-group"><label>Descripción</label><input value="${attr(material.material)}" onchange="updateMaterial('material', this.value)"></div><div class="form-row"><div><label>STCK</label><input type="number" value="${material.inventarioSTCK}" onchange="updateMaterial('inventarioSTCK', Number(this.value))"></div><div><label>FLOR</label><input type="number" value="${material.inventarioFLOR}" onchange="updateMaterial('inventarioFLOR', Number(this.value))"></div></div><div class="form-group"><label>Unidad</label><input value="${attr(material.unidad)}" onchange="updateMaterial('unidad', this.value)"></div>`;
     }
 
     function renderArrivalPanel() {
       const material = materials.find(m => m.id === selectedMaterialId);
       const box = document.getElementById("arrivalPanel");
-
-      if (!material) {
-        box.innerHTML = `<p class="note">Selecciona un material.</p>`;
-        return;
-      }
-
-      box.innerHTML = `
-        <div class="form-group"><label>Material seleccionado</label><input value="${attr(material.id + " - " + material.material)}" disabled></div>
-        <div class="form-row">
-          <div><label>Fecha llegada</label><input type="date" id="arrivalDate" value="${addDaysISO(elStart.value, 1)}"></div>
-          <div><label>Cantidad</label><input type="number" id="arrivalQty" value="0"></div>
-        </div>
-        <div class="form-group"><label>PO</label><input id="arrivalPO" placeholder="PO opcional"></div>
-        <button class="btn-primary" style="width:100%;" onclick="addArrival()">Agregar llegada</button>
-        <p class="note">La llegada se considera en el total proyectado, pero la alerta principal sigue evaluando el inventario actual.</p>
-      `;
+      if (!material) { box.innerHTML = `<p class="note">Selecciona un material.</p>`; return; }
+      box.innerHTML = `<div class="form-group"><label>Material seleccionado</label><input value="${attr(material.id + " - " + material.material)}" disabled></div><div class="form-row"><div><label>Fecha llegada</label><input type="date" id="arrivalDate" value="${addDaysISO(elStart.value, 1)}"></div><div><label>Cantidad</label><input type="number" id="arrivalQty" value="0"></div></div><div class="form-group"><label>PO</label><input id="arrivalPO" placeholder="PO opcional"></div><button class="btn-primary" style="width:100%;" onclick="addArrival()">Agregar llegada</button><p class="note">La llegada se considera en el total proyectado, pero la alerta principal sigue evaluando el inventario actual.</p>`;
     }
 
     function renderDetailPanel() {
       const material = materials.find(m => m.id === selectedMaterialId);
       const box = document.getElementById("detailPanel");
-
-      if (!material) {
-        box.innerHTML = `<p class="note">Selecciona un material.</p>`;
-        return;
-      }
-
+      if (!material) { box.innerHTML = `<p class="note">Selecciona un material.</p>`; return; }
       const c = calculateMaterial(material);
-      let html = `
-        <div class="mini-grid">
-          <div class="mini"><span>Material</span><strong>${esc(material.id)}</strong></div>
-          <div class="mini"><span>Necesidad plan</span><strong>${num(c.need)}</strong></div>
-          <div class="mini"><span>Faltante actual</span><strong style="color:${c.shortageActual > 0 ? "#991b1b" : "#166534"}">${num(c.shortageActual)}</strong></div>
-          <div class="mini"><span>Riesgo sin FLOR</span><strong>${num(c.riskWithoutFlor)}</strong></div>
-        </div>
-        <p class="note">
-          <b>Descripción:</b> ${esc(material.material)}<br>
-          <b>Unidad:</b> ${esc(material.unidad)}<br>
-          <b>% FLOR:</b> ${pct(c.florPct)}<br>
-          <b>Acción sugerida:</b> <span class="${c.actionClass}" style="font-weight:800;">${esc(c.action)}</span>
-        </p>
-        <hr class="separator">
-        <table>
-          <thead>
-            <tr>
-              <th>Fecha</th><th>Orden</th><th>SKU</th><th>Línea</th><th>Cliente</th>
-              <th class="num">Req.</th><th class="num">STCK</th><th class="num">FLOR</th><th class="num">Faltante</th><th>Estado orden-material</th>
-            </tr>
-          </thead>
-          <tbody>
-      `;
-
+      let html = `<div class="mini-grid"><div class="mini"><span>Material</span><strong>${esc(material.id)}</strong></div><div class="mini"><span>Necesidad plan</span><strong>${num(c.need)}</strong></div><div class="mini"><span>Faltante actual</span><strong style="color:${c.shortageActual > 0 ? "#991b1b" : "#166534"}">${num(c.shortageActual)}</strong></div><div class="mini"><span>Riesgo sin FLOR</span><strong>${num(c.riskWithoutFlor)}</strong></div></div><p class="note"><b>Descripción:</b> ${esc(material.material)}<br><b>Unidad:</b> ${esc(material.unidad)}<br><b>% FLOR:</b> ${pct(c.florPct)}<br><b>Acción sugerida:</b> <span class="${c.actionClass}" style="font-weight:800;">${esc(c.action)}</span></p><hr class="separator"><table><thead><tr><th>Fecha</th><th>Orden</th><th>SKU</th><th>Línea</th><th>Cliente</th><th class="num">Req.</th><th class="num">STCK</th><th class="num">FLOR</th><th class="num">Falt.</th><th>Estado</th></tr></thead><tbody>`;
       c.orderLines.forEach(line => {
         let badge = `<span class="badge b-ok">STCK</span>`;
         if (line.faltante > 0) badge = `<span class="badge b-red-strong">Faltante</span>`;
         else if (line.cubiertoFLOR > 0) badge = `<span class="badge b-warn">Usa FLOR</span>`;
-
-        html += `
-          <tr>
-            <td>${esc(line.fechaNecesidad)} ${line.overdue ? `<span class="badge b-red">Overdue</span>` : ""}</td>
-            <td>${esc(line.orden)}</td>
-            <td>${esc(line.sku)}</td>
-            <td>${esc(line.linea)}</td>
-            <td>${esc(line.cliente)}</td>
-            <td class="num">${num(line.cantidad)}</td>
-            <td class="num">${num(line.cubiertoSTCK)}</td>
-            <td class="num">${num(line.cubiertoFLOR)}</td>
-            <td class="num">${num(line.faltante)}</td>
-            <td>${badge}</td>
-          </tr>
-        `;
+        html += `<tr><td>${esc(line.fechaNecesidad)} ${line.overdue ? `<span class="badge b-red">Overdue</span>` : ""}</td><td>${esc(line.orden)}</td><td>${esc(line.sku)}</td><td>${esc(line.linea)}</td><td>${esc(line.cliente)}</td><td class="num">${num(line.cantidad)}</td><td class="num">${num(line.cubiertoSTCK)}</td><td class="num">${num(line.cubiertoFLOR)}</td><td class="num">${num(line.faltante)}</td><td>${badge}</td></tr>`;
       });
-
       if (!c.orderLines.length) html += `<tr><td colspan="10" class="note">Sin demandas dentro del horizonte seleccionado.</td></tr>`;
-
-      html += `
-          </tbody>
-        </table>
-      `;
+      html += `</tbody></table>`;
       box.innerHTML = html;
     }
 
-    function setView(view) {
-      currentView = view;
-      render();
-    }
-
-    function selectMaterial(id) {
-      selectedMaterialId = id;
-      render();
-    }
+    function setView(view) { currentView = view; render(); }
+    function selectMaterial(id) { selectedMaterialId = id; render(); }
 
     function updateMaterial(field, value) {
       const oldId = selectedMaterialId;
@@ -1116,12 +921,7 @@
       const fecha = document.getElementById("arrivalDate").value;
       const cantidad = Number(document.getElementById("arrivalQty").value || 0);
       const po = document.getElementById("arrivalPO").value || "";
-
-      if (!fecha || cantidad <= 0) {
-        alert("Captura fecha y cantidad mayor a cero.");
-        return;
-      }
-
+      if (!fecha || cantidad <= 0) { alert("Captura fecha y cantidad mayor a cero."); return; }
       material.llegadas.push({ id: crypto.randomUUID(), po, fecha, cantidad });
       render();
     }
@@ -1134,16 +934,11 @@
         try {
           let data = JSON.parse(reader.result);
           if (data.materiales) data = data.materiales;
-          if (!Array.isArray(data)) {
-            alert("El JSON debe ser una lista de materiales o un objeto con propiedad materiales.");
-            return;
-          }
+          if (!Array.isArray(data)) { alert("El JSON debe ser una lista de materiales o un objeto con propiedad materiales."); return; }
           materials = data.map(normalizeMaterial);
           selectedMaterialId = materials[0]?.id || null;
           render();
-        } catch (error) {
-          alert("No se pudo leer el JSON. Revisa el formato.");
-        }
+        } catch (error) { alert("No se pudo leer el JSON. Revisa el formato."); }
       };
       reader.readAsText(file);
       event.target.value = "";
@@ -1183,12 +978,7 @@
           "Llegadas": c.arrivalsQty
         };
       });
-
-      if (exportRows.length === 0) {
-        alert("No hay materiales en acción para descargar.");
-        return;
-      }
-
+      if (exportRows.length === 0) { alert("No hay materiales en acción para descargar."); return; }
       if (window.XLSX) {
         const workbook = XLSX.utils.book_new();
         const worksheet = XLSX.utils.json_to_sheet(exportRows);
@@ -1196,10 +986,7 @@
         XLSX.writeFile(workbook, "materiales_en_accion_flor_stck.xlsx");
       } else {
         const headers = Object.keys(exportRows[0]);
-        const csv = [
-          headers.join(","),
-          ...exportRows.map(row => headers.map(header => csvCell(row[header])).join(","))
-        ].join("\n");
+        const csv = [headers.join(","), ...exportRows.map(row => headers.map(header => csvCell(row[header])).join(","))].join("\n");
         const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
@@ -1210,85 +997,45 @@
       }
     }
 
-    function openEmailModal() {
-      document.getElementById("emailModal").style.display = "flex";
-    }
-
-    function closeEmailModal() {
-      document.getElementById("emailModal").style.display = "none";
-    }
+    function openEmailModal() { document.getElementById("emailModal").style.display = "flex"; }
+    function closeEmailModal() { document.getElementById("emailModal").style.display = "none"; }
 
     function getActionMaterialsForEmail() {
       return materials
         .map(material => ({ ...material, calc: calculateMaterial(material) }))
         .filter(material => material.calc.action !== "OK PARA CORRER")
-        .sort((a, b) =>
-          a.calc.priority - b.calc.priority ||
-          b.calc.shortageActual - a.calc.shortageActual ||
-          b.calc.riskWithoutFlor - a.calc.riskWithoutFlor
-        );
+        .sort((a, b) => a.calc.priority - b.calc.priority || b.calc.shortageActual - a.calc.shortageActual || b.calc.riskWithoutFlor - a.calc.riskWithoutFlor);
     }
 
     async function sendActionEmailPowerAutomate() {
       const to = document.getElementById("emailTo").value.trim();
       const cc = document.getElementById("emailCc").value.trim();
       const subject = document.getElementById("emailSubject").value.trim();
-
-      if (!to) {
-        alert("Captura al menos un destinatario.");
-        return;
-      }
-
+      if (!to) { alert("Captura al menos un destinatario."); return; }
       const actionMaterials = getActionMaterialsForEmail();
-      if (actionMaterials.length === 0) {
-        alert("No hay materiales en acción para enviar.");
-        return;
-      }
-
+      if (actionMaterials.length === 0) { alert("No hay materiales en acción para enviar."); return; }
       const sendButton = document.getElementById("sendEmailButton");
-
       try {
         sendButton.disabled = true;
         sendButton.textContent = "Enviando...";
-
         const imageBase64 = await generateActionScreenshotBase64(actionMaterials);
         const csvBase64 = generateActionCsvBase64(actionMaterials);
         const bodyHtml = buildActionEmailHtml(actionMaterials, imageBase64);
-
         const payload = { to, cc, subject, bodyHtml, imageBase64, csvBase64 };
-
-        let response;
         try {
-          response = await fetch(POWER_AUTOMATE_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-          });
-
+          const response = await fetch(POWER_AUTOMATE_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
           if (!response.ok) throw new Error("Power Automate respondió con error HTTP: " + response.status);
-
           alert("Correo enviado correctamente por Power Automate.");
           closeEmailModal();
         } catch (normalError) {
           console.warn("Intento normal falló. Probando modo no-cors.", normalError);
-
-          await fetch(POWER_AUTOMATE_URL, {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-          });
-
+          await fetch(POWER_AUTOMATE_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
           alert("Solicitud enviada a Power Automate. Si el flujo está correcto, el correo llegará en unos momentos.");
           closeEmailModal();
         }
       } catch (error) {
         console.error(error);
-        alert(
-          "No se pudo enviar el correo.\n\n" +
-          "Revisa que el flujo de Power Automate esté guardado/publicado y que la URL sea correcta.\n\n" +
-          "Error: " + error.message
-        );
+        alert("No se pudo enviar el correo.\n\nRevisa que el flujo de Power Automate esté guardado/publicado y que la URL sea correcta.\n\nError: " + error.message);
       } finally {
         sendButton.disabled = false;
         sendButton.textContent = "Enviar correo";
@@ -1297,7 +1044,6 @@
 
     async function generateActionScreenshotBase64(actionMaterials) {
       if (!window.html2canvas) throw new Error("No cargó la librería html2canvas.");
-
       const node = document.createElement("div");
       node.style.position = "fixed";
       node.style.left = "-99999px";
@@ -1307,79 +1053,17 @@
       node.style.padding = "18px";
       node.style.fontFamily = "Arial, Helvetica, sans-serif";
       node.style.color = "#0f172a";
-
       const generatedAt = new Date().toLocaleString("es-MX");
-      let html = `
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
-          <div>
-            <div style="font-size:22px;font-weight:800;">Materiales con acción requerida</div>
-            <div style="font-size:12px;color:#64748b;margin-top:4px;">Action Board Plan vs FLOR/STCK · Generado: ${generatedAt}</div>
-          </div>
-          <div style="font-size:11px;color:#64748b;display:flex;gap:12px;align-items:center;">
-            <span><span style="display:inline-block;width:18px;height:9px;background:#2563eb;border-radius:4px;"></span> STCK</span>
-            <span><span style="display:inline-block;width:18px;height:9px;background:#f97316;border-radius:4px;"></span> FLOR</span>
-            <span><span style="display:inline-block;width:18px;height:9px;background:#dc2626;border-radius:4px;"></span> Faltante</span>
-          </div>
-        </div>
-        <table style="width:100%;border-collapse:collapse;font-size:11px;">
-          <thead>
-            <tr style="background:#f8fafc;color:#64748b;text-transform:uppercase;">
-              <th style="text-align:left;padding:7px;border-bottom:1px solid #dbe3ef;">Estado</th>
-              <th style="text-align:left;padding:7px;border-bottom:1px solid #dbe3ef;">Acción</th>
-              <th style="text-align:left;padding:7px;border-bottom:1px solid #dbe3ef;">Material</th>
-              <th style="text-align:right;padding:7px;border-bottom:1px solid #dbe3ef;">Necesidad</th>
-              <th style="text-align:right;padding:7px;border-bottom:1px solid #dbe3ef;">STCK</th>
-              <th style="text-align:right;padding:7px;border-bottom:1px solid #dbe3ef;">FLOR</th>
-              <th style="text-align:right;padding:7px;border-bottom:1px solid #dbe3ef;">% FLOR</th>
-              <th style="text-align:left;padding:7px;border-bottom:1px solid #dbe3ef;">Uso del plan</th>
-              <th style="text-align:right;padding:7px;border-bottom:1px solid #dbe3ef;">Faltante</th>
-              <th style="text-align:right;padding:7px;border-bottom:1px solid #dbe3ef;">Riesgo sin FLOR</th>
-              <th style="text-align:right;padding:7px;border-bottom:1px solid #dbe3ef;">Órdenes riesgo</th>
-            </tr>
-          </thead>
-          <tbody>
-      `;
-
+      let html = `<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;"><div><div style="font-size:22px;font-weight:800;">Materiales con acción requerida</div><div style="font-size:12px;color:#64748b;margin-top:4px;">Action Board Plan vs FLOR/STCK · Generado: ${generatedAt}</div></div><div style="font-size:11px;color:#64748b;display:flex;gap:12px;align-items:center;"><span><span style="display:inline-block;width:18px;height:9px;background:#2563eb;border-radius:4px;"></span> STCK</span><span><span style="display:inline-block;width:18px;height:9px;background:#f97316;border-radius:4px;"></span> FLOR</span><span><span style="display:inline-block;width:18px;height:9px;background:#dc2626;border-radius:4px;"></span> Faltante</span></div></div><table style="width:100%;border-collapse:collapse;font-size:11px;"><thead><tr style="background:#f8fafc;color:#64748b;text-transform:uppercase;"><th style="text-align:left;padding:7px;border-bottom:1px solid #dbe3ef;">Estado</th><th style="text-align:left;padding:7px;border-bottom:1px solid #dbe3ef;">Acción</th><th style="text-align:left;padding:7px;border-bottom:1px solid #dbe3ef;">Material</th><th style="text-align:right;padding:7px;border-bottom:1px solid #dbe3ef;">Necesidad</th><th style="text-align:right;padding:7px;border-bottom:1px solid #dbe3ef;">STCK</th><th style="text-align:right;padding:7px;border-bottom:1px solid #dbe3ef;">FLOR</th><th style="text-align:right;padding:7px;border-bottom:1px solid #dbe3ef;">% FLOR</th><th style="text-align:left;padding:7px;border-bottom:1px solid #dbe3ef;">Uso del plan</th><th style="text-align:right;padding:7px;border-bottom:1px solid #dbe3ef;">Faltante</th><th style="text-align:right;padding:7px;border-bottom:1px solid #dbe3ef;">Riesgo sin FLOR</th><th style="text-align:right;padding:7px;border-bottom:1px solid #dbe3ef;">Órdenes riesgo</th></tr></thead><tbody>`;
       actionMaterials.slice(0, 80).forEach(material => {
         const c = material.calc;
         const base = Math.max(c.need, 1);
         const stckWidth = Math.min(100, Math.min(c.stck, c.need) / base * 100);
         const florWidth = Math.min(100 - stckWidth, c.requiredFromFlor / base * 100);
         const shortWidth = Math.max(0, c.shortageActual / base * 100);
-
-        html += `
-          <tr>
-            <td style="padding:7px;border-bottom:1px solid #edf2f7;font-weight:800;color:${c.shortageActual > 0 ? "#991b1b" : "#9a3412"};">${esc(c.status)}</td>
-            <td style="padding:7px;border-bottom:1px solid #edf2f7;font-weight:800;color:${c.shortageActual > 0 ? "#991b1b" : "#9a3412"};">${esc(c.action)}</td>
-            <td style="padding:7px;border-bottom:1px solid #edf2f7;">
-              <div style="font-weight:900;">${esc(material.id)}</div>
-              <div style="font-size:10px;color:#64748b;max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(material.material)} · ${esc(material.unidad)}</div>
-            </td>
-            <td style="padding:7px;border-bottom:1px solid #edf2f7;text-align:right;">${num(c.need)}</td>
-            <td style="padding:7px;border-bottom:1px solid #edf2f7;text-align:right;">${num(c.stck)}</td>
-            <td style="padding:7px;border-bottom:1px solid #edf2f7;text-align:right;">${num(c.flor)}</td>
-            <td style="padding:7px;border-bottom:1px solid #edf2f7;text-align:right;">${pct(c.florPct)}</td>
-            <td style="padding:7px;border-bottom:1px solid #edf2f7;">
-              <div style="width:200px;height:13px;border:1px solid #cbd5e1;border-radius:999px;overflow:hidden;display:flex;background:#e5e7eb;">
-                <div style="width:${stckWidth}%;background:#2563eb;"></div>
-                <div style="width:${florWidth}%;background:#f97316;"></div>
-                <div style="width:${shortWidth}%;background:#dc2626;"></div>
-              </div>
-              <div style="font-size:10px;color:#64748b;margin-top:2px;">FLOR requerido: ${num(c.requiredFromFlor)}</div>
-            </td>
-            <td style="padding:7px;border-bottom:1px solid #edf2f7;text-align:right;color:#991b1b;font-weight:800;">${num(c.shortageActual)}</td>
-            <td style="padding:7px;border-bottom:1px solid #edf2f7;text-align:right;">${num(c.riskWithoutFlor)}</td>
-            <td style="padding:7px;border-bottom:1px solid #edf2f7;text-align:right;">${num(c.ordersRisk)}</td>
-          </tr>
-        `;
+        html += `<tr><td style="padding:7px;border-bottom:1px solid #edf2f7;font-weight:800;color:${c.shortageActual > 0 ? "#991b1b" : "#9a3412"};">${esc(c.status)}</td><td style="padding:7px;border-bottom:1px solid #edf2f7;font-weight:800;color:${c.shortageActual > 0 ? "#991b1b" : "#9a3412"};">${esc(c.action)}</td><td style="padding:7px;border-bottom:1px solid #edf2f7;"><div style="font-weight:900;">${esc(material.id)}</div><div style="font-size:10px;color:#64748b;max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(material.material)} · ${esc(material.unidad)}</div></td><td style="padding:7px;border-bottom:1px solid #edf2f7;text-align:right;">${num(c.need)}</td><td style="padding:7px;border-bottom:1px solid #edf2f7;text-align:right;">${num(c.stck)}</td><td style="padding:7px;border-bottom:1px solid #edf2f7;text-align:right;">${num(c.flor)}</td><td style="padding:7px;border-bottom:1px solid #edf2f7;text-align:right;">${pct(c.florPct)}</td><td style="padding:7px;border-bottom:1px solid #edf2f7;"><div style="width:200px;height:13px;border:1px solid #cbd5e1;border-radius:999px;overflow:hidden;display:flex;background:#e5e7eb;"><div style="width:${stckWidth}%;background:#2563eb;"></div><div style="width:${florWidth}%;background:#f97316;"></div><div style="width:${shortWidth}%;background:#dc2626;"></div></div><div style="font-size:10px;color:#64748b;margin-top:2px;">FLOR requerido: ${num(c.requiredFromFlor)}</div></td><td style="padding:7px;border-bottom:1px solid #edf2f7;text-align:right;color:#991b1b;font-weight:800;">${num(c.shortageActual)}</td><td style="padding:7px;border-bottom:1px solid #edf2f7;text-align:right;">${num(c.riskWithoutFlor)}</td><td style="padding:7px;border-bottom:1px solid #edf2f7;text-align:right;">${num(c.ordersRisk)}</td></tr>`;
       });
-
-      html += `
-          </tbody>
-        </table>
-        <div style="font-size:11px;color:#64748b;margin-top:10px;">Nota: screenshot limitado a los primeros 80 materiales en acción ordenados por prioridad.</div>
-      `;
-
+      html += `</tbody></table><div style="font-size:11px;color:#64748b;margin-top:10px;">Nota: screenshot limitado a los primeros 80 materiales en acción ordenados por prioridad.</div>`;
       node.innerHTML = html;
       document.body.appendChild(node);
       const canvas = await html2canvas(node, { backgroundColor: "#ffffff", scale: 2 });
@@ -1391,111 +1075,28 @@
     function generateActionCsvBase64(actionMaterials) {
       const rows = actionMaterials.map(material => {
         const c = material.calc;
-        return {
-          Estado: c.status,
-          Accion: c.action,
-          Material: material.id,
-          Descripcion: material.material,
-          Unidad: material.unidad,
-          NecesidadPlan: c.need,
-          InventarioSTCK: c.stck,
-          InventarioFLOR: c.flor,
-          TotalActual: c.totalActual,
-          PorcentajeFLOR: Number((c.florPct * 100).toFixed(2)),
-          FlorRequerido: c.requiredFromFlor,
-          FaltanteActual: c.shortageActual,
-          FaltanteProyectado: c.shortageProjected,
-          RiesgoSinFLOR: c.riskWithoutFlor,
-          OrdenesRiesgo: c.ordersRisk,
-          Overdue: c.overdueNeed,
-          Llegadas: c.arrivalsQty
-        };
+        return { Estado: c.status, Accion: c.action, Material: material.id, Descripcion: material.material, Unidad: material.unidad, NecesidadPlan: c.need, InventarioSTCK: c.stck, InventarioFLOR: c.flor, TotalActual: c.totalActual, PorcentajeFLOR: Number((c.florPct * 100).toFixed(2)), FlorRequerido: c.requiredFromFlor, FaltanteActual: c.shortageActual, FaltanteProyectado: c.shortageProjected, RiesgoSinFLOR: c.riskWithoutFlor, OrdenesRiesgo: c.ordersRisk, Overdue: c.overdueNeed, Llegadas: c.arrivalsQty };
       });
-
       const headers = Object.keys(rows[0]);
-      const csv = [
-        headers.join(","),
-        ...rows.map(row => headers.map(header => csvCell(row[header])).join(","))
-      ].join("\n");
+      const csv = [headers.join(","), ...rows.map(row => headers.map(header => csvCell(row[header])).join(","))].join("\n");
       return utf8ToBase64(csv);
     }
 
     function buildActionEmailHtml(actionMaterials, imageBase64) {
       const now = new Date().toLocaleString("es-MX");
-
-      const noLoad = actionMaterials.filter(m =>
-        m.calc.action.includes("NO CARGAR") || m.calc.action.includes("ESCALAR")
-      ).length;
-
-      const validateFlor = actionMaterials.filter(m =>
-        m.calc.action.includes("VALIDAR FLOR")
-      ).length;
-
-      const balanceFlor = actionMaterials.filter(m =>
-        m.calc.action.includes("BALANCE FLOR")
-      ).length;
-
-      let html = `
-        <p>Hola,</p>
-        <p>Comparto el resumen de materiales con acción requerida para el plan.</p>
-        <p><b>Fecha/hora de generación:</b> ${now}</p>
-        <ul>
-          <li><b>Total materiales en acción:</b> ${actionMaterials.length}</li>
-          <li><b>No cargar / Escalar:</b> ${noLoad}</li>
-          <li><b>Validar FLOR:</b> ${validateFlor}</li>
-          <li><b>Revisar balance FLOR:</b> ${balanceFlor}</li>
-        </ul>
-        <p><b>Top materiales en acción:</b></p>
-        <table border="1" cellspacing="0" cellpadding="5" style="border-collapse:collapse;font-family:Arial;font-size:12px;">
-          <thead>
-            <tr style="background:#f3f4f6;">
-              <th>Material</th>
-              <th>Acción</th>
-              <th>Necesidad</th>
-              <th>STCK</th>
-              <th>FLOR</th>
-              <th>Faltante</th>
-              <th>Riesgo sin FLOR</th>
-            </tr>
-          </thead>
-          <tbody>
-      `;
-
+      const noSurtir = actionMaterials.filter(m => m.calc.action.includes("NO SURTIR") || m.calc.action.includes("ESCALAR")).length;
+      const validateFlor = actionMaterials.filter(m => m.calc.action.includes("VALIDAR FLOR")).length;
+      const balanceFlor = actionMaterials.filter(m => m.calc.action.includes("BALANCE FLOR")).length;
+      let html = `<p>Hola,</p><p>Comparto el resumen de materiales con acción requerida para el plan.</p><p><b>Fecha/hora de generación:</b> ${now}</p><ul><li><b>Total materiales en acción:</b> ${actionMaterials.length}</li><li><b>No surtir:</b> ${noSurtir}</li><li><b>Validar FLOR:</b> ${validateFlor}</li><li><b>Revisar balance FLOR:</b> ${balanceFlor}</li></ul><p><b>Top materiales en acción:</b></p><table border="1" cellspacing="0" cellpadding="5" style="border-collapse:collapse;font-family:Arial;font-size:12px;"><thead><tr style="background:#f3f4f6;"><th>Material</th><th>Acción</th><th>Necesidad</th><th>STCK</th><th>FLOR</th><th>Faltante</th><th>Riesgo sin FLOR</th></tr></thead><tbody>`;
       actionMaterials.slice(0, 20).forEach(material => {
         const c = material.calc;
-        html += `
-          <tr>
-            <td><b>${esc(material.id)}</b><br>${esc(material.material)}</td>
-            <td>${esc(c.action)}</td>
-            <td align="right">${num(c.need)}</td>
-            <td align="right">${num(c.stck)}</td>
-            <td align="right">${num(c.flor)}</td>
-            <td align="right">${num(c.shortageActual)}</td>
-            <td align="right">${num(c.riskWithoutFlor)}</td>
-          </tr>
-        `;
+        html += `<tr><td><b>${esc(material.id)}</b><br>${esc(material.material)}</td><td>${esc(c.action)}</td><td align="right">${num(c.need)}</td><td align="right">${num(c.stck)}</td><td align="right">${num(c.flor)}</td><td align="right">${num(c.shortageActual)}</td><td align="right">${num(c.riskWithoutFlor)}</td></tr>`;
       });
-
-      html += `
-          </tbody>
-        </table>
-        <p>Se adjunta screenshot y archivo CSV con los materiales en acción.</p>
-        <hr>
-        <p><b>Vista visual de materiales en acción:</b></p>
-        <p style="font-size:12px;color:#64748b;">Si la imagen no se visualiza correctamente en Outlook, también va incluida como archivo adjunto.</p>
-        <p>
-          <img src="data:image/png;base64,${imageBase64}" alt="Screenshot de materiales con acción requerida" style="max-width:100%;height:auto;border:1px solid #dbe3ef;border-radius:10px;">
-        </p>
-        <p>Saludos.</p>
-      `;
-
+      html += `</tbody></table><p>Se adjunta screenshot y archivo CSV con los materiales en acción.</p><hr><p><b>Vista visual de materiales en acción:</b></p><p style="font-size:12px;color:#64748b;">Si la imagen no se visualiza correctamente en Outlook, también va incluida como archivo adjunto.</p><p><img src="data:image/png;base64,${imageBase64}" alt="Screenshot de materiales con acción requerida" style="max-width:100%;height:auto;border:1px solid #dbe3ef;border-radius:10px;"></p><p>Saludos.</p>`;
       return html;
     }
 
-    function utf8ToBase64(text) {
-      return btoa(unescape(encodeURIComponent(text)));
-    }
-
+    function utf8ToBase64(text) { return btoa(unescape(encodeURIComponent(text))); }
     function csvCell(value) {
       const text = String(value ?? "");
       if (/[",\n]/.test(text)) return '"' + text.replace(/"/g, '""') + '"';
@@ -1523,8 +1124,5 @@
       }
     }
   </script>
-
-<!-- force trigger -->
-  
 </body>
 </html>
